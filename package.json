@@ -7,6 +7,7 @@
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
     "gulp-ignore": "^2.0.1",
+    "gulp-order": "^1.1.1",
     "gulp-rimraf": "^0.2.0",
     "gulp-typescript": "^2.11.0",
     "merge-stream": "^1.0.0",

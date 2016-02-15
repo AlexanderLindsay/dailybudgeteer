@@ -15,7 +15,7 @@ gulp.task('client', ['clean'], function () {
     var compiled = gulp.src('client/**/*.ts')
         .pipe(ts({
             noImplicitAny: true,
-            out: 'client.js'
+            sortOutput: true
         }));
 
     var mithril = gulp.src('node_modules/mithril/mithril.min.js');
