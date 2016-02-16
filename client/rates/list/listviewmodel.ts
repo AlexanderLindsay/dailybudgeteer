@@ -7,6 +7,14 @@ module RateWidget {
         
         public rates: Rate[];
         
+        public total = () => {
+            var t = 0;
+            this.rates.forEach((rate: Rate, index: number) => {
+                t += rate.perDiem();
+            });
+            return t;
+        }
+        
         private edit: (index:number) => void;
         private remove: (index:number) => void;
         
