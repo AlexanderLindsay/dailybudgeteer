@@ -24,7 +24,7 @@ module Budget {
                     height: this.height
                 });
                 
-                //this.mainWindow.setMenuBarVisibility(false);
+                this.mainWindow.setMenuBarVisibility(false);
                 
                 this.mainWindow.loadURL("file://" + __dirname + "/index.html");
 

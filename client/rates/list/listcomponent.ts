@@ -1,8 +1,7 @@
 /// <reference path="listcontroller.ts" />
 /// <reference path="listview.ts" />
 
-
-module Rates {
+module RateWidget {
     "use strict";
     
     export class ListRatesComponent implements
@@ -11,8 +10,8 @@ module Rates {
         public controller: () => ListRatesController;
         public view: _mithril.MithrilView<ListRatesController>;
 
-        constructor() {
-            this.controller = () => { return new ListRatesController(); };
+        constructor(list: Rate[], edit: (index:number) => void, remove: (index:number) => void) {
+            this.controller = () => { return new ListRatesController(list, edit, remove); };
             this.view = listView;
         }
     }

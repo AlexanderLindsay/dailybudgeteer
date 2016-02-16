@@ -1,10 +1,11 @@
 /// <reference path="../../typings/browser.d.ts" />
 
-module Rates {
+module RateWidget {
     "use strict";
     
     export class Rate {
         
+        public id: _mithril.MithrilProperty<number>;
         public name: _mithril.MithrilProperty<string>;
         public amount: _mithril.MithrilProperty<number>;
         public days: _mithril.MithrilProperty<number>;
@@ -20,8 +21,9 @@ module Rates {
         
         public startDate: _mithril.MithrilProperty<Date>;
         public endDate: _mithril.MithrilProperty<Date>;
-        
+               
         constructor(name: string, amount: number, days: number){
+            this.id = m.prop(0);
             this.name = m.prop(name);
             this.amount = m.prop(amount);
             this.days = m.prop(days);
@@ -29,5 +31,15 @@ module Rates {
             this.startDate = m.prop(<Date>null);
             this.endDate = m.prop(<Date>null);
         }
+        
+        // public copy = () => {
+        //     return new Rate(this.name(), this.amount(), this.days());
+        // }
+        // 
+        // public reset = () => {
+        //     this.name("");
+        //     this.amount(0);
+        //     this.days(0);
+        // }
     }
 }
