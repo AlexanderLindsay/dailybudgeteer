@@ -5,7 +5,7 @@ module RateWidget {
 
         private nextId: number;
         public rates: Rate[];
-        public rate: _mithril.MithrilProperty<Rate>;
+        public rate: _mithril.MithrilBasicProperty<Rate>;
 
         constructor() {
             this.nextId = 1;
