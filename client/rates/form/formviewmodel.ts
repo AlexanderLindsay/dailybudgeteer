@@ -3,7 +3,7 @@
 module RateWidget {
     "use strict";
     
-    export class RateFormViewModel {
+    export class FormViewModel {
         public rate: _mithril.MithrilProperty<Rate>;
         
         private save: () => void;

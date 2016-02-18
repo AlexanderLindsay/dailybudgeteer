@@ -1,7 +1,7 @@
 module RateWidget {
     "use strict";
 
-    export var listView: _mithril.MithrilView<ListRatesController> = (ctrl: ListRatesController) => {
+    export var listView: _mithril.MithrilView<ListController> = (ctrl: ListController) => {
         return m("div", [
             m("table", [
                 m("thead", [

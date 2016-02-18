@@ -3,7 +3,7 @@
 module RateWidget {
     "use strict";
     
-    export class ListRates {
+    export class ListViewModel {
         
         public rates: Rate[];
         

@@ -4,14 +4,14 @@
 module RateWidget {
     "use strict";
     
-    export class ListRatesComponent implements
-        _mithril.MithrilComponent<ListRatesController>{
+    export class ListComponent implements
+        _mithril.MithrilComponent<ListController>{
 
-        public controller: () => ListRatesController;
-        public view: _mithril.MithrilView<ListRatesController>;
+        public controller: () => ListController;
+        public view: _mithril.MithrilView<ListController>;
 
         constructor(list: Rate[], edit: (index:number) => void, remove: (index:number) => void) {
-            this.controller = () => { return new ListRatesController(list, edit, remove); };
+            this.controller = () => { return new ListController(list, edit, remove); };
             this.view = listView;
         }
     }

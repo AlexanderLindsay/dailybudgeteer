@@ -1,7 +1,7 @@
 module RateWidget {
     "use strict";
 
-    export var rateFormView: _mithril.MithrilView<RateFormController> = (ctrl: RateFormController) => {
+    export var formView: _mithril.MithrilView<FormController> = (ctrl: FormController) => {
         
         var rate = ctrl.vm.rate();
         

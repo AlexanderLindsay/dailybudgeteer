@@ -3,11 +3,11 @@
 module RateWidget {
     "use strict";
     
-    export class ListRatesController implements _mithril.MithrilController {
-        public vm: ListRates;
+    export class ListController implements _mithril.MithrilController {
+        public vm: ListViewModel;
 
         constructor(list: Rate[], edit: (index:number) => void, remove: (index:number) => void) {
-            this.vm = new ListRates(list, edit, remove);
+            this.vm = new ListViewModel(list, edit, remove);
         }
     }
 }

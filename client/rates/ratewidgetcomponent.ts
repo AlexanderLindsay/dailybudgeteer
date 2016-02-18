@@ -1,5 +1,5 @@
 /// <reference path="ratewidgetcontroller.ts" />
-/// <reference path="rateForm/rateformcomponent.ts" />
+/// <reference path="form/formcomponent.ts" />
 /// <reference path="list/listcomponent.ts" />
 
 module RateWidget {
@@ -15,8 +15,8 @@ module RateWidget {
             this.controller = () => { return new RateWidgetController(); };
             this.view = (ctrl) => {
                 return [
-                    m.component(new ListRatesComponent(ctrl.rates, ctrl.edit, ctrl.remove)),
-                    m.component(new RateFormComponent(ctrl.save, ctrl.rate))
+                    m.component(new ListComponent(ctrl.rates, ctrl.edit, ctrl.remove)),
+                    m.component(new FormComponent(ctrl.save, ctrl.rate))
                 ]   
             };
         }
