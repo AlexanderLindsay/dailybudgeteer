@@ -15,6 +15,7 @@ module RateWidget {
             this.controller = () => { return new RateWidgetController(); };
             this.view = (ctrl) => {
                 return [
+                    m("a[href='/expenses']", { config: m.route }, "Expenses"),
                     m.component(new ListComponent(ctrl.rates, ctrl.edit, ctrl.remove)),
                     m.component(new FormComponent(ctrl.save, ctrl.rate))
                 ]   
