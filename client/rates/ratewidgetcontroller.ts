@@ -13,15 +13,23 @@ module RateWidget {
             this.rate = m.prop(new Rate("", 0, 0));
         }
 
+        public total = () => {
+            var t = 0;
+            this.rates.forEach((rate: Rate, index: number) => {
+                t += rate.perDiem();
+            });
+            return t;
+        }
+
         public save = () => {
             var rate = this.rate();
-            
+
             if (rate.id() == 0) {
                 rate.id(this.nextId)
                 this.nextId += 1;
                 this.rates.push(rate);
             }
-            
+
             this.rate(new Rate("", 0, 0))
         }
 
