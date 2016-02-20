@@ -2,14 +2,14 @@ module Components {
     "use strict";
 
     export interface DataSource<T> {
-        list: () => _mithril.MithrilProperty<T[]>;
+        list: () => _mithril.MithrilPromise<T[]>;
         edit: (index: number) => void;
         remove: (index: number) => void;
     }
 
     class ListViewModel<T> {
 
-        public items: _mithril.MithrilProperty<T[]>;
+        public items: _mithril.MithrilPromise<T[]>;
 
         private source: DataSource<T>;
 

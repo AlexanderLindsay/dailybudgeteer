@@ -6,12 +6,16 @@ module RateWidget {
     "use strict";
 
     class RateDataSource implements Components.DataSource<Rate> {
-        list: () => _mithril.MithrilProperty<Rate[]>;
+        list: () => _mithril.MithrilPromise<Rate[]>;
         edit: (index: number) => void;
         remove: (index: number) => void;
 
         constructor(rates: Rate[], edit: (index: number) => void, remove: (index: number) => void) {
-            this.list = () => m.prop(rates);
+            this.list = () => {
+                var deferred = m.deferred<Rate[]>();
+                deferred.resolve(rates);
+                return deferred.promise;
+            }
             this.edit = edit;
             this.remove = remove;
         }

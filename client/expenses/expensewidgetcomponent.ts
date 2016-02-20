@@ -6,12 +6,16 @@ module ExpenseWidget {
     "use strict";
 
     class ExpenseDataSource implements Components.DataSource<Expense> {
-        list: () => _mithril.MithrilProperty<Expense[]>;
+        list: () => _mithril.MithrilPromise<Expense[]>;
         edit: (index: number) => void;
         remove: (index: number) => void;
 
         constructor(expenses: Expense[], edit: (index: number) => void, remove: (index: number) => void) {
-            this.list = () => m.prop(expenses);
+            this.list = () => {
+                var deferred = m.deferred<Expense[]>();
+                deferred.resolve(expenses);
+                return deferred.promise;
+            }
             this.edit = edit;
             this.remove = remove;
         }
