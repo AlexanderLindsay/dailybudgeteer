@@ -1,19 +1,19 @@
 /// <reference path="datasource.ts" />
 
-module Components {
+namespace Components {
     "use strict";
 
     class FormViewModel<T> {
-        
+
         public item: _mithril.MithrilProperty<T>;
-        
+
         constructor(private source: DataSource<T>) {
             this.item = source.item;
         }
-        
+
         public saveItem = () => {
             this.source.save();
-        }               
+        };
     }
 
     class FormController<T> implements _mithril.MithrilController {
@@ -39,7 +39,7 @@ module Components {
                 return m("div", [
                     renderForm(ctrl.vm.item()),
                     m("button", { onclick: ctrl.vm.saveItem}, "Save")
-                ])
+                ]);
             };
         }
     }

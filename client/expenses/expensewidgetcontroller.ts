@@ -1,4 +1,4 @@
-module ExpenseWidget {
+namespace ExpenseWidget {
     "use strict";
 
     export class ExpenseWidgetController implements _mithril.MithrilController {
@@ -14,26 +14,26 @@ module ExpenseWidget {
         }
 
         public save = () => {
-            var exp = this.expense();
-            
-            if (exp.id() == 0) {
-                exp.id(this.nextId)
+            let exp = this.expense();
+
+            if (exp.id() === 0) {
+                exp.id(this.nextId);
                 this.nextId += 1;
                 this.expenses.push(exp);
             }
-            
-            this.expense(new Expense("", <Date>null, 0))
-        }
+
+            this.expense(new Expense("", <Date>null, 0));
+        };
 
         public remove = (index: number) => {
             this.expenses.splice(index, 1);
-        }
+        };
 
         public edit = (index: number) => {
             if (index < 0 || index > this.expenses.length) {
                 this.expense(new Expense("", <Date>null, 0));
             }
             this.expense(this.expenses[index]);
-        }
+        };
     }
 }

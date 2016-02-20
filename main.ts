@@ -1,9 +1,9 @@
 /// <reference path="typings/main.d.ts"/>
 
-module Budget {
+namespace Budget {
     "use strict";
 
-    const electron = require('electron');
+    const electron = require("electron");
     const app: Electron.App = electron.app;
 
     class Main {
@@ -12,28 +12,28 @@ module Budget {
 
         constructor(private width: number, private height: number) {
             app.on("window-all-closed", () => {
-                if (process.platform != 'darwin') {
+                if (process.platform !== "darwin") {
                     app.quit();
                 }
             });
 
-            app.on('ready', () => {
+            app.on("ready", () => {
 
                 this.mainWindow = new electron.BrowserWindow({
                     width: this.width,
                     height: this.height
                 });
-                
+
                 this.mainWindow.setMenuBarVisibility(false);
-                
+
                 this.mainWindow.loadURL("file://" + __dirname + "/index.html");
 
-                this.mainWindow.on('closed', () => {
+                this.mainWindow.on("closed", () => {
                     this.mainWindow = null;
                 });
             });
         }
     }
 
-    var main: Main = new Main(800, 600);
+    let main: Main = new Main(800, 600);
 }

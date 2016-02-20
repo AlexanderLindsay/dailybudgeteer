@@ -3,7 +3,7 @@
 /// <reference path="../components/listcomponent.ts" />
 /// <reference path="../components/formcomponent.ts" />
 
-module ExpenseWidget {
+namespace ExpenseWidget {
     "use strict";
 
     class ExpenseDataSource implements Components.DataSource<Expense> {
@@ -21,40 +21,40 @@ module ExpenseWidget {
             save: () => void) {
             this.item = expense;
             this.list = () => {
-                var deferred = m.deferred<Expense[]>();
+                let deferred = m.deferred<Expense[]>();
                 deferred.resolve(expenses);
                 return deferred.promise;
-            }
+            };
             this.edit = edit;
             this.remove = remove;
             this.save = save;
         }
     }
 
-    var renderHeader = () => {
+    let renderHeader = () => {
         return [
             m("th", "Name"),
             m("th", "Amount"),
         ];
-    }
+    };
 
-    var renderItem = (expense: Expense) => {
+    let renderItem = (expense: Expense) => {
         return [
             m("td", expense.name()),
             m("td", expense.amount()),
         ];
-    }
+    };
 
-    var renderForm = (expense: Expense) => {
+    let renderForm = (expense: Expense) => {
         return [
             m("input[type='text']", { onchange: m.withAttr("value", expense.name), value: expense.name() }),
             m("input[type='date']", { onchange: m.withAttr("value", expense.day), value: expense.day() }),
             m("input[type='number']", { onchange: m.withAttr("value", expense.amount), value: expense.amount() })
         ];
-    }
+    };
 
     export class ExpenseWidgetComponent implements
-        _mithril.MithrilComponent<ExpenseWidgetController>{
+        _mithril.MithrilComponent<ExpenseWidgetController> {
 
         public controller: () => ExpenseWidgetController;
         public view: _mithril.MithrilView<ExpenseWidgetController>;
@@ -62,7 +62,7 @@ module ExpenseWidget {
         constructor() {
             this.controller = () => { return new ExpenseWidgetController(); };
             this.view = (ctrl) => {
-                var source = new ExpenseDataSource(
+                let source = new ExpenseDataSource(
                     ctrl.expense,
                     ctrl.expenses,
                     ctrl.edit,
@@ -75,7 +75,7 @@ module ExpenseWidget {
                         renderHeader,
                         renderItem)),
                     m.component(new Components.FormComponent<Expense>(source, renderForm))
-                ]
+                ];
             };
         }
     }

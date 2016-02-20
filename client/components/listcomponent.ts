@@ -1,6 +1,6 @@
 /// <reference path="datasource.ts" />
 
-module Components {
+namespace Components {
     "use strict";
 
     class ListViewModel<T> {
@@ -14,11 +14,11 @@ module Components {
 
         public editItem = (index: number) => {
             this.source.edit(index);
-        }
+        };
 
         public removeItem = (index: number) => {
             this.source.remove(index);
-        }
+        };
     }
 
     class ListController<T> implements _mithril.MithrilController {
@@ -30,7 +30,7 @@ module Components {
     }
 
     export class ListComponent<T> implements
-        _mithril.MithrilComponent<ListController<T>>{
+        _mithril.MithrilComponent<ListController<T>> {
 
         public controller: () => ListController<T>;
         public view: _mithril.MithrilView<ListController<T>>;

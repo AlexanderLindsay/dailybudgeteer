@@ -1,6 +1,6 @@
-module Components {
+namespace Components {
     "use strict";
-    
+
      export interface DataSource<T> {
         item: _mithril.MithrilProperty<T>;
         list: () => _mithril.MithrilPromise<T[]>;
