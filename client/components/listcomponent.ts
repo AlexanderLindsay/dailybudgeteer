@@ -1,19 +1,13 @@
+/// <reference path="datasource.ts" />
+
 module Components {
     "use strict";
-
-    export interface DataSource<T> {
-        list: () => _mithril.MithrilPromise<T[]>;
-        edit: (index: number) => void;
-        remove: (index: number) => void;
-    }
 
     class ListViewModel<T> {
 
         public items: _mithril.MithrilPromise<T[]>;
 
-        private source: DataSource<T>;
-
-        constructor(source: DataSource<T>) {
+        constructor(private source: DataSource<T>) {
             this.items = source.list();
             this.source = source;
         }

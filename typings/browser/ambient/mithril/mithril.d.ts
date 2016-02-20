@@ -137,7 +137,7 @@ declare module _mithril {
 		*/
 		withAttr<T>(
 			attributeName: string,
-			property: MithrilBasicProperty<T>
+			property: MithrilProperty<T>
 		) : (e: Event) => any;
 
 		/**

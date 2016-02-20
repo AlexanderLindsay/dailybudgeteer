@@ -5,7 +5,7 @@ module ExpenseWidget {
 
         private nextId: number;
         public expenses: Expense[];
-        public expense: _mithril.MithrilBasicProperty<Expense>;
+        public expense: _mithril.MithrilProperty<Expense>;
 
         constructor() {
             this.nextId = 1;
@@ -14,12 +14,12 @@ module ExpenseWidget {
         }
 
         public save = () => {
-            var rate = this.expense();
+            var exp = this.expense();
             
-            if (rate.id() == 0) {
-                rate.id(this.nextId)
+            if (exp.id() == 0) {
+                exp.id(this.nextId)
                 this.nextId += 1;
-                this.expenses.push(rate);
+                this.expenses.push(exp);
             }
             
             this.expense(new Expense("", <Date>null, 0))

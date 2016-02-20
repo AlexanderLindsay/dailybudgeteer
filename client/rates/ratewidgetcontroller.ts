@@ -5,7 +5,7 @@ module RateWidget {
 
         private nextId: number;
         public rates: Rate[];
-        public rate: _mithril.MithrilBasicProperty<Rate>;
+        public rate: _mithril.MithrilProperty<Rate>;
 
         constructor() {
             this.nextId = 1;
@@ -22,12 +22,12 @@ module RateWidget {
         }
 
         public save = () => {
-            var rate = this.rate();
+            var r = this.rate();
 
-            if (rate.id() == 0) {
-                rate.id(this.nextId)
+            if (r.id() == 0) {
+                r.id(this.nextId)
                 this.nextId += 1;
-                this.rates.push(rate);
+                this.rates.push(r);
             }
 
             this.rate(new Rate("", 0, 0))

@@ -4,10 +4,10 @@ module ExpenseWidget {
     "use strict";
     
     export class Expense {
-        id: _mithril.MithrilBasicProperty<number>;
-        name: _mithril.MithrilBasicProperty<string>;
-        day: _mithril.MithrilBasicProperty<Date>;
-        amount: _mithril.MithrilBasicProperty<number>;
+        id: _mithril.MithrilProperty<number>;
+        name: _mithril.MithrilProperty<string>;
+        day: _mithril.MithrilProperty<Date>;
+        amount: _mithril.MithrilProperty<number>;
         
         constructor(name: string, day: Date, amount: number) {
             this.id = m.prop(0);

@@ -5,10 +5,10 @@ module RateWidget {
     
     export class Rate {
         
-        public id: _mithril.MithrilBasicProperty<number>;
-        public name: _mithril.MithrilBasicProperty<string>;
-        public amount: _mithril.MithrilBasicProperty<number>;
-        public days: _mithril.MithrilBasicProperty<number>;
+        public id: _mithril.MithrilProperty<number>;
+        public name: _mithril.MithrilProperty<string>;
+        public amount: _mithril.MithrilProperty<number>;
+        public days: _mithril.MithrilProperty<number>;
         
         public perDiem = () => {
             if(this.days() <= 0)
@@ -19,8 +19,8 @@ module RateWidget {
             return this.amount() / this.days();
         }
         
-        public startDate: _mithril.MithrilBasicProperty<Date>;
-        public endDate: _mithril.MithrilBasicProperty<Date>;
+        public startDate: _mithril.MithrilProperty<Date>;
+        public endDate: _mithril.MithrilProperty<Date>;
                
         constructor(name: string, amount: number, days: number){
             this.id = m.prop(0);
