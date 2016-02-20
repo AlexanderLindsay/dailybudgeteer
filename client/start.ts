@@ -3,10 +3,18 @@
 /// <reference path="expenses/expensewidgetcomponent.ts" />
 /// <reference path="filehandling/dragdrop.ts" />
 let root = document.getElementById("root");
+
 let handler = new FileHandling.FileHandler(root, {
     onchange: (files: FileList) => {
+        let reader = new FileReader();
+        reader.onload = (e: Event) => {
+            let data = JSON.parse(reader.result);
+            console.log(data);
+        };
+
         for (let i = 0; i < files.length; i++) {
-            console.log(files[i].path);
+            let file = files[i];
+            reader.readAsText(file);
         }
     }
 });
