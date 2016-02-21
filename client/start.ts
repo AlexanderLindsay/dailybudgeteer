@@ -3,6 +3,8 @@
 /// <reference path="rates/ratewidgetcomponent.ts" />
 /// <reference path="expenses/expensewidgetcomponent.ts" />
 /// <reference path="filehandling/dragdrop.ts" />
+/// <reference path="components/page.ts" />
+
 
 let root = document.getElementById("root");
 let context = new Data.Context();
@@ -24,9 +26,12 @@ let handler = new FileHandling.FileHandler(root, {
     }
 });
 
+let fileDialog = new FileHandling.FileDialog();
+let page = Components.Page.bind(null, context, fileDialog);
+
 m.route.mode = "search";
 
 m.route(root, "/", {
-    "/": new RateWidget.RatesWidgetComponent(context),
-    "/expenses": new ExpenseWidget.ExpenseWidgetComponent(context)
+    "/": new page(new RateWidget.RatesWidgetComponent(context)),
+    "/expenses": new page(new ExpenseWidget.ExpenseWidgetComponent(context))
 });

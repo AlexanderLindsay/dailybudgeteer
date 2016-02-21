@@ -3,6 +3,7 @@
 /// <reference path="../expenses/expense.ts" />
 
 namespace Data {
+    "use strict";
 
     type Expense = ExpenseWidget.Expense;
     type Rate = RateWidget.Rate;

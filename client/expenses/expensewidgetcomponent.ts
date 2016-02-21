@@ -6,8 +6,6 @@
 namespace ExpenseWidget {
     "use strict";
 
-
-
     let renderHeader = () => {
         return [
             m("th", "Name"),
@@ -39,14 +37,14 @@ namespace ExpenseWidget {
         constructor(context: Data.Context) {
             this.controller = () => { return new ExpenseWidgetController(context); };
             this.view = (ctrl) => {
-                return [
+                return m("div", [
                     m("h1", "Expenses"),
                     m("a[href='/']", { config: m.route }, "View Rates"),
                     m.component(new Components.ListComponent<Expense>(ctrl.source,
                         renderHeader,
                         renderItem)),
                     m.component(new Components.FormComponent<Expense>(ctrl.source, renderForm))
-                ];
+                ]);
             };
         }
     }

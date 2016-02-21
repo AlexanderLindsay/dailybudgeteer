@@ -41,7 +41,7 @@ namespace RateWidget {
         constructor(context: Data.Context) {
             this.controller = () => { return new RateWidgetController(context); };
             this.view = (ctrl) => {
-                return [
+                return m("div", [
                     m("h1", "Rates"),
                     m("a[href='/expenses']", { config: m.route }, "View Expenses"),
                     m.component(new Components.ListComponent<Rate>(ctrl.source,
@@ -49,7 +49,7 @@ namespace RateWidget {
                         renderItem)),
                     m("div", `Daily Rate: ${ctrl.source.total()}`),
                     m.component(new Components.FormComponent<Rate>(ctrl.source, renderForm))
-                ];
+                ]);
             };
         }
     }
