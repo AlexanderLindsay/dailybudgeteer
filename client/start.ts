@@ -1,19 +1,24 @@
 /// <reference path="../typings/browser.d.ts" />
+/// <reference path="data/context.ts" />
 /// <reference path="rates/ratewidgetcomponent.ts" />
 /// <reference path="expenses/expensewidgetcomponent.ts" />
 /// <reference path="filehandling/dragdrop.ts" />
+
 let root = document.getElementById("root");
+let context = new Data.Context();
 
 let handler = new FileHandling.FileHandler(root, {
     onchange: (files: FileList) => {
         let reader = new FileReader();
         reader.onload = (e: Event) => {
-            let data = JSON.parse(reader.result);
-            console.log(data);
+            let data = reader.result;
+            m.startComputation();
+            context.loadData(data);
+            m.endComputation();
         };
 
-        for (let i = 0; i < files.length; i++) {
-            let file = files[i];
+        if (files.length > 0) {
+            let file = files[0];
             reader.readAsText(file);
         }
     }
@@ -22,6 +27,6 @@ let handler = new FileHandling.FileHandler(root, {
 m.route.mode = "search";
 
 m.route(root, "/", {
-    "/": new RateWidget.RatesWidgetComponent(),
-    "/expenses": new ExpenseWidget.ExpenseWidgetComponent()
+    "/": new RateWidget.RatesWidgetComponent(context),
+    "/expenses": new ExpenseWidget.ExpenseWidgetComponent(context)
 });

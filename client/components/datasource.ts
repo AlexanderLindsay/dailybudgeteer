@@ -4,8 +4,8 @@ namespace Components {
      export interface DataSource<T> {
         item: _mithril.MithrilProperty<T>;
         list: () => _mithril.MithrilPromise<T[]>;
-        edit: (index: number) => void;
-        remove: (index: number) => void;
+        edit: (id: number) => void;
+        remove: (id: number) => void;
         save: () => void;
     }
 }

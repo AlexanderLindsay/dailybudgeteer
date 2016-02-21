@@ -1,39 +1,47 @@
 namespace ExpenseWidget {
     "use strict";
 
-    export class ExpenseWidgetController implements _mithril.MithrilController {
+    class ExpenseDataSource implements Components.DataSource<Expense> {
+        item: _mithril.MithrilProperty<Expense>;
 
-        private nextId: number;
-        public expenses: Expense[];
-        public expense: _mithril.MithrilProperty<Expense>;
-
-        constructor() {
-            this.nextId = 1;
-            this.expenses = [];
-            this.expense = m.prop(new Expense("", <Date>null, 0));
+        constructor(private context: Data.Context) {
+            this.item = m.prop(new Expense("", <Date>null, 0));
         }
 
+        public list = () => {
+            let deferred = m.deferred<Expense[]>();
+            deferred.resolve(this.context.listExpenses());
+            return deferred.promise;
+        };
+
+        public edit = (id: number) => {
+            let expense = this.context.getExpense(id);
+            if (expense === null) {
+                this.item(new Expense("", <Date>null, 0));
+            } else {
+                this.item(expense);
+            }
+        };
+
+        public remove = (id: number) => {
+            this.context.removeExpense(id);
+        };
+
         public save = () => {
-            let exp = this.expense();
-
-            if (exp.id() === 0) {
-                exp.id(this.nextId);
-                this.nextId += 1;
-                this.expenses.push(exp);
+            if (this.item().id() === 0) {
+                this.context.addExpense(this.item());
             }
 
-            this.expense(new Expense("", <Date>null, 0));
+            this.item(new Expense("", <Date>null, 0));
         };
+    }
 
-        public remove = (index: number) => {
-            this.expenses.splice(index, 1);
-        };
+    export class ExpenseWidgetController implements _mithril.MithrilController {
 
-        public edit = (index: number) => {
-            if (index < 0 || index > this.expenses.length) {
-                this.expense(new Expense("", <Date>null, 0));
-            }
-            this.expense(this.expenses[index]);
-        };
+        public source: ExpenseDataSource;
+
+        constructor(context: Data.Context) {
+            this.source = new ExpenseDataSource(context);
+        }
     }
 }

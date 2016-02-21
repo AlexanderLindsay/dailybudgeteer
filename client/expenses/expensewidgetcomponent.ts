@@ -6,30 +6,7 @@
 namespace ExpenseWidget {
     "use strict";
 
-    class ExpenseDataSource implements Components.DataSource<Expense> {
-        item: _mithril.MithrilProperty<Expense>;
-        list: () => _mithril.MithrilPromise<Expense[]>;
-        edit: (index: number) => void;
-        remove: (index: number) => void;
-        save: () => void;
 
-        constructor(
-            expense: _mithril.MithrilProperty<Expense>,
-            expenses: Expense[],
-            edit: (index: number) => void,
-            remove: (index: number) => void,
-            save: () => void) {
-            this.item = expense;
-            this.list = () => {
-                let deferred = m.deferred<Expense[]>();
-                deferred.resolve(expenses);
-                return deferred.promise;
-            };
-            this.edit = edit;
-            this.remove = remove;
-            this.save = save;
-        }
-    }
 
     let renderHeader = () => {
         return [
@@ -59,22 +36,16 @@ namespace ExpenseWidget {
         public controller: () => ExpenseWidgetController;
         public view: _mithril.MithrilView<ExpenseWidgetController>;
 
-        constructor() {
-            this.controller = () => { return new ExpenseWidgetController(); };
+        constructor(context: Data.Context) {
+            this.controller = () => { return new ExpenseWidgetController(context); };
             this.view = (ctrl) => {
-                let source = new ExpenseDataSource(
-                    ctrl.expense,
-                    ctrl.expenses,
-                    ctrl.edit,
-                    ctrl.remove,
-                    ctrl.save
-                );
                 return [
-                    m("a[href='/']", { config: m.route }, "Rates"),
-                    m.component(new Components.ListComponent<Expense>(source,
+                    m("h1", "Expenses"),
+                    m("a[href='/']", { config: m.route }, "View Rates"),
+                    m.component(new Components.ListComponent<Expense>(ctrl.source,
                         renderHeader,
                         renderItem)),
-                    m.component(new Components.FormComponent<Expense>(source, renderForm))
+                    m.component(new Components.FormComponent<Expense>(ctrl.source, renderForm))
                 ];
             };
         }

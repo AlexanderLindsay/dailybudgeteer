@@ -1,47 +1,56 @@
 namespace RateWidget {
     "use strict";
 
-    export class RateWidgetController implements _mithril.MithrilController {
+    class RateDataSource implements Components.DataSource<Rate> {
+        item: _mithril.MithrilProperty<Rate>;
 
-        private nextId: number;
-        public rates: Rate[];
-        public rate: _mithril.MithrilProperty<Rate>;
-
-        constructor() {
-            this.nextId = 1;
-            this.rates = [];
-            this.rate = m.prop(new Rate("", 0, 0));
+        constructor(private context: Data.Context) {
+            this.item = m.prop(new Rate("", 0, 0));
         }
+
+        list = () => {
+            let deferred = m.deferred<Rate[]>();
+            deferred.resolve(this.context.listRates());
+            return deferred.promise;
+        };
 
         public total = () => {
             let t = 0;
-            this.rates.forEach((rate: Rate, index: number) => {
-                t += rate.perDiem();
-            });
+            this.context.listRates()
+                .forEach((rate: Rate, index: number) => {
+                    t += rate.perDiem();
+                });
             return t;
         };
 
+        public edit = (id: number) => {
+            let rate = this.context.getRate(id);
+            if (rate === null) {
+                this.item(new Rate("", 0, 0));
+            } else {
+                this.item(rate);
+            }
+        };
+
+        public remove = (id: number) => {
+            this.context.removeRate(id);
+        };
+
         public save = () => {
-            let r = this.rate();
-
-            if (r.id() === 0) {
-                r.id(this.nextId);
-                this.nextId += 1;
-                this.rates.push(r);
+            if (this.item().id() === 0) {
+                this.context.addRate(this.item());
             }
 
-            this.rate(new Rate("", 0, 0));
+            this.item(new Rate("", 0, 0));
         };
+    }
 
-        public remove = (index: number) => {
-            this.rates.splice(index, 1);
-        };
+    export class RateWidgetController implements _mithril.MithrilController {
 
-        public edit = (index: number) => {
-            if (index < 0 || index > this.rates.length) {
-                this.rate(new Rate("", 0, 0));
-            }
-            this.rate(this.rates[index]);
-        };
+        public source: RateDataSource;
+
+        constructor(context: Data.Context) {
+            this.source = new RateDataSource(context);
+        }
     }
 }

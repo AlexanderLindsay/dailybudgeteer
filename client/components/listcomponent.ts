@@ -3,7 +3,7 @@
 namespace Components {
     "use strict";
 
-    class ListViewModel<T> {
+    class ListViewModel<T extends Data.IKeyed> {
 
         public items: _mithril.MithrilPromise<T[]>;
 
@@ -12,16 +12,16 @@ namespace Components {
             this.source = source;
         }
 
-        public editItem = (index: number) => {
-            this.source.edit(index);
+        public editItem = (id: number) => {
+            this.source.edit(id);
         };
 
-        public removeItem = (index: number) => {
-            this.source.remove(index);
+        public removeItem = (id: number) => {
+            this.source.remove(id);
         };
     }
 
-    class ListController<T> implements _mithril.MithrilController {
+    class ListController<T extends Data.IKeyed> implements _mithril.MithrilController {
         public vm: ListViewModel<T>;
 
         constructor(source: DataSource<T>) {
@@ -29,7 +29,7 @@ namespace Components {
         }
     }
 
-    export class ListComponent<T> implements
+    export class ListComponent<T extends Data.IKeyed> implements
         _mithril.MithrilComponent<ListController<T>> {
 
         public controller: () => ListController<T>;
@@ -55,8 +55,8 @@ namespace Components {
                                 return m("tr", [
                                     renderItem(item),
                                     m("td", [
-                                        m("button", { onclick: ctrl.vm.editItem.bind(ctrl.vm, index) }, "Edit"),
-                                        m("button", { onclick: ctrl.vm.removeItem.bind(ctrl.vm, index) }, "Remove")
+                                        m("button", { onclick: ctrl.vm.editItem.bind(ctrl.vm, item.id()) }, "Edit"),
+                                        m("button", { onclick: ctrl.vm.removeItem.bind(ctrl.vm, item.id()) }, "Remove")
                                     ])
                                 ]);
                             })

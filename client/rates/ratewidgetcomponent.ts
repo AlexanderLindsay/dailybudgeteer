@@ -6,31 +6,6 @@
 namespace RateWidget {
     "use strict";
 
-    class RateDataSource implements Components.DataSource<Rate> {
-        item: _mithril.MithrilProperty<Rate>;
-        list: () => _mithril.MithrilPromise<Rate[]>;
-        edit: (index: number) => void;
-        remove: (index: number) => void;
-        save: () => void;
-
-        constructor(
-            rate: _mithril.MithrilProperty<Rate>,
-            rates: Rate[],
-            edit: (index: number) => void,
-            remove: (index: number) => void,
-            save: () => void) {
-            this.item = rate;
-            this.list = () => {
-                let deferred = m.deferred<Rate[]>();
-                deferred.resolve(rates);
-                return deferred.promise;
-            };
-            this.edit = edit;
-            this.remove = remove;
-            this.save = save;
-        }
-    }
-
     let renderHeader = () => {
         return [
             m("th", "Name"),
@@ -63,22 +38,17 @@ namespace RateWidget {
         public controller: () => RateWidgetController;
         public view: _mithril.MithrilView<RateWidgetController>;
 
-        constructor() {
-            this.controller = () => { return new RateWidgetController(); };
+        constructor(context: Data.Context) {
+            this.controller = () => { return new RateWidgetController(context); };
             this.view = (ctrl) => {
-                let source = new RateDataSource(
-                    ctrl.rate,
-                    ctrl.rates,
-                    ctrl.edit,
-                    ctrl.remove,
-                    ctrl.save);
                 return [
-                    m("a[href='/expenses']", { config: m.route }, "Expenses"),
-                    m.component(new Components.ListComponent<Rate>(source,
+                    m("h1", "Rates"),
+                    m("a[href='/expenses']", { config: m.route }, "View Expenses"),
+                    m.component(new Components.ListComponent<Rate>(ctrl.source,
                         renderHeader,
                         renderItem)),
-                    m("div", `Daily Rate: ${ctrl.total()}`),
-                    m.component(new Components.FormComponent<Rate>(source, renderForm))
+                    m("div", `Daily Rate: ${ctrl.source.total()}`),
+                    m.component(new Components.FormComponent<Rate>(ctrl.source, renderForm))
                 ];
             };
         }

@@ -1,9 +1,10 @@
 /// <reference path="../../typings/browser.d.ts" />
+/// <reference path="../data/keyed.ts" />
 
 namespace ExpenseWidget {
     "use strict";
 
-    export class Expense {
+    export class Expense implements Data.IKeyed {
         id: _mithril.MithrilProperty<number>;
         name: _mithril.MithrilProperty<string>;
         day: _mithril.MithrilProperty<Date>;

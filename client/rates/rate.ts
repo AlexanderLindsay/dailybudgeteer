@@ -1,9 +1,10 @@
 /// <reference path="../../typings/browser.d.ts" />
+/// <reference path="../data/keyed.ts" />
 
 namespace RateWidget {
     "use strict";
 
-    export class Rate {
+    export class Rate implements Data.IKeyed {
 
         public id: _mithril.MithrilProperty<number>;
         public name: _mithril.MithrilProperty<string>;
