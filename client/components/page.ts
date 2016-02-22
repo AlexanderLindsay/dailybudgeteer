@@ -10,6 +10,10 @@ namespace Components {
         saveFile = () => {
             this.fileDialog.save(this.context.writeData());
         };
+
+        openFile = () => {
+            this.fileDialog.open(this.context.loadData);
+        };
     }
 
     export class Page implements _mithril.MithrilComponent<PageController> {
@@ -21,6 +25,7 @@ namespace Components {
             this.view = (ctrl) => {
                 return m("div", [
                     m.component(body),
+                    m("button", { onclick: ctrl.openFile }, "Open"),
                     m("button", { onclick: ctrl.saveFile }, "Save")
                 ]);
             };

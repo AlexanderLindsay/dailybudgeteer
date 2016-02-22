@@ -26,8 +26,9 @@ namespace Data {
             };
         }
 
-        public loadData(json: string) {
+        public loadData = (json: string) => {
             let data = JSON.parse(json);
+            m.startComputation();
             this.expenses = data.expenses.map((raw: any) => {
                 let expense = new ExpenseWidget.Expense(raw.name, raw.day, raw.amount);
                 expense.id(raw.id);
@@ -44,9 +45,10 @@ namespace Data {
                 expenses: 0,
                 rates: 0
             };
-        }
+            m.endComputation();
+        };
 
-        public writeData() {
+        public writeData = () => {
             let data = {
                 expenses: this.expenses,
                 rates: this.rates,
@@ -54,31 +56,31 @@ namespace Data {
             };
 
             return JSON.stringify(data);
-        }
+        };
 
-        public listExpenses() {
+        public listExpenses = () => {
             return this.expenses.slice(0);
-        }
+        };
 
-        public listRates() {
+        public listRates = () => {
             return this.rates.slice(0);
-        }
+        };
 
-        private addItem<T extends IKeyed>(item: T, list: T[], id: number) {
+        private addItem = <T extends IKeyed>(item: T, list: T[], id: number) => {
             item.id(id);
             list.push(item);
             return id + 1;
-        }
+        };
 
-        public addExpense(expense: Expense) {
+        public addExpense = (expense: Expense) => {
             this.nextIds.expenses = this.addItem(expense, this.expenses, this.nextIds.expenses);
-        }
+        };
 
-        public addRate(rate: Rate) {
+        public addRate = (rate: Rate) => {
             this.nextIds.rates = this.addItem(rate, this.rates, this.nextIds.rates);
-        }
+        };
 
-        private getItem<T extends IKeyed>(id: number, list: T[]) {
+        private getItem = <T extends IKeyed>(id: number, list: T[]) => {
             let results = list.filter((value: T, index: number) => {
                 return value.id() === id;
             });
@@ -92,17 +94,17 @@ namespace Data {
             }
 
             return null;
-        }
+        };
 
-        public getExpense(id: number) {
+        public getExpense = (id: number) => {
             return this.getItem<Expense>(id, this.expenses);
-        }
+        };
 
-        public getRate(id: number) {
+        public getRate = (id: number) => {
             return this.getItem<Rate>(id, this.rates);
-        }
+        };
 
-        private removeItem<T extends IKeyed>(id: number, list: T[]) {
+        private removeItem = <T extends IKeyed>(id: number, list: T[]) => {
             let ids = list.map((item) => {
                 return item.id();
             });
@@ -111,14 +113,14 @@ namespace Data {
 
             list.splice(index, 1);
             return list;
-        }
+        };
 
-        public removeExpense(id: number) {
+        public removeExpense = (id: number) => {
             this.expenses = this.removeItem(id, this.expenses);
-        }
+        };
 
-        public removeRate(id: number) {
+        public removeRate = (id: number) => {
             this.rates = this.removeItem(id, this.rates);
-        }
+        };
     }
 }

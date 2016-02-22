@@ -6,24 +6,43 @@ namespace FileHandling {
     let fs = require("fs");
 
     export class FileDialog {
-        public save = (data: string) => {
 
+        public save = (data: string) => {
             let dialogSettings: Electron.Dialog.SaveDialogOptions = {
                 filters: [
                     { name: "json", extensions: ["json"] }
                 ]
             };
 
-            dialog.showSaveDialog(null, dialogSettings, this.onSave.bind(this, data));
+            dialog.showSaveDialog(null, dialogSettings, this.onSaveDialogClose.bind(this, data));
         };
 
-        private onSave = (data: string, fileName: string) => {
+        private onSaveDialogClose = (data: string, fileName: string) => {
             if (fileName === undefined) {
                 return;
             }
             fs.writeFile(fileName, data, function(err) {
                 dialog.showMessageBox(null, { title: "File Saved", message: `File ${fileName} was saved successfully.`, buttons: ["Ok"] });
             });
+        };
+
+        public open = (onOpen: (data: string) => void) => {
+            let dialogSettings: Electron.Dialog.OpenDialogOptions = {
+                filters: [
+                    { name: "json", extensions: ["json"] }
+                ]
+            };
+
+            dialog.showOpenDialog(null, dialogSettings, this.onOpenDialogClose.bind(this, onOpen));
+        };
+
+        private onOpenDialogClose = (onOpen: (data: string) => void, fileNames: string[]) => {
+            if (fileNames.length > 0) {
+                let fileName = fileNames[0];
+                fs.readFile(fileName, "utf-8", (err, data) => {
+                    onOpen(data);
+                });
+            }
         };
     }
 }
