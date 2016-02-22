@@ -38,7 +38,7 @@ namespace RateWidget {
         public controller: () => RateWidgetController;
         public view: _mithril.MithrilView<RateWidgetController>;
 
-        constructor(context: Data.Context) {
+        constructor(context: Data.BudgetContext) {
             this.controller = () => { return new RateWidgetController(context); };
             this.view = (ctrl) => {
                 return m("div", [

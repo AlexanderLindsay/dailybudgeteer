@@ -4,7 +4,7 @@ namespace RateWidget {
     class RateDataSource implements Components.DataSource<Rate> {
         item: _mithril.MithrilProperty<Rate>;
 
-        constructor(private context: Data.Context) {
+        constructor(private context: Data.BudgetContext) {
             this.item = m.prop(new Rate("", 0, 0));
         }
 
@@ -49,7 +49,7 @@ namespace RateWidget {
 
         public source: RateDataSource;
 
-        constructor(context: Data.Context) {
+        constructor(context: Data.BudgetContext) {
             this.source = new RateDataSource(context);
         }
     }

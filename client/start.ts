@@ -1,5 +1,5 @@
 /// <reference path="../typings/browser.d.ts" />
-/// <reference path="data/context.ts" />
+/// <reference path="data/budgetcontext.ts" />
 /// <reference path="rates/ratewidgetcomponent.ts" />
 /// <reference path="expenses/expensewidgetcomponent.ts" />
 /// <reference path="filehandling/dragdrop.ts" />
@@ -7,7 +7,7 @@
 
 
 let root = document.getElementById("root");
-let context = new Data.Context();
+let context = new Data.BudgetContext();
 
 let handler = new FileHandling.FileHandler(root, {
     onchange: (files: FileList) => {

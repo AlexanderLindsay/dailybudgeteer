@@ -4,7 +4,7 @@ namespace ExpenseWidget {
     class ExpenseDataSource implements Components.DataSource<Expense> {
         item: _mithril.MithrilProperty<Expense>;
 
-        constructor(private context: Data.Context) {
+        constructor(private context: Data.BudgetContext) {
             this.item = m.prop(new Expense("", <Date>null, 0));
         }
 
@@ -40,7 +40,7 @@ namespace ExpenseWidget {
 
         public source: ExpenseDataSource;
 
-        constructor(context: Data.Context) {
+        constructor(context: Data.BudgetContext) {
             this.source = new ExpenseDataSource(context);
         }
     }

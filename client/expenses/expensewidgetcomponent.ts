@@ -34,7 +34,7 @@ namespace ExpenseWidget {
         public controller: () => ExpenseWidgetController;
         public view: _mithril.MithrilView<ExpenseWidgetController>;
 
-        constructor(context: Data.Context) {
+        constructor(context: Data.BudgetContext) {
             this.controller = () => { return new ExpenseWidgetController(context); };
             this.view = (ctrl) => {
                 return m("div", [
