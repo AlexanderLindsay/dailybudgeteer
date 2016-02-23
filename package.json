@@ -12,5 +12,9 @@
     "gulp-typescript": "^2.11.0",
     "merge-stream": "^1.0.0",
     "rimraf": "^2.5.2"
+  },
+  "dependencies": {
+    "mithril": "^0.2.2-rc.1",
+    "semantic-ui": "^2.1.8"
   }
 }
