@@ -24,9 +24,11 @@ namespace Components {
             this.controller = () => { return new PageController(context, fileDialog); };
             this.view = (ctrl) => {
                 return m("div", [
-                    m.component(body),
-                    m("button", { onclick: ctrl.openFile }, "Open"),
-                    m("button", { onclick: ctrl.saveFile }, "Save")
+                    m("div.ui.two.item.menu", [
+                        m("div.item", m("button.ui.button", { onclick: ctrl.openFile }, "Open")),
+                        m("div.item", m("button.ui.button", { onclick: ctrl.saveFile }, "Save"))
+                    ]),
+                    m("div.ui.grid.container", m.component(body))
                 ]);
             };
         }

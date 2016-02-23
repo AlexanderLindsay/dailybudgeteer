@@ -36,9 +36,9 @@ namespace Components {
         ) {
             this.controller = () => new FormController<T>(source);
             this.view = (ctrl: FormController<T>) => {
-                return m("div", [
+                return m("form.ui.form", [
                     renderForm(ctrl.vm.item()),
-                    m("button", { onclick: ctrl.vm.saveItem}, "Save")
+                    m("button.ui.button[type='submit']", { onclick: ctrl.vm.saveItem}, "Save")
                 ]);
             };
         }

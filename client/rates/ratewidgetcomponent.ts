@@ -26,9 +26,9 @@ namespace RateWidget {
 
     let renderForm = (rate: Rate) => {
         return [
-            m("input[type='text']", { onchange: m.withAttr("value", rate.name), value: rate.name() }),
-            m("input[type='number']", { onchange: m.withAttr("value", rate.amount), value: rate.amount() }),
-            m("input[type='number']", { onchange: m.withAttr("value", rate.days), value: rate.days() })
+            m("div.field", m("input[type='text'].ui.input", { onchange: m.withAttr("value", rate.name), value: rate.name() })),
+            m("div.field", m("input[type='number'].ui.input", { onchange: m.withAttr("value", rate.amount), value: rate.amount() })),
+            m("div.field", m("input[type='number'].ui.input", { onchange: m.withAttr("value", rate.days), value: rate.days() }))
         ];
     };
 
@@ -41,8 +41,8 @@ namespace RateWidget {
         constructor(context: Data.BudgetContext) {
             this.controller = () => { return new RateWidgetController(context); };
             this.view = (ctrl) => {
-                return m("div", [
-                    m("h1", "Rates"),
+                return m("div.column", [
+                    m("h1.ui.header", "Rates"),
                     m("a[href='/expenses']", { config: m.route }, "View Expenses"),
                     m.component(new Components.ListComponent<Rate>(ctrl.source,
                         renderHeader,

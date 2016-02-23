@@ -43,11 +43,11 @@ namespace Components {
             this.controller = () => new ListController<T>(source);
             this.view = (ctrl: ListController<T>) => {
                 return m("div", [
-                    m("table", [
+                    m("table.ui.striped.table", [
                         m("thead", [
                             m("tr", [
                                 renderHeader(),
-                                m("td", "")
+                                m("th", "")
                             ])
                         ]),
                         m("tbody", [
@@ -55,8 +55,8 @@ namespace Components {
                                 return m("tr", [
                                     renderItem(item),
                                     m("td", [
-                                        m("button", { onclick: ctrl.vm.editItem.bind(ctrl.vm, item.id()) }, "Edit"),
-                                        m("button", { onclick: ctrl.vm.removeItem.bind(ctrl.vm, item.id()) }, "Remove")
+                                        m("button.ui.button", { onclick: ctrl.vm.editItem.bind(ctrl.vm, item.id()) }, "Edit"),
+                                        m("button.ui.button", { onclick: ctrl.vm.removeItem.bind(ctrl.vm, item.id()) }, "Remove")
                                     ])
                                 ]);
                             })

@@ -19,8 +19,9 @@ gulp.task('client', ['clean'], function () {
         }));
 
     var mithril = gulp.src('node_modules/mithril/mithril.min.js');
+    var semantic = gulp.src('semantic/dist/semantic.min.js');
 
-    return merge(mithril, compiled)
+    return merge(mithril, semantic, compiled)
         .pipe(concat('client.js'))
         .pipe(gulp.dest('.'));
 });

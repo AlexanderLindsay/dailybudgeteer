@@ -22,9 +22,9 @@ namespace ExpenseWidget {
 
     let renderForm = (expense: Expense) => {
         return [
-            m("input[type='text']", { onchange: m.withAttr("value", expense.name), value: expense.name() }),
-            m("input[type='date']", { onchange: m.withAttr("value", expense.day), value: expense.day() }),
-            m("input[type='number']", { onchange: m.withAttr("value", expense.amount), value: expense.amount() })
+            m("div.field", m("input[type='text'].ui.input", { onchange: m.withAttr("value", expense.name), value: expense.name() })),
+            m("div.field", m("input[type='date'].ui.input", { onchange: m.withAttr("value", expense.day), value: expense.day() })),
+            m("div.field", m("input[type='number'].ui.input", { onchange: m.withAttr("value", expense.amount), value: expense.amount() }))
         ];
     };
 
@@ -37,8 +37,8 @@ namespace ExpenseWidget {
         constructor(context: Data.BudgetContext) {
             this.controller = () => { return new ExpenseWidgetController(context); };
             this.view = (ctrl) => {
-                return m("div", [
-                    m("h1", "Expenses"),
+                return m("div.column", [
+                    m("h1.ui.header", "Expenses"),
                     m("a[href='/']", { config: m.route }, "View Rates"),
                     m.component(new Components.ListComponent<Expense>(ctrl.source,
                         renderHeader,
