@@ -3,6 +3,7 @@
 /// <reference path="rates/ratewidgetcomponent.ts" />
 /// <reference path="expenses/expensewidgetcomponent.ts" />
 /// <reference path="filehandling/dragdrop.ts" />
+/// <reference path="components/menu.ts" />
 /// <reference path="components/page.ts" />
 
 
@@ -25,7 +26,12 @@ let handler = new FileHandling.FileHandler(root, {
 });
 
 let fileDialog = new FileHandling.FileDialog();
-let page = Components.Page.bind(null, context, fileDialog);
+
+let menu = new Components.MenuComponent([
+   new Components.MenuItem("/", "Rates"),
+   new Components.MenuItem("/expenses", "Expenses")
+]);
+let page = Components.Page.bind(null, context, fileDialog, menu);
 
 m.route.mode = "search";
 

@@ -42,8 +42,6 @@ namespace RateWidget {
             this.controller = () => { return new RateWidgetController(context); };
             this.view = (ctrl) => {
                 return m("div.column", [
-                    m("h1.ui.header", "Rates"),
-                    m("a[href='/expenses']", { config: m.route }, "View Expenses"),
                     m.component(new Components.ListComponent<Rate>(ctrl.source,
                         renderHeader,
                         renderItem)),

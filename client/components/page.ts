@@ -20,14 +20,21 @@ namespace Components {
         public controller: () => PageController;
         public view: _mithril.MithrilView<PageController>;
 
-        constructor(context: Data.BudgetContext, fileDialog: FileHandling.FileDialog, body: _mithril.MithrilComponent<{}>) {
+        constructor(context: Data.BudgetContext, fileDialog: FileHandling.FileDialog, menu: _mithril.MithrilComponent<{}>, body: _mithril.MithrilComponent<{}>) {
             this.controller = () => { return new PageController(context, fileDialog); };
             this.view = (ctrl) => {
                 return m("div", [
-                    m("div.ui.two.item.menu", [
-                        m("div.item", m("button.ui.button", { onclick: ctrl.openFile }, "Open")),
-                        m("div.item", m("button.ui.button", { onclick: ctrl.saveFile }, "Save"))
+                    m("div.ui.top.attached.menu", [
+                        m("div.ui.simple.dropdown.item", [
+                            "File",
+                            m("i.dropdown.icon"),
+                            m("div.menu", [
+                                m("div.item", m("button.ui.button", { onclick: ctrl.openFile }, "Open")),
+                                m("div.item", m("button.ui.button", { onclick: ctrl.saveFile }, "Save"))
+                            ])
+                        ])
                     ]),
+                    m.component(menu),
                     m("div.ui.grid.container", m.component(body))
                 ]);
             };

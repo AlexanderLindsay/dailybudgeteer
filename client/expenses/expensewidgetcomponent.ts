@@ -38,8 +38,6 @@ namespace ExpenseWidget {
             this.controller = () => { return new ExpenseWidgetController(context); };
             this.view = (ctrl) => {
                 return m("div.column", [
-                    m("h1.ui.header", "Expenses"),
-                    m("a[href='/']", { config: m.route }, "View Rates"),
                     m.component(new Components.ListComponent<Expense>(ctrl.source,
                         renderHeader,
                         renderItem)),
