@@ -22,9 +22,18 @@ namespace ExpenseWidget {
 
     let renderForm = (expense: Expense) => {
         return [
-            m("div.field", m("input[type='text'].ui.input", { onchange: m.withAttr("value", expense.name), value: expense.name() })),
-            m("div.field", m("input[type='date'].ui.input", { onchange: m.withAttr("value", expense.day), value: expense.day() })),
-            m("div.field", m("input[type='number'].ui.input", { onchange: m.withAttr("value", expense.amount), value: expense.amount() }))
+            m("div.field", [
+                m("label[for='name']", "Name"),
+                m("input[type='text'][id='name'][placeholder='Name'].ui.input", { onchange: m.withAttr("value", expense.name), value: expense.name() })
+            ]),
+            m("div.field", [
+                m("label[for='day']", "Day"),
+                m("input[type='date'][id='day'].ui.input", { onchange: m.withAttr("value", expense.day), value: expense.day() })
+            ]),
+            m("div.field", [
+                m("label[for='amount']", "Amount"),
+                m("input[type='number'][id='amount'].ui.input", { onchange: m.withAttr("value", expense.amount), value: expense.amount() })
+            ])
         ];
     };
 

@@ -26,9 +26,18 @@ namespace RateWidget {
 
     let renderForm = (rate: Rate) => {
         return [
-            m("div.field", m("input[type='text'].ui.input", { onchange: m.withAttr("value", rate.name), value: rate.name() })),
-            m("div.field", m("input[type='number'].ui.input", { onchange: m.withAttr("value", rate.amount), value: rate.amount() })),
-            m("div.field", m("input[type='number'].ui.input", { onchange: m.withAttr("value", rate.days), value: rate.days() }))
+            m("div.field", [
+                m("label[for='name']", "Name"),
+                m("input[type='text'][id='name'][placeholder='Name'].ui.input", { onchange: m.withAttr("value", rate.name), value: rate.name() })
+            ]),
+            m("div.field", [
+                m("label[for='amount']", "Amount"),
+                m("input[type='number'][id='amount'].ui.input", { onchange: m.withAttr("value", rate.amount), value: rate.amount() })
+            ]),
+            m("div.field", [
+                m("label[for='days']", "Days"),
+                m("input[type='number'][id='days'].ui.input", { onchange: m.withAttr("value", rate.days), value: rate.days() })
+            ])
         ];
     };
 
