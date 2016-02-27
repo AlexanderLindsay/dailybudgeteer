@@ -1,6 +1,7 @@
 # Dependency directories
 node_modules
-semantic
+semantic/dist
+semantic/tasks
 
 #compiled scripts
 client.js
