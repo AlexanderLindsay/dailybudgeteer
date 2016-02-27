@@ -27,6 +27,14 @@ namespace Data {
             };
         }
 
+        private parseDate(value: string) {
+            let timestamp = Date.parse(value);
+            if (isNaN(timestamp) === false) {
+                return new Date(timestamp);
+            }
+            return null;
+        }
+
         public loadData = (json: string) => {
             let data = JSON.parse(json);
             m.startComputation();
@@ -36,10 +44,9 @@ namespace Data {
                 return expense;
             }) || [];
             this.rates = data.rates.map((raw: any) => {
-                let rate = new RateWidget.Rate(raw.name, raw.amount, raw.days);
+                let rate = new RateWidget.Rate(raw.name, raw.amount, raw.days,
+                    this.parseDate(raw.startDate), this.parseDate(raw.endDate));
                 rate.id(raw.id);
-                rate.startDate(raw.startDate);
-                rate.endDate(raw.endDate);
                 return rate;
             }) || [];
             this.nextIds = data.nextIds || {

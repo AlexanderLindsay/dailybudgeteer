@@ -16,5 +16,14 @@ namespace ExpenseWidget {
             this.day = m.prop(day);
             this.amount = m.prop(amount);
         }
+
+        public toJSON = () => {
+            return {
+                id: this.id(),
+                name: this.name(),
+                day: this.day(),
+                amount: this.amount()
+            };
+        };
     }
 }

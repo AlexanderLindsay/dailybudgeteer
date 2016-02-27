@@ -10,7 +10,19 @@ namespace RateWidget {
 
         list = () => {
             let deferred = m.deferred<Rate[]>();
-            deferred.resolve(this.context.listRates());
+            deferred.resolve(this.context.listRates().filter((rate) => {
+                const currentDate = new Date();
+                if (rate.startDate() == null) {
+                    return true;
+                } else if (rate.startDate() <= currentDate) {
+                    if (rate.endDate() == null) {
+                        return true;
+                    } else {
+                        return rate.endDate() >= currentDate;
+                    }
+                }
+                return false;
+            }));
             return deferred.promise;
         };
 
@@ -38,6 +50,7 @@ namespace RateWidget {
 
         public save = () => {
             if (this.item().id() === 0) {
+                this.item().startDate(new Date());
                 this.context.addRate(this.item());
             }
 

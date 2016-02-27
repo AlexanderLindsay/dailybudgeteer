@@ -22,14 +22,25 @@ namespace RateWidget {
         public startDate: _mithril.MithrilProperty<Date>;
         public endDate: _mithril.MithrilProperty<Date>;
 
-        constructor(name: string, amount: number, days: number) {
+        constructor(name: string, amount: number, days: number, start?: Date, end?: Date) {
             this.id = m.prop(0);
             this.name = m.prop(name);
             this.amount = m.prop(amount);
             this.days = m.prop(days);
 
-            this.startDate = m.prop(<Date>null);
-            this.endDate = m.prop(<Date>null);
+            this.startDate = m.prop(start);
+            this.endDate = m.prop(end);
         }
+
+        public toJSON = () => {
+            return {
+                id: this.id(),
+                name: this.name(),
+                amount: this.amount(),
+                days: this.days(),
+                startDate: this.startDate(),
+                endDate: this.endDate()
+            };
+        };
     }
 }
