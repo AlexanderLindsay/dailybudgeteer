@@ -5,7 +5,7 @@ namespace RateWidget {
         item: _mithril.MithrilProperty<Rate>;
 
         constructor(private context: Data.BudgetContext) {
-            this.item = m.prop(new Rate("", 0, 0));
+            this.item = m.prop(new Rate("", 0, 1, IntervalType.Days));
         }
 
         list = () => {
@@ -30,7 +30,7 @@ namespace RateWidget {
             let t = 0;
             this.context.listRates()
                 .forEach((rate: Rate, index: number) => {
-                    t += rate.perDiem();
+                    t += rate.perDiem(new Date());
                 });
             return t;
         };
@@ -38,7 +38,7 @@ namespace RateWidget {
         public edit = (id: number) => {
             let rate = this.context.getRate(id);
             if (rate === null) {
-                this.item(new Rate("", 0, 0));
+                this.item(new Rate("", 0, 1, IntervalType.Days));
             } else {
                 this.item(rate);
             }
@@ -50,11 +50,14 @@ namespace RateWidget {
 
         public save = () => {
             if (this.item().id() === 0) {
+                if (this.item().intervalType() !== IntervalType.Days) {
+                    this.item().interval(1);
+                }
                 this.item().startDate(new Date());
                 this.context.addRate(this.item());
             }
 
-            this.item(new Rate("", 0, 0));
+            this.item(new Rate("", 0, 1, IntervalType.Days));
         };
     }
 

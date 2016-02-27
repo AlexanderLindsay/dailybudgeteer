@@ -2,6 +2,7 @@
 /// <reference path="ratewidgetcontroller.ts" />
 /// <reference path="../components/listcomponent.ts" />
 /// <reference path="../components/formcomponent.ts" />
+/// <reference path="../viewhelpers.ts" />
 
 namespace RateWidget {
     "use strict";
@@ -10,7 +11,8 @@ namespace RateWidget {
         return [
             m("th", "Name"),
             m("th", "Amount"),
-            m("th", "Days"),
+            m("th", "Interval"),
+            m("th", "Interval Type"),
             m("th", "Amount / Day")
         ];
     };
@@ -19,8 +21,9 @@ namespace RateWidget {
         return [
             m("td", rate.name()),
             m("td", rate.amount()),
-            m("td", rate.days()),
-            m("td", rate.perDiem())
+            m("td", rate.interval()),
+            m("td", IntervalType[rate.intervalType()]),
+            m("td", rate.perDiem(new Date()))
         ];
     };
 
@@ -35,9 +38,21 @@ namespace RateWidget {
                 m("input[type='number'][id='amount'].ui.input", { onchange: m.withAttr("value", rate.amount), value: rate.amount() })
             ]),
             m("div.field", [
-                m("label[for='days']", "Days"),
-                m("input[type='number'][id='days'].ui.input", { onchange: m.withAttr("value", rate.days), value: rate.days() })
-            ])
+                m("label[for='intervaltype']", "Interval Type"),
+                m("select[id='intervaltype'].ui.selection.dropdown", { onchange: m.withAttr("value", (value) => {
+                    rate.intervalType(+value);
+                }, null) },
+                    ViewHelpers.WriteOptions(rate.intervalType(), [
+                        new ViewHelpers.Option(IntervalType.Days, IntervalType[IntervalType.Days]),
+                        new ViewHelpers.Option(IntervalType.Month, IntervalType[IntervalType.Month]),
+                        new ViewHelpers.Option(IntervalType.Year, IntervalType[IntervalType.Year])
+                    ]))
+            ]),
+            m(`div.field${rate.allowInterval() ? "" : ".disabled"}`, [
+                m("label[for='interval']", "Interval"),
+                m(`input[type='number'][id='interval'][min='1']${rate.allowInterval() ? "" : "[disabled]"}.ui.input`,
+                    { onchange: m.withAttr("value", rate.interval), value: rate.interval() })
+            ]),
         ];
     };
 
@@ -54,7 +69,6 @@ namespace RateWidget {
                     m.component(new Components.ListComponent<Rate>(ctrl.source,
                         renderHeader,
                         renderItem)),
-                    m("div", `Daily Rate: ${ctrl.source.total()}`),
                     m.component(new Components.FormComponent<Rate>(ctrl.source, renderForm))
                 ]);
             };

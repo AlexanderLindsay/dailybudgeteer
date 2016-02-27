@@ -44,8 +44,13 @@ namespace Data {
                 return expense;
             }) || [];
             this.rates = data.rates.map((raw: any) => {
-                let rate = new RateWidget.Rate(raw.name, raw.amount, raw.days,
-                    this.parseDate(raw.startDate), this.parseDate(raw.endDate));
+                let rate = new RateWidget.Rate(
+                    raw.name,
+                    raw.amount,
+                    raw.interval,
+                    raw.intervalType,
+                    this.parseDate(raw.startDate),
+                    this.parseDate(raw.endDate));
                 rate.id(raw.id);
                 return rate;
             }) || [];
