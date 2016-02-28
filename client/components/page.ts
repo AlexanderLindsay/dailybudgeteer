@@ -29,8 +29,8 @@ namespace Components {
                             "File",
                             m("i.dropdown.icon"),
                             m("div.menu", [
-                                m("div.item", m("button.ui.button", { onclick: ctrl.openFile }, "Open")),
-                                m("div.item", m("button.ui.button", { onclick: ctrl.saveFile }, "Save"))
+                                m("div.item", { onclick: ctrl.openFile }, "Open"),
+                                m("div.item", { onclick: ctrl.saveFile }, "Save")
                             ])
                         ])
                     ]),
