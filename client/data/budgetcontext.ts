@@ -1,3 +1,4 @@
+import moment = require("moment");
 import DataContext from "./datacontext";
 import Expense from "../expenses/expense";
 import Rate from "../rates/rate";
@@ -22,18 +23,14 @@ export default class BudgetContext extends DataContext {
     }
 
     private parseDate(value: string) {
-        let timestamp = Date.parse(value);
-        if (isNaN(timestamp) === false) {
-            return new Date(timestamp);
-        }
-        return null;
+        return moment(value);
     }
 
     public loadData = (json: string) => {
         let data = JSON.parse(json);
         m.startComputation();
         this.expenses = data.expenses.map((raw: any) => {
-            let expense = new Expense(raw.name, raw.day, raw.amount);
+            let expense = new Expense(raw.name, this.parseDate(raw.day), raw.amount);
             expense.id(raw.id);
             return expense;
         }) || [];

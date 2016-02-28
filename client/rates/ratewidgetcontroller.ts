@@ -1,3 +1,4 @@
+import moment = require("moment");
 import * as it from "./intervaltype";
 import Rate from "./rate";
 import FormComponent from "../components/formcomponent";
@@ -15,14 +16,14 @@ class RateDataSource implements DataSource<Rate> {
     list = () => {
         let deferred = m.deferred<Rate[]>();
         deferred.resolve(this.context.listRates().filter((rate) => {
-            const currentDate = new Date();
+            const currentDate = moment();
             if (rate.startDate() == null) {
                 return true;
-            } else if (rate.startDate() <= currentDate) {
+            } else if (rate.startDate().isSameOrBefore(currentDate, "day")) {
                 if (rate.endDate() == null) {
                     return true;
                 } else {
-                    return rate.endDate() >= currentDate;
+                    return rate.endDate().isSameOrAfter(currentDate, "day");
                 }
             }
             return false;
@@ -34,7 +35,7 @@ class RateDataSource implements DataSource<Rate> {
         let t = 0;
         this.context.listRates()
             .forEach((rate: Rate, index: number) => {
-                t += rate.perDiem(new Date());
+                t += rate.perDiem(moment());
             });
         return t;
     };
@@ -57,7 +58,7 @@ class RateDataSource implements DataSource<Rate> {
             if (this.item().intervalType() !== it.IntervalType.Days) {
                 this.item().interval(1);
             }
-            this.item().startDate(new Date());
+            this.item().startDate(moment());
             this.context.addRate(this.item());
         }
 

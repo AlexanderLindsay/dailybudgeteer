@@ -1,3 +1,4 @@
+import moment = require("moment");
 import * as it from "./intervaltype";
 import Rate from "./rate";
 import RateWidgetController from "./ratewidgetcontroller";
@@ -22,7 +23,7 @@ let renderItem = (rate: Rate) => {
         m("td", rate.amount()),
         m("td", rate.interval()),
         m("td", it.IntervalType[rate.intervalType()]),
-        m("td", rate.perDiem(new Date()))
+        m("td", rate.perDiem(moment()))
     ];
 };
 
