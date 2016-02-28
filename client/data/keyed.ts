@@ -1,7 +1,5 @@
-namespace Data {
-    "use strict";
-
-    export interface IKeyed {
-        id: _mithril.MithrilProperty<number>;
-    }
+interface IKeyed {
+    id: _mithril.MithrilProperty<number>;
 }
+
+export default IKeyed;

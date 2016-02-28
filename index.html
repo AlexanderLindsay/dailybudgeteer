@@ -18,5 +18,9 @@
       <div id="root" class="fullpage">
       </div>
   </body>
-  <script type="text/javascript" src="client.js"></script>
+  <script type="text/javascript" src="compiled/mithril.min.js"></script>
+  <script type="text/javascript">
+    require("module").globalPaths.push(__dirname + "/compiled");
+    require("start");
+  </script>
 </html>

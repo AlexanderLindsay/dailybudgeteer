@@ -1,14 +1,16 @@
 /// <reference path="../typings/browser.d.ts" />
-/// <reference path="data/budgetcontext.ts" />
-/// <reference path="rates/ratewidgetcomponent.ts" />
-/// <reference path="expenses/expensewidgetcomponent.ts" />
-/// <reference path="filehandling/dragdrop.ts" />
-/// <reference path="components/menu.ts" />
-/// <reference path="components/page.ts" />
 
+import moment = require("moment");
+import BudgetContext from "./data/budgetcontext";
+import * as FileHandling from "./filehandling/dragdrop";
+import FileDialog from "./filehandling/dialog";
+import * as Menu from "./components/menu";
+import Page from "./components/page";
+import RatesWidgetComponent from "./rates/rateswidgetcomponent";
+import ExpenseWidgetComponent from "./expenses/expensewidgetcomponent";
 
 let root = document.getElementById("root");
-let context = new Data.BudgetContext();
+let context = new BudgetContext();
 
 let handler = new FileHandling.FileHandler(root, {
     onchange: (files: FileList) => {
@@ -25,17 +27,18 @@ let handler = new FileHandling.FileHandler(root, {
     }
 });
 
-let fileDialog = new FileHandling.FileDialog();
+let fileDialog = new FileDialog();
 
-let menu = new Components.MenuComponent([
-   new Components.MenuItem("/", "Rates"),
-   new Components.MenuItem("/expenses", "Expenses")
+let menu = new Menu.MenuComponent([
+   new Menu.MenuItem("/", "Rates"),
+   new Menu.MenuItem(`/expenses/${moment().toISOString()}`, "Expenses")
 ]);
-let page = Components.Page.bind(null, context, fileDialog, menu);
+let page = Page.bind(null, context, fileDialog, menu);
 
 m.route.mode = "search";
 
 m.route(root, "/", {
-    "/": new page(new RateWidget.RatesWidgetComponent(context)),
-    "/expenses": new page(new ExpenseWidget.ExpenseWidgetComponent(context))
+    "/": new page(new RatesWidgetComponent(context)),
+    "/expenses": new page(new ExpenseWidgetComponent(context)),
+    "/expenses/:date": new page(new ExpenseWidgetComponent(context))
 });

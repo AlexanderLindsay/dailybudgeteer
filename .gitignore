@@ -4,5 +4,5 @@ semantic/dist
 semantic/tasks
 
 #compiled scripts
-client.js
+compiled
 main.js
