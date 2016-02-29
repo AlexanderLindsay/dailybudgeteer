@@ -6,3 +6,6 @@ semantic/tasks
 #compiled scripts
 compiled
 main.js
+
+#packaging
+builds
