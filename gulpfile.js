@@ -4,6 +4,7 @@ var concat = require('gulp-concat');
 var merge = require('merge-stream');
 var ignore = require('gulp-ignore');
 var rimraf = require('gulp-rimraf');
+var packager = require('electron-packager');
 
 gulp.task('clean', function () {
     return gulp.src(['./**/*.js', 'compiled/*'], { read: false }) // much faster
@@ -37,3 +38,15 @@ gulp.task('main', ['clean'], function () {
 });
 
 gulp.task('build', ['main', 'client']);
+
+gulp.task('package', function () {
+   packager({
+       arch: "x64",
+       dir: ".",
+       platform: "win32",
+       name: "PerTurn",
+       version: "0.36.9",
+       out: "builds",
+       overwrite: true
+   }, function(err, appPath){}) 
+});
