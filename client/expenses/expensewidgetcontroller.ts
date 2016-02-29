@@ -11,12 +11,24 @@ class ExpenseDataSource implements DataSource<Expense> {
     }
 
     public list = () => {
-        let deferred = m.deferred<Expense[]>();
-        deferred.resolve(this.context.listExpenses().filter((exp) => {
+        let perDiem = this.context.listRates().reduce<number>((previous, current, index) => {
+            return previous + current.perDiem(this.day);
+        }, 0);
+
+        let expenses = [];
+        if (perDiem !== 0) {
+            expenses.push(new Expense("Base", this.day, perDiem));
+        }
+
+        expenses.concat(this.context.listExpenses().filter((exp) => {
             const expDate = exp.day();
             const day = this.day;
             return expDate.isSame(day, "day");
         }));
+
+        let deferred = m.deferred<Expense[]>();
+        deferred.resolve(expenses);
+
         return deferred.promise;
     };
 
