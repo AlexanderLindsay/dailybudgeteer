@@ -47,6 +47,7 @@ gulp.task('package', function () {
        name: "PerTurn",
        version: "0.36.9",
        out: "builds",
-       overwrite: true
+       overwrite: true,
+       ignore: "(\.gitignore)|(gulpfile\.js)|(\.vscode.*)|(typings.*)|(tsconfig.json)|(semantic.json)|(builds.*)|(client.*)|(node_modules.*)|(semantic/src.*)|(semantic/tasks.*)"
    }, function(err, appPath){}) 
 });
