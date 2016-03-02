@@ -5,10 +5,11 @@ var merge = require('merge-stream');
 var ignore = require('gulp-ignore');
 var rimraf = require('gulp-rimraf');
 var packager = require('electron-packager');
+var semanticBuild = require('./semantic/tasks/build');
 
 gulp.task('clean', function () {
     return gulp.src(['./**/*.js', 'compiled/*'], { read: false }) // much faster
-        .pipe(ignore(['node_modules/**', 'gulpfile.js']))
+        .pipe(ignore(['node_modules/**', 'gulpfile.js', 'semantic/**']))
         .pipe(rimraf());
 });
 
@@ -21,10 +22,11 @@ gulp.task('client', ['clean'], function () {
         }));
 
     var mithril = gulp.src('node_modules/mithril/mithril.min.js');
+    var jquery = gulp.src('node_modules/jquery/dist/jquery.min.js');
     var semantic = gulp.src('semantic/dist/semantic.min.js');
     var moment = gulp.src('node_modules/moment/moment.js');
 
-    return merge(mithril, semantic, moment, compiled)
+    return merge(mithril, jquery, semantic, moment, compiled)
         .pipe(gulp.dest('compiled/.'));
 });
 
@@ -36,6 +38,8 @@ gulp.task('main', ['clean'], function () {
         }))
         .pipe(gulp.dest('.'));
 });
+
+gulp.task('semantic-build', semanticBuild);
 
 gulp.task('build', ['main', 'client']);
 

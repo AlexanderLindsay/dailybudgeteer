@@ -1,7 +1,6 @@
 # Dependency directories
 node_modules
 semantic/dist
-semantic/tasks
 
 #compiled scripts
 compiled
