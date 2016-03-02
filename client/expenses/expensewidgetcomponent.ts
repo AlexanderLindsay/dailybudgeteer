@@ -1,4 +1,5 @@
 import moment = require("moment");
+import modal from "../components/modal";
 import Expense from "./expense";
 import ExpenseWidgetController from "./expensewidgetcontroller";
 import FormComponent from "../components/formcomponent";
@@ -53,7 +54,8 @@ export default class ExpenseWidgetComponent implements
                 m.component(new ListComponent<Expense>(ctrl.source,
                     renderHeader,
                     renderItem)),
-                m.component(new FormComponent<Expense>(ctrl.source, renderForm))
+                m("button[type='button'].ui.button", { onclick: ctrl.showAddModal.bind(ctrl, true) }, "Add Expense"),
+                m.component(new modal("Add Expense", ctrl.showAddModal, () => new FormComponent<Expense>(ctrl.source, renderForm)))
             ]);
         };
     }

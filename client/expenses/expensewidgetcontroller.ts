@@ -57,8 +57,10 @@ class ExpenseDataSource implements DataSource<Expense> {
 export default class ExpenseWidgetController implements _mithril.MithrilController {
 
     public source: ExpenseDataSource;
+    public showAddModal: _mithril.MithrilProperty<Boolean>;
 
     constructor(context: BudgetContext, day: moment.Moment) {
         this.source = new ExpenseDataSource(context, day);
+        this.showAddModal = m.prop(false);
     }
 }

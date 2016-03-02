@@ -36,6 +36,9 @@ export default class FileDialog {
     };
 
     private onOpenDialogClose = (onOpen: (data: string) => void, fileNames: string[]) => {
+        if (fileNames === undefined) {
+            return;
+        }
         if (fileNames.length > 0) {
             let fileName = fileNames[0];
             fs.readFile(fileName, "utf-8", (err: any, data: any) => {
