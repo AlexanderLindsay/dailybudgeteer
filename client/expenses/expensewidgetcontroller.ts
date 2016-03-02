@@ -15,7 +15,7 @@ class ExpenseDataSource implements DataSource<Expense> {
             return previous + current.perDiem(this.day);
         }, 0);
 
-        let expenses = [];
+        let expenses: Expense[] = [];
         if (perDiem !== 0) {
             expenses.push(new Expense("Base", this.day, perDiem));
         }

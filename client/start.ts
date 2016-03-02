@@ -29,16 +29,18 @@ let handler = new FileHandling.FileHandler(root, {
 
 let fileDialog = new FileDialog();
 
+const dateFormat = "YYYY-MM-DD";
+
 let menu = new Menu.MenuComponent([
-   new Menu.MenuItem("/", "Rates"),
-   new Menu.MenuItem(`/expenses/${moment().toISOString()}`, "Expenses")
+   new Menu.MenuItem(`/expenses/${moment().format(dateFormat)}`, "Expenses"),
+   new Menu.MenuItem("/rates", "Rates")
 ]);
 let page = Page.bind(null, context, fileDialog, menu);
 
 m.route.mode = "search";
 
-m.route(root, "/", {
-    "/": new page(new RatesWidgetComponent(context)),
+m.route(root, `/expenses/${moment().format(dateFormat)}`, {
+    "/rates": new page(new RatesWidgetComponent(context)),
     "/expenses": new page(new ExpenseWidgetComponent(context)),
     "/expenses/:date": new page(new ExpenseWidgetComponent(context))
 });
