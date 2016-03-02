@@ -16,7 +16,8 @@
 			},
 			"externalConsole": false,
 			"sourceMaps": false,
-			"outDir": null
+			"outDir": null,
+            "preLaunchTask": "build"
 		},
 		{
 			"name": "Attach",
