@@ -29,13 +29,12 @@ export default class FormComponent<T> implements
 
     constructor(
         source: DataSource<T>,
-        renderForm: (item: T) => _mithril.MithrilVirtualElement<{}>[]
+        renderForm: (item: T) => _mithril.MithrilVirtualElement<{}>
     ) {
         this.controller = () => new FormController<T>(source);
         this.view = (ctrl: FormController<T>) => {
             return m("form.ui.form", [
-                renderForm(ctrl.vm.item()),
-                m("button.ui.button[type='button']", { onclick: ctrl.vm.saveItem }, "Save")
+                renderForm(ctrl.vm.item())
             ]);
         };
     }

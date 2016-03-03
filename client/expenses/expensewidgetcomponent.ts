@@ -21,7 +21,7 @@ let renderItem = (expense: Expense) => {
 };
 
 let renderForm = (expense: Expense) => {
-    return [
+    return <_mithril.MithrilVirtualElement<{}>>[
         m("div.field", [
             m("label[for='name']", "Name"),
             m("input[type='text'][id='name'][placeholder='Name'].ui.input", { onchange: m.withAttr("value", expense.name), value: expense.name() })
@@ -35,6 +35,12 @@ let renderForm = (expense: Expense) => {
             m("input[type='number'][id='amount'].ui.input", { onchange: m.withAttr("value", expense.amount), value: expense.amount() })
         ])
     ];
+};
+
+let renderFooter = (ctrl: ExpenseWidgetController) => {
+    return m("th[colspan='3']", [
+        m("button[type='button'].ui.primary.button", { onclick: ctrl.showAddModal.bind(ctrl, true) }, "Add Expense")
+    ]);
 };
 
 export default class ExpenseWidgetComponent implements
@@ -53,9 +59,14 @@ export default class ExpenseWidgetComponent implements
             return m("div.column", [
                 m.component(new ListComponent<Expense>(ctrl.source,
                     renderHeader,
-                    renderItem)),
-                m("button[type='button'].ui.button", { onclick: ctrl.showAddModal.bind(ctrl, true) }, "Add Expense"),
-                m.component(new modal("Add Expense", ctrl.showAddModal, () => new FormComponent<Expense>(ctrl.source, renderForm)))
+                    renderItem,
+                    renderFooter.bind(this, ctrl))),
+                m.component(new modal("Add Expense", ctrl.showAddModal,
+                    () => new FormComponent<Expense>(ctrl.source, renderForm),
+                    () => [
+                        m("button.ui.approve.button[type='button']", { onclick: ctrl.source.save }, "Add"),
+                        m("button.ui.cancel.button[type='button]", "Cancel")
+                    ]))
             ]);
         };
     }

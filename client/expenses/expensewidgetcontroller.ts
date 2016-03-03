@@ -20,7 +20,7 @@ class ExpenseDataSource implements DataSource<Expense> {
             expenses.push(new Expense("Base", this.day, perDiem));
         }
 
-        expenses.concat(this.context.listExpenses().filter((exp) => {
+        expenses = expenses.concat(this.context.listExpenses().filter((exp) => {
             const expDate = exp.day();
             const day = this.day;
             return expDate.isSame(day, "day");

@@ -35,8 +35,9 @@ export default class ListComponent<T extends IKeyed> implements
 
     constructor(
         source: DataSource<T>,
-        renderHeader: () => _mithril.MithrilVirtualElement<{}>[],
-        renderItem: (item: T) => _mithril.MithrilVirtualElement<{}>[]) {
+        renderHeader: () => _mithril.MithrilVirtualElement<{}>,
+        renderItem: (item: T) => _mithril.MithrilVirtualElement<{}>,
+        renderFooter: () => _mithril.MithrilVirtualElement<{}> = () => []) {
 
         this.controller = () => new ListController<T>(source);
         this.view = (ctrl: ListController<T>) => {
@@ -58,7 +59,8 @@ export default class ListComponent<T extends IKeyed> implements
                                 ])
                             ]);
                         })
-                    ])
+                    ]),
+                    m("tfoot.full.width", m("tr", renderFooter()))
                 ])
             ]);
         };
