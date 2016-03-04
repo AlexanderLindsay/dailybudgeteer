@@ -39,7 +39,7 @@ let renderForm = (expense: Expense) => {
 
 let renderFooter = (ctrl: ExpenseWidgetController) => {
     return m("th[colspan='3']", [
-        m("button[type='button'].ui.primary.button", { onclick: ctrl.showAddModal.bind(ctrl, true) }, "Add Expense")
+        m("button[type='button'].ui.primary.button", { onclick: ctrl.vm.openAddModal }, "Add Expense")
     ]);
 };
 
@@ -57,14 +57,14 @@ export default class ExpenseWidgetComponent implements
         };
         this.view = (ctrl) => {
             return m("div.column", [
-                m.component(new ListComponent<Expense>(ctrl.source,
+                m.component(new ListComponent<Expense>(ctrl.vm,
                     renderHeader,
                     renderItem,
                     renderFooter.bind(this, ctrl))),
-                m.component(new modal("Add Expense", ctrl.showAddModal,
-                    () => new FormComponent<Expense>(ctrl.source, renderForm),
+                m.component(new modal(ctrl.vm.modalTitle(), ctrl.vm.isAddModalOpen,
+                    () => new FormComponent<Expense>(ctrl.vm, renderForm),
                     () => [
-                        m("button.ui.approve.button[type='button']", { onclick: ctrl.source.save }, "Add"),
+                        m("button.ui.approve.button[type='button']", { onclick: ctrl.vm.save }, ctrl.vm.modalActionName()),
                         m("button.ui.cancel.button[type='button]", "Cancel")
                     ]))
             ]);

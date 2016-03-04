@@ -17,8 +17,8 @@ export default class BudgetContext extends DataContext {
         this.expenses = [];
         this.rates = [];
         this.nextIds = {
-            expenses: 0,
-            rates: 0
+            expenses: 1,
+            rates: 1
         };
     }
 
@@ -46,8 +46,8 @@ export default class BudgetContext extends DataContext {
             return rate;
         }) || [];
         this.nextIds = data.nextIds || {
-            expenses: 0,
-            rates: 0
+            expenses: 1,
+            rates: 1
         };
         m.endComputation();
     };

@@ -3,11 +3,22 @@ import Expense from "./expense";
 import BudgetContext from "../data/budgetcontext";
 import DataSource from "../components/datasource";
 
+const saveTitle = "Add Expense";
+const saveActionName = "Add";
+const editTitle = "Edit Expense";
+const editActionName = "Save";
+
 class ExpenseDataSource implements DataSource<Expense> {
     item: _mithril.MithrilProperty<Expense>;
+    isAddModalOpen: _mithril.MithrilProperty<Boolean>;
+    modalTitle: _mithril.MithrilProperty<string>;
+    modalActionName: _mithril.MithrilProperty<string>;
 
     constructor(private context: BudgetContext, private day: moment.Moment) {
         this.item = m.prop(new Expense("", this.day, 0));
+        this.isAddModalOpen = m.prop(false);
+        this.modalTitle = m.prop(saveTitle);
+        this.modalActionName = m.prop(saveActionName);
     }
 
     public list = () => {
@@ -37,8 +48,12 @@ class ExpenseDataSource implements DataSource<Expense> {
         if (expense === null) {
             this.item(new Expense("", this.day, 0));
         } else {
-            this.item(expense);
+            this.item(expense.clone());
         }
+
+        this.modalTitle(editTitle);
+        this.modalActionName(editActionName);
+        this.isAddModalOpen(true);
     };
 
     public remove = (id: number) => {
@@ -48,19 +63,28 @@ class ExpenseDataSource implements DataSource<Expense> {
     public save = () => {
         if (this.item().id() === 0) {
             this.context.addExpense(this.item());
+        } else {
+            let modified = this.item();
+            let current = this.context.getExpense(modified.id());
+            current.name(modified.name());
+            current.day(modified.day());
+            current.amount(modified.amount());
         }
+    };
 
+    public openAddModal = () => {
         this.item(new Expense("", this.day, 0));
+        this.modalTitle(saveTitle);
+        this.modalActionName(saveActionName);
+        this.isAddModalOpen(true);
     };
 }
 
 export default class ExpenseWidgetController implements _mithril.MithrilController {
 
-    public source: ExpenseDataSource;
-    public showAddModal: _mithril.MithrilProperty<Boolean>;
+    public vm: ExpenseDataSource;
 
     constructor(context: BudgetContext, day: moment.Moment) {
-        this.source = new ExpenseDataSource(context, day);
-        this.showAddModal = m.prop(false);
+        this.vm = new ExpenseDataSource(context, day);
     }
 }
