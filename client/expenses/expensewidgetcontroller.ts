@@ -3,6 +3,7 @@ import Expense from "./expense";
 import BudgetContext from "../data/budgetcontext";
 import DataSource from "../components/datasource";
 
+const baseExpenseId = -100; // arbitray number that is not zero or -1 (which would be reasonable numbers to assume were sential values for a new record)
 const saveTitle = "Add Expense";
 const saveActionName = "Add";
 const editTitle = "Edit Expense";
@@ -26,16 +27,17 @@ class ExpenseDataSource implements DataSource<Expense> {
             return previous + current.perDiem(this.day);
         }, 0);
 
-        let expenses: Expense[] = [];
-        if (perDiem !== 0) {
-            expenses.push(new Expense("Base", this.day, perDiem));
-        }
-
-        expenses = expenses.concat(this.context.listExpenses().filter((exp) => {
+        let expenses: Expense[] = this.context.listExpenses().filter((exp) => {
             const expDate = exp.day();
             const day = this.day;
             return expDate.isSame(day, "day");
-        }));
+        });
+
+        if (perDiem !== 0) {
+            let baseExpense = new Expense("Base", this.day, perDiem);
+            baseExpense.id(baseExpenseId);
+            expenses.unshift(baseExpense);
+        }
 
         let deferred = m.deferred<Expense[]>();
         deferred.resolve(expenses);
@@ -68,6 +70,14 @@ class ExpenseDataSource implements DataSource<Expense> {
             let current = this.context.getExpense(modified.id());
             current.update(modified);
         }
+    };
+
+    public allowEdit = (id: number) => {
+        return id !== baseExpenseId;
+    };
+
+    public allowRemove = (id: number) => {
+        return id !== baseExpenseId;
     };
 
     public openAddModal = () => {

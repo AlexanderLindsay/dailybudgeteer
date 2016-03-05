@@ -83,6 +83,14 @@ class RateDataSource implements DataSource<Rate> {
         }
     };
 
+    public allowEdit = (id: number) => {
+        return true;
+    };
+
+    public allowRemove = (id: number) => {
+        return true;
+    };
+
     public openAddModal = () => {
         this.item(new Rate("", 0, 1, it.IntervalType.Days));
         this.modalTitle(saveTitle);

@@ -17,6 +17,14 @@ class ListViewModel<T extends IKeyed> {
     public removeItem = (id: number) => {
         this.source.remove(id);
     };
+
+    public allowEdit = (id: number) => {
+        return this.source.allowEdit(id);
+    };
+
+    public allowRemove = (id: number) => {
+        return this.source.allowRemove(id);
+    };
 }
 
 class ListController<T extends IKeyed> implements _mithril.MithrilController {
@@ -50,13 +58,10 @@ export default class ListComponent<T extends IKeyed> implements
                         ])
                     ]),
                     m("tbody", [
-                        ctrl.vm.items().map(function(item, index) {
+                        ctrl.vm.items().map((item, index) => {
                             return m("tr", [
                                 renderItem(item),
-                                m("td", [
-                                    m("button.ui.button", { onclick: ctrl.vm.editItem.bind(ctrl.vm, item.id()) }, "Edit"),
-                                    m("button.ui.button", { onclick: ctrl.vm.removeItem.bind(ctrl.vm, item.id()) }, "Remove")
-                                ])
+                                m("td", this.renderActions(ctrl, item))
                             ]);
                         })
                     ]),
@@ -64,5 +69,20 @@ export default class ListComponent<T extends IKeyed> implements
                 ])
             ]);
         };
+    }
+
+    private renderActions(ctrl: ListController<T>, item: T) {
+        const id = item.id();
+
+        let actions = [];
+        if (ctrl.vm.allowEdit(id)) {
+            actions.push(m("button.ui.button", { onclick: ctrl.vm.editItem.bind(ctrl.vm, id) }, "Edit"));
+        }
+
+        if (ctrl.vm.allowRemove(id)) {
+            actions.push(m("button.ui.button", { onclick: ctrl.vm.removeItem.bind(ctrl.vm, id) }, "Remove"));
+        }
+
+        return actions;
     }
 }
