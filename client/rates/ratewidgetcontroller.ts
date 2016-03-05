@@ -6,11 +6,22 @@ import ListComponent from "../components/listcomponent";
 import BudgetContext from "../data/budgetcontext";
 import DataSource from "../components/datasource";
 
+const saveTitle = "Add Rate";
+const saveActionName = "Add";
+const editTitle = "Edit Rate";
+const editActionName = "Save";
+
 class RateDataSource implements DataSource<Rate> {
     item: _mithril.MithrilProperty<Rate>;
+    isAddModalOpen: _mithril.MithrilProperty<Boolean>;
+    modalTitle: _mithril.MithrilProperty<string>;
+    modalActionName: _mithril.MithrilProperty<string>;
 
     constructor(private context: BudgetContext) {
         this.item = m.prop(new Rate("", 0, 1, it.IntervalType.Days));
+        this.isAddModalOpen = m.prop(false);
+        this.modalTitle = m.prop(saveTitle);
+        this.modalActionName = m.prop(saveActionName);
     }
 
     list = () => {
@@ -45,8 +56,12 @@ class RateDataSource implements DataSource<Rate> {
         if (rate === null) {
             this.item(new Rate("", 0, 1, it.IntervalType.Days));
         } else {
-            this.item(rate);
+            this.item(rate.clone());
         }
+
+        this.modalTitle(editTitle);
+        this.modalActionName(editActionName);
+        this.isAddModalOpen(true);
     };
 
     public remove = (id: number) => {
@@ -54,23 +69,33 @@ class RateDataSource implements DataSource<Rate> {
     };
 
     public save = () => {
-        if (this.item().id() === 0) {
-            if (this.item().intervalType() !== it.IntervalType.Days) {
-                this.item().interval(1);
-            }
-            this.item().startDate(moment());
-            this.context.addRate(this.item());
+        if (this.item().intervalType() !== it.IntervalType.Days) {
+            this.item().interval(1);
         }
 
+        if (this.item().id() === 0) {
+            this.item().startDate(moment());
+            this.context.addRate(this.item());
+        } else {
+            let modified = this.item();
+            let current = this.context.getRate(modified.id());
+            current.update(modified);
+        }
+    };
+
+    public openAddModal = () => {
         this.item(new Rate("", 0, 1, it.IntervalType.Days));
+        this.modalTitle(saveTitle);
+        this.modalActionName(saveActionName);
+        this.isAddModalOpen(true);
     };
 }
 
 export default class RateWidgetController implements _mithril.MithrilController {
 
-    public source: RateDataSource;
+    public vm: RateDataSource;
 
     constructor(context: BudgetContext) {
-        this.source = new RateDataSource(context);
+        this.vm = new RateDataSource(context);
     }
 }

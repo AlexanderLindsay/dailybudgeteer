@@ -44,4 +44,10 @@ export default class Expense implements IKeyed {
         clone.id(this.id());
         return clone;
     };
+
+    public update = (modified: Expense) => {
+        this.name(modified.name());
+        this.day(modified.day());
+        this.amount(modified.amount());
+    };
 }

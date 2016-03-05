@@ -66,9 +66,7 @@ class ExpenseDataSource implements DataSource<Expense> {
         } else {
             let modified = this.item();
             let current = this.context.getExpense(modified.id());
-            current.name(modified.name());
-            current.day(modified.day());
-            current.amount(modified.amount());
+            current.update(modified);
         }
     };
 

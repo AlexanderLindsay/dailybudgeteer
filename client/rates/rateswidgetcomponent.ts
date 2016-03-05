@@ -1,4 +1,5 @@
 import moment = require("moment");
+import modal from "../components/modal";
 import * as it from "./intervaltype";
 import Rate from "./rate";
 import RateWidgetController from "./ratewidgetcontroller";
@@ -58,6 +59,15 @@ let renderForm = (rate: Rate) => {
     ];
 };
 
+let renderFooter = (ctrl: RateWidgetController) => {
+    return [
+        m("th[colspan='4']", [
+            m("button[type='button'].ui.primary.button", { onclick: ctrl.vm.openAddModal }, "Add Rate")
+        ]),
+        m("th[colspan='2']", ctrl.vm.total())
+    ];
+};
+
 export default class RatesWidgetComponent implements
     _mithril.MithrilComponent<RateWidgetController> {
 
@@ -68,10 +78,16 @@ export default class RatesWidgetComponent implements
         this.controller = () => { return new RateWidgetController(context); };
         this.view = (ctrl) => {
             return m("div.column", [
-                m.component(new ListComponent<Rate>(ctrl.source,
+                m.component(new ListComponent<Rate>(ctrl.vm,
                     renderHeader,
-                    renderItem)),
-                m.component(new FormComponent<Rate>(ctrl.source, renderForm))
+                    renderItem,
+                    renderFooter.bind(this, ctrl))),
+                m.component(new modal(ctrl.vm.modalTitle(), ctrl.vm.isAddModalOpen,
+                    () => new FormComponent<Rate>(ctrl.vm, renderForm),
+                    () => [
+                        m("button.ui.approve.button[type='button']", { onclick: ctrl.vm.save }, ctrl.vm.modalActionName()),
+                        m("button.ui.cancel.button[type='button]", "Cancel")
+                    ]))
             ]);
         };
     }
