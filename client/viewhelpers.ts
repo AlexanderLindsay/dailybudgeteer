@@ -1,7 +1,7 @@
 import m = require("mithril");
 
 export class Option<T> {
-    constructor(public value: T, public name: string) { }
+    constructor(public value: T, public text: string) { }
 }
 
 export function WriteOptions<T>(selected: T | T[], options: Option<T>[]) {
@@ -13,11 +13,6 @@ export function WriteOptions<T>(selected: T | T[], options: Option<T>[]) {
             isSelected = selected === opt.value;
         }
 
-        let selectedAttribute = "";
-        if (isSelected) {
-            selectedAttribute = "[selected]";
-        }
-
-        return m(`option[value='${opt.value}']${selectedAttribute}`, opt.name);
+        return m("option", { value: opt.value, selected: isSelected }, opt.text);
     });
 }

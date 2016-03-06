@@ -54,7 +54,7 @@ export default class RatesWidgetComponent implements
                 m("label[for='intervaltype']", "Interval Type"),
                 m("select[id='intervaltype'].ui.selection.dropdown", { onchange: m.withAttr("value", (value) => {
                     rate.intervalType(+value);
-                }, null) },
+                }, null), value: rate.intervalType() },
                     ViewHelpers.WriteOptions(rate.intervalType(), RatesWidgetComponent.intervalTypeOptions))
             ]),
             m(`div.field${rate.allowInterval() ? "" : ".disabled"}`, [
