@@ -8,21 +8,17 @@ export class MenuItem {
     };
 }
 
-export class MenuController implements _mithril.MithrilController {
-    constructor(public menuItems: MenuItem[]) { }
-}
-
-export class MenuComponent implements _mithril.MithrilComponent<MenuController> {
-    controller: () => MenuController;
-    view: _mithril.MithrilView<MenuController>;
+export class MenuComponent implements _mithril.MithrilComponent<{}> {
+    controller: () => Object;
+    view: _mithril.MithrilView<{}>;
 
     constructor(menuItems: MenuItem[]) {
-        this.controller = () => new MenuController(menuItems);
-        this.view = (ctrl: MenuController) => {
+        this.controller = () => { return {}; };
+        this.view = () => {
             return m("div.ui.tabular.menu",
-                ctrl.menuItems.map((item: MenuItem) => {
-                    let activeCss = item.isActive() ? ".active" : "";
-                    return m(`div${activeCss}.item`, { key: item.name }, m(`a[href='${item.href}']`, { config: m.route }, item.name));
+                menuItems.map((item: MenuItem) => {
+                    let activeCss = item.isActive() ? "active" : "";
+                    return m(`div.item`, { "class": activeCss, key: item.name }, m("a", { href: item.href, config: m.route }, item.name));
                 }));
         };
     }
