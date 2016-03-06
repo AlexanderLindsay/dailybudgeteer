@@ -22,7 +22,7 @@ export class MenuComponent implements _mithril.MithrilComponent<MenuController> 
             return m("div.ui.tabular.menu",
                 ctrl.menuItems.map((item: MenuItem) => {
                     let activeCss = item.isActive() ? ".active" : "";
-                    return m(`div${activeCss}.item`, m(`a[href='${item.href}']`, { config: m.route }, item.name));
+                    return m(`div${activeCss}.item`, { key: item.name }, m(`a[href='${item.href}']`, { config: m.route }, item.name));
                 }));
         };
     }

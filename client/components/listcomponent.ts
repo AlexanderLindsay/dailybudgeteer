@@ -60,9 +60,9 @@ export default class ListComponent<T extends IKeyed> implements
                     ]),
                     m("tbody", [
                         ctrl.vm.items().map((item, index) => {
-                            return m("tr", [
+                            return m("tr", { key: item.id() }, [
                                 renderItem(item),
-                                m("td", this.renderActions(ctrl, item))
+                                m("td", { key: -1 }, this.renderActions(ctrl, item))
                             ]);
                         })
                     ]),
