@@ -2,61 +2,51 @@ import m = require("mithril");
 import DataSource from "./datasource";
 import IKeyed from "../data/keyed";
 
-class ListController<T> implements _mithril.MithrilController {
-
-    public list: _mithril.MithrilPromise<T[]>;
-
-    constructor(source: DataSource<T>) {
-        this.list = source.list();
-    }
-}
-
 export default class ListComponent<T extends IKeyed> implements
-    _mithril.MithrilComponent<ListController<T>> {
+    _mithril.MithrilComponent<{}> {
 
     constructor(
-        private source: DataSource<T>,
-        private renderHeader: () => _mithril.MithrilVirtualElement<{}>,
-        private renderItem: (item: T) => _mithril.MithrilVirtualElement<{}>,
-        private renderFooter: () => _mithril.MithrilVirtualElement<{}> = () => []) { }
+        private renderHeader: (args: any) => _mithril.MithrilVirtualElement<{}>,
+        private renderItem: (item: T, args: any) => _mithril.MithrilVirtualElement<{}>,
+        private renderFooter: (args: any) => _mithril.MithrilVirtualElement<{}> = () => []) { }
 
-    private renderActions(item: T) {
+    private renderActions(item: T, args: any) {
         const id = item.id();
 
         let actions: _mithril.MithrilVirtualElement<{}>[] = [];
-        if (this.source.allowEdit(id)) {
-            actions.push(m("button.ui.button", { onclick: this.source.edit.bind(this.source, id) }, "Edit"));
+        if (args.allowEdit(id)) {
+            actions.push(m("button.ui.button", { onclick: args.edit.bind(args, id) }, "Edit"));
         }
 
-        if (this.source.allowRemove(id)) {
-            actions.push(m("button.ui.button", { onclick: this.source.remove.bind(this.source, id) }, "Remove"));
+        if (args.allowRemove(id)) {
+            actions.push(m("button.ui.button", { onclick: args.remove.bind(args, id) }, "Remove"));
         }
 
         return actions;
     }
 
     public controller = () => {
-        return new ListController<T>(this.source);
+        return {};
     };
 
-    public view = (ctrl: ListController<T>) => {
+    public view = (ctrl: any, args: any) => {
         return m("div", [
             m("table.ui.striped.table", [
                 m("thead", [
                     m("tr", [
-                        this.renderHeader(),
+                        this.renderHeader(args),
                         m("th", "")
                     ])
                 ]),
                 m("tbody", [
-                    ctrl.list().map((item, index) => {
+                    args.list().map((item: T, index: number) => {
                         return m("tr", { key: item.id() }, [
-                            this.renderItem(item),
-                            m("td", { key: -1 }, this.renderActions(item))
+                            this.renderItem(item, args),
+                            m("td", { key: -1 }, this.renderActions(item, args))
                         ]);
                     })
                 ]),
-                m("tfoot.full.width", m("tr", this.renderFooter()))
+                m("tfoot.full.width", m("tr", this.renderFooter(args)))
             ])
         ]);
     };

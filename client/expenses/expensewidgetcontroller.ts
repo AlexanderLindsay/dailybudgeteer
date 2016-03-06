@@ -10,8 +10,9 @@ const saveActionName = "Add";
 const editTitle = "Edit Expense";
 const editActionName = "Save";
 
-class ExpenseDataSource implements DataSource<Expense> {
+export class ExpenseDataSource implements DataSource<Expense> {
     item: _mithril.MithrilProperty<Expense>;
+    list: _mithril.MithrilPromise<Expense[]>;
     isAddModalOpen: _mithril.MithrilProperty<Boolean>;
     modalTitle: _mithril.MithrilProperty<string>;
     modalActionName: _mithril.MithrilProperty<string>;
@@ -21,9 +22,10 @@ class ExpenseDataSource implements DataSource<Expense> {
         this.isAddModalOpen = m.prop(false);
         this.modalTitle = m.prop(saveTitle);
         this.modalActionName = m.prop(saveActionName);
+        this.list = this.fetchList();
     }
 
-    public list = () => {
+    private fetchList = () => {
         let perDiem = this.context.listRates().reduce<number>((previous, current, index) => {
             return previous + current.perDiem(this.day);
         }, 0);
@@ -61,6 +63,7 @@ class ExpenseDataSource implements DataSource<Expense> {
 
     public remove = (id: number) => {
         this.context.removeExpense(id);
+        this.list = this.fetchList();
     };
 
     public save = () => {
@@ -71,6 +74,7 @@ class ExpenseDataSource implements DataSource<Expense> {
             let current = this.context.getExpense(modified.id());
             current.update(modified);
         }
+        this.list = this.fetchList();
     };
 
     public allowEdit = (id: number) => {
@@ -89,7 +93,7 @@ class ExpenseDataSource implements DataSource<Expense> {
     };
 }
 
-export default class ExpenseWidgetController implements _mithril.MithrilController {
+export class ExpenseWidgetController implements _mithril.MithrilController {
 
     public vm: ExpenseDataSource;
 

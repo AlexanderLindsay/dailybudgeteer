@@ -3,7 +3,7 @@ import moment = require("moment");
 import modal from "../components/modal";
 import * as it from "./intervaltype";
 import Rate from "./rate";
-import RateWidgetController from "./ratewidgetcontroller";
+import {RateDataSource, RateWidgetController} from "./ratewidgetcontroller";
 import FormComponent from "../components/formcomponent";
 import ListComponent from "../components/listcomponent";
 import BudgetContext from "../data/budgetcontext";
@@ -13,6 +13,7 @@ export default class RatesWidgetComponent implements
     _mithril.MithrilComponent<RateWidgetController> {
 
     private formComponent: FormComponent<Rate>;
+    private listComponent: ListComponent<Rate>;
 
     private static renderHeader = () => {
         return [
@@ -65,17 +66,22 @@ export default class RatesWidgetComponent implements
         ];
     };
 
-    private static renderFooter = (ctrl: RateWidgetController) => {
+    private static renderFooter = (vm: RateDataSource) => {
         return [
             m("th[colspan='4']", [
-                m("button[type='button'].ui.primary.button", { onclick: ctrl.vm.openAddModal }, "Add Rate")
+                m("button[type='button'].ui.primary.button", { onclick: vm.openAddModal }, "Add Rate")
             ]),
-            m("th[colspan='2']", ctrl.vm.total())
+            m("th[colspan='2']", vm.total())
         ];
     };
 
     constructor(private context: BudgetContext) {
         this.formComponent = new FormComponent<Rate>(RatesWidgetComponent.renderForm);
+        this.listComponent = new ListComponent<Rate>(
+            RatesWidgetComponent.renderHeader,
+                    RatesWidgetComponent.renderItem,
+                    RatesWidgetComponent.renderFooter
+        );
     }
 
     public controller = () => {
@@ -84,10 +90,7 @@ export default class RatesWidgetComponent implements
 
     public view = (ctrl: RateWidgetController) => {
         return m("div.column", [
-                m.component(new ListComponent<Rate>(ctrl.vm,
-                    RatesWidgetComponent.renderHeader,
-                    RatesWidgetComponent.renderItem,
-                    RatesWidgetComponent.renderFooter.bind(this, ctrl))),
+                m.component(this.listComponent, ctrl.vm),
                 m.component(new modal(ctrl.vm.modalTitle(), ctrl.vm.isAddModalOpen,
                     () => m.component(this.formComponent, { item: ctrl.vm.item }),
                     () => [

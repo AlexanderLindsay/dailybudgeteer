@@ -12,8 +12,9 @@ const saveActionName = "Add";
 const editTitle = "Edit Rate";
 const editActionName = "Save";
 
-class RateDataSource implements DataSource<Rate> {
+export class RateDataSource implements DataSource<Rate> {
     item: _mithril.MithrilProperty<Rate>;
+    list: _mithril.MithrilPromise<Rate[]>;
     isAddModalOpen: _mithril.MithrilProperty<Boolean>;
     modalTitle: _mithril.MithrilProperty<string>;
     modalActionName: _mithril.MithrilProperty<string>;
@@ -23,9 +24,10 @@ class RateDataSource implements DataSource<Rate> {
         this.isAddModalOpen = m.prop(false);
         this.modalTitle = m.prop(saveTitle);
         this.modalActionName = m.prop(saveActionName);
+        this.list = this.fetchList();
     }
 
-    list = () => {
+    private fetchList = () => {
         let deferred = m.deferred<Rate[]>();
         deferred.resolve(this.context.listRates().filter((rate) => {
             const currentDate = moment();
@@ -67,6 +69,7 @@ class RateDataSource implements DataSource<Rate> {
 
     public remove = (id: number) => {
         this.context.removeRate(id);
+        this.list = this.fetchList();
     };
 
     public save = () => {
@@ -82,6 +85,7 @@ class RateDataSource implements DataSource<Rate> {
             let current = this.context.getRate(modified.id());
             current.update(modified);
         }
+        this.list = this.fetchList();
     };
 
     public allowEdit = (id: number) => {
@@ -100,7 +104,7 @@ class RateDataSource implements DataSource<Rate> {
     };
 }
 
-export default class RateWidgetController implements _mithril.MithrilController {
+export class RateWidgetController implements _mithril.MithrilController {
 
     public vm: RateDataSource;
 

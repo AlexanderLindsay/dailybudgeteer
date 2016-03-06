@@ -2,7 +2,7 @@ import m = require("mithril");
 import moment = require("moment");
 import modal from "../components/modal";
 import Expense from "./expense";
-import ExpenseWidgetController from "./expensewidgetcontroller";
+import {ExpenseDataSource, ExpenseWidgetController} from "./expensewidgetcontroller";
 import FormComponent from "../components/formcomponent";
 import ListComponent from "../components/listcomponent";
 import BudgetContext from "../data/budgetcontext";
@@ -11,6 +11,7 @@ export default class ExpenseWidgetComponent implements
     _mithril.MithrilComponent<ExpenseWidgetController> {
 
     private formComponent: FormComponent<Expense>;
+    private listComponent: ListComponent<Expense>;
 
     private static renderHeader = () => {
         return [
@@ -43,15 +44,18 @@ export default class ExpenseWidgetComponent implements
         ];
     };
 
-    private static renderFooter = (ctrl: ExpenseWidgetController) => {
+    private static renderFooter = (vm: ExpenseDataSource) => {
         return m("th[colspan='3']", [
-            m("button[type='button'].ui.primary.button", { onclick: ctrl.vm.openAddModal }, "Add Expense")
+            m("button[type='button'].ui.primary.button", { onclick: vm.openAddModal }, "Add Expense")
         ]);
     };
 
     constructor(private context: BudgetContext) {
         this.formComponent = new FormComponent<Expense>(ExpenseWidgetComponent.renderForm);
-        // this.listComponent = new ListComponent<Expense>();
+        this.listComponent = new ListComponent<Expense>(
+            ExpenseWidgetComponent.renderHeader,
+            ExpenseWidgetComponent.renderItem,
+            ExpenseWidgetComponent.renderFooter);
     }
 
     public controller = () => {
@@ -62,10 +66,7 @@ export default class ExpenseWidgetComponent implements
 
     public view = (ctrl: ExpenseWidgetController) => {
         return m("div.column", [
-            m.component(new ListComponent<Expense>(ctrl.vm,
-                ExpenseWidgetComponent.renderHeader,
-                ExpenseWidgetComponent.renderItem,
-                ExpenseWidgetComponent.renderFooter.bind(this, ctrl))),
+            m.component(this.listComponent, ctrl.vm),
             m.component(new modal(ctrl.vm.modalTitle(), ctrl.vm.isAddModalOpen,
                 () => m.component(this.formComponent, { item: ctrl.vm.item }),
                 () => [
