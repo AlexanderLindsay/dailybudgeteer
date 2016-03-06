@@ -1,3 +1,4 @@
+import m = require("mithril");
 import moment = require("moment");
 import Expense from "./expense";
 import BudgetContext from "../data/budgetcontext";

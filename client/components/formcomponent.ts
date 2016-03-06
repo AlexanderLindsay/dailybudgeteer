@@ -1,3 +1,4 @@
+import m = require("mithril");
 import DataSource from "./datasource";
 
 class FormViewModel<T> {

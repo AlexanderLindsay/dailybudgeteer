@@ -1,3 +1,5 @@
+import m = require("mithril");
+
 export class MenuItem {
     constructor(public href: string, public name: string) { }
 

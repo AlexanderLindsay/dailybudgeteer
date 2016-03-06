@@ -1,3 +1,4 @@
+import m = require("mithril");
 import DataSource from "./datasource";
 import IKeyed from "../data/keyed";
 
@@ -74,7 +75,7 @@ export default class ListComponent<T extends IKeyed> implements
     private renderActions(ctrl: ListController<T>, item: T) {
         const id = item.id();
 
-        let actions = [];
+        let actions: _mithril.MithrilVirtualElement<{}>[] = [];
         if (ctrl.vm.allowEdit(id)) {
             actions.push(m("button.ui.button", { onclick: ctrl.vm.editItem.bind(ctrl.vm, id) }, "Edit"));
         }

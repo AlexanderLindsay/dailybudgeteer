@@ -1,3 +1,5 @@
+import m = require("mithril");
+
 class ModalController implements _mithril.MithrilController {
     constructor(public show: _mithril.MithrilProperty<Boolean>) { }
 }

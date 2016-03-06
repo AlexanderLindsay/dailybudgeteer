@@ -1,3 +1,4 @@
+import m = require("mithril");
 import BudgetContext from "../data/budgetcontext";
 import FileDialog from "../filehandling/dialog";
 

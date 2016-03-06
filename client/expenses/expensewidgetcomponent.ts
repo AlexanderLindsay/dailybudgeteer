@@ -1,3 +1,4 @@
+import m = require("mithril");
 import moment = require("moment");
 import modal from "../components/modal";
 import Expense from "./expense";

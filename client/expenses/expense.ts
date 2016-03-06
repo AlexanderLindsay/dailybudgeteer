@@ -1,5 +1,6 @@
 /// <reference path="../../typings/browser.d.ts" />
 
+import m = require("mithril");
 import moment = require("moment");
 import IKeyed from "../data/keyed";
 

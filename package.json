@@ -15,7 +15,8 @@
     "rimraf": "^2.5.2"
   },
   "dependencies": {
-    "mithril": "^0.2.2-rc.1",
+    "jquery": "^2.2.1",
+    "mithril": "^0.2.3",
     "moment": "^2.11.2",
     "semantic-ui": "^2.1.8"
   }

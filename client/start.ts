@@ -1,5 +1,6 @@
 /// <reference path="../typings/browser.d.ts" />
 
+import m = require("mithril");
 import moment = require("moment");
 import BudgetContext from "./data/budgetcontext";
 import * as FileHandling from "./filehandling/dragdrop";

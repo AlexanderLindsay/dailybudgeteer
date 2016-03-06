@@ -1,3 +1,4 @@
+import m = require("mithril");
 import moment = require("moment");
 import * as it from "./intervaltype";
 import Rate from "./rate";

@@ -1,3 +1,5 @@
+import m = require("mithril");
+
 export class Option<T> {
     constructor(public value: T, public name: string) { }
 }
