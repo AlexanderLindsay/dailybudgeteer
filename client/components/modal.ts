@@ -17,7 +17,7 @@ export default class ModalComponent implements _mithril.MithrilComponent<ModalCo
             return m("div.ui.modal", { config: this.setupModal.bind(ctrl, ctrl.show) }, [
                 m("i.close.icon"),
                 m("div.header", title),
-                m(`div${imageContent ? ".image" : ""}.content`, renderContent()),
+                m("div.content", { "class": imageContent ? "image" : "" }, renderContent()),
                 m("div.actions", renderActions())
             ]);
         };
