@@ -59,8 +59,8 @@ export default class RatesWidgetComponent implements
             ]),
             m(`div.field${rate.allowInterval() ? "" : ".disabled"}`, [
                 m("label[for='interval']", "Interval"),
-                m(`input[type='number'][id='interval'][min='1']${rate.allowInterval() ? "" : "[disabled]"}.ui.input`,
-                    { onchange: m.withAttr("value", rate.interval), value: rate.interval() })
+                m("input[type='number'][id='interval'][min='1'].ui.input",
+                    { onchange: m.withAttr("value", rate.interval), value: rate.interval(), disabled: !rate.allowInterval() })
             ]),
         ];
     };
