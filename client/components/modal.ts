@@ -9,8 +9,8 @@ export default class ModalComponent implements _mithril.MithrilComponent<ModalCo
     view: _mithril.MithrilView<ModalController>;
 
     constructor(title: string, show: _mithril.MithrilProperty<Boolean>,
-        renderContent: () => _mithril.MithrilVirtualElement<{}>,
-        renderActions: () => _mithril.MithrilVirtualElement<{}>,
+        renderContent: () => _mithril.MithrilVirtualElement<{}> | _mithril.MithrilComponent<{}>,
+        renderActions: () => _mithril.MithrilVirtualElement<{}> | _mithril.MithrilComponent<{}>,
         imageContent = false) {
         this.controller = () => new ModalController(show);
         this.view = (ctrl) => {

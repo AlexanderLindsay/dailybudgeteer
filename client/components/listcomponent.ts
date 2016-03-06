@@ -2,88 +2,62 @@ import m = require("mithril");
 import DataSource from "./datasource";
 import IKeyed from "../data/keyed";
 
-class ListViewModel<T extends IKeyed> {
+class ListController<T> implements _mithril.MithrilController {
 
-    public items: _mithril.MithrilPromise<T[]>;
-
-    constructor(private source: DataSource<T>) {
-        this.items = source.list();
-        this.source = source;
-    }
-
-    public editItem = (id: number) => {
-        this.source.edit(id);
-    };
-
-    public removeItem = (id: number) => {
-        this.source.remove(id);
-    };
-
-    public allowEdit = (id: number) => {
-        return this.source.allowEdit(id);
-    };
-
-    public allowRemove = (id: number) => {
-        return this.source.allowRemove(id);
-    };
-}
-
-class ListController<T extends IKeyed> implements _mithril.MithrilController {
-    public vm: ListViewModel<T>;
+    public list: _mithril.MithrilPromise<T[]>;
 
     constructor(source: DataSource<T>) {
-        this.vm = new ListViewModel<T>(source);
+        this.list = source.list();
     }
 }
 
 export default class ListComponent<T extends IKeyed> implements
     _mithril.MithrilComponent<ListController<T>> {
 
-    public controller: () => ListController<T>;
-    public view: _mithril.MithrilView<ListController<T>>;
-
     constructor(
-        source: DataSource<T>,
-        renderHeader: () => _mithril.MithrilVirtualElement<{}>,
-        renderItem: (item: T) => _mithril.MithrilVirtualElement<{}>,
-        renderFooter: () => _mithril.MithrilVirtualElement<{}> = () => []) {
+        private source: DataSource<T>,
+        private renderHeader: () => _mithril.MithrilVirtualElement<{}>,
+        private renderItem: (item: T) => _mithril.MithrilVirtualElement<{}>,
+        private renderFooter: () => _mithril.MithrilVirtualElement<{}> = () => []) { }
 
-        this.controller = () => new ListController<T>(source);
-        this.view = (ctrl: ListController<T>) => {
-            return m("div", [
-                m("table.ui.striped.table", [
-                    m("thead", [
-                        m("tr", [
-                            renderHeader(),
-                            m("th", "")
-                        ])
-                    ]),
-                    m("tbody", [
-                        ctrl.vm.items().map((item, index) => {
-                            return m("tr", { key: item.id() }, [
-                                renderItem(item),
-                                m("td", { key: -1 }, this.renderActions(ctrl, item))
-                            ]);
-                        })
-                    ]),
-                    m("tfoot.full.width", m("tr", renderFooter()))
-                ])
-            ]);
-        };
-    }
-
-    private renderActions(ctrl: ListController<T>, item: T) {
+    private renderActions(item: T) {
         const id = item.id();
 
         let actions: _mithril.MithrilVirtualElement<{}>[] = [];
-        if (ctrl.vm.allowEdit(id)) {
-            actions.push(m("button.ui.button", { onclick: ctrl.vm.editItem.bind(ctrl.vm, id) }, "Edit"));
+        if (this.source.allowEdit(id)) {
+            actions.push(m("button.ui.button", { onclick: this.source.edit.bind(this.source, id) }, "Edit"));
         }
 
-        if (ctrl.vm.allowRemove(id)) {
-            actions.push(m("button.ui.button", { onclick: ctrl.vm.removeItem.bind(ctrl.vm, id) }, "Remove"));
+        if (this.source.allowRemove(id)) {
+            actions.push(m("button.ui.button", { onclick: this.source.remove.bind(this.source, id) }, "Remove"));
         }
 
         return actions;
     }
+
+    public controller = () => {
+        return new ListController<T>(this.source);
+    };
+
+    public view = (ctrl: ListController<T>) => {
+        return m("div", [
+            m("table.ui.striped.table", [
+                m("thead", [
+                    m("tr", [
+                        this.renderHeader(),
+                        m("th", "")
+                    ])
+                ]),
+                m("tbody", [
+                    ctrl.list().map((item, index) => {
+                        return m("tr", { key: item.id() }, [
+                            this.renderItem(item),
+                            m("td", { key: -1 }, this.renderActions(item))
+                        ]);
+                    })
+                ]),
+                m("tfoot.full.width", m("tr", this.renderFooter()))
+            ])
+        ]);
+    };
 }
