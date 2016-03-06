@@ -1,4 +1,6 @@
-import m = require("mithril");
+/// <reference path="../../typings/browser.d.ts" />
+
+import * as m from "mithril";
 import DataSource from "./datasource";
 import IKeyed from "../data/keyed";
 

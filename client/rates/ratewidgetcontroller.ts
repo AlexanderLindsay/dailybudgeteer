@@ -1,5 +1,7 @@
-import m = require("mithril");
-import moment = require("moment");
+/// <reference path="../../typings/browser.d.ts" />
+
+import * as m from "mithril";
+import * as moment from "moment";
 import * as it from "./intervaltype";
 import Rate from "./rate";
 import FormComponent from "../components/formcomponent";
@@ -25,7 +27,18 @@ export class RateDataSource implements DataSource<Rate> {
         this.modalTitle = m.prop(saveTitle);
         this.modalActionName = m.prop(saveActionName);
         this.list = this.fetchList();
+        context.addUpdateCallback(this.contextCallback);
     }
+
+    private contextCallback = () => {
+        m.startComputation();
+        this.list = this.fetchList();
+        m.endComputation();
+    };
+
+    public onunload = () => {
+        this.context.removeUpdateCallback(this.contextCallback);
+    };
 
     private fetchList = () => {
         let deferred = m.deferred<Rate[]>();

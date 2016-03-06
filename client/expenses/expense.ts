@@ -1,7 +1,7 @@
 /// <reference path="../../typings/browser.d.ts" />
 
-import m = require("mithril");
-import moment = require("moment");
+import * as m from "mithril";
+import * as moment from "moment";
 import IKeyed from "../data/keyed";
 
 export default class Expense implements IKeyed {

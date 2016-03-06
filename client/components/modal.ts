@@ -1,4 +1,6 @@
-import m = require("mithril");
+/// <reference path="../../typings/browser.d.ts" />
+
+import * as m from "mithril";
 
 class ModalController implements _mithril.MithrilController {
     constructor(public show: _mithril.MithrilProperty<Boolean>) { }

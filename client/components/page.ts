@@ -1,4 +1,6 @@
-import m = require("mithril");
+/// <reference path="../../typings/browser.d.ts" />
+
+import * as m from "mithril";
 import BudgetContext from "../data/budgetcontext";
 import FileDialog from "../filehandling/dialog";
 
@@ -10,7 +12,9 @@ class PageController implements _mithril.MithrilController {
     };
 
     openFile = () => {
-        this.fileDialog.open(this.context.loadData);
+        this.fileDialog.open((data: string) => {
+            this.context.loadData(data);
+        });
     };
 }
 

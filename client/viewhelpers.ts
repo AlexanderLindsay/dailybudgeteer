@@ -1,4 +1,4 @@
-import m = require("mithril");
+import * as m from "mithril";
 
 export class Option<T> {
     constructor(public value: T, public text: string) { }

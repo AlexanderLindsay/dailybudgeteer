@@ -1,4 +1,6 @@
-import moment = require("moment");
+/// <reference path="../../typings/browser.d.ts" />
+
+import * as moment from "moment";
 import DataContext from "./datacontext";
 import Expense from "../expenses/expense";
 import Rate from "../rates/rate";
@@ -12,6 +14,8 @@ export default class BudgetContext extends DataContext {
         rates: number;
     };
 
+    private updateCallbacks: (() => void)[];
+
     constructor() {
         super();
         this.expenses = [];
@@ -20,15 +24,30 @@ export default class BudgetContext extends DataContext {
             expenses: 1,
             rates: 1
         };
+
+        this.updateCallbacks = [];
     }
 
     private parseDate(value: string) {
         return moment(value);
     }
 
+    public addUpdateCallback = (callback: () => void) => {
+        this.updateCallbacks.push(callback);
+    };
+
+    public removeUpdateCallback = (callback: () => void) => {
+        this.updateCallbacks = this.updateCallbacks.filter((cb) => cb === callback);
+    };
+
+    private onUpdate = () => {
+        this.updateCallbacks.forEach(cb => {
+            cb();
+        });
+    };
+
     public loadData = (json: string) => {
         let data = JSON.parse(json);
-        m.startComputation();
         this.expenses = data.expenses.map((raw: any) => {
             let expense = new Expense(raw.name, this.parseDate(raw.day), raw.amount);
             expense.id(raw.id);
@@ -49,7 +68,7 @@ export default class BudgetContext extends DataContext {
             expenses: 1,
             rates: 1
         };
-        m.endComputation();
+        this.onUpdate();
     };
 
     public writeData = () => {

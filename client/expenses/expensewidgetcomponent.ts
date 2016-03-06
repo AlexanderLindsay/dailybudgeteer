@@ -1,5 +1,7 @@
-import m = require("mithril");
-import moment = require("moment");
+/// <reference path="../../typings/browser.d.ts" />
+
+import * as m from "mithril";
+import * as moment from "moment";
 import modal from "../components/modal";
 import Expense from "./expense";
 import {ExpenseDataSource, ExpenseWidgetController} from "./expensewidgetcontroller";

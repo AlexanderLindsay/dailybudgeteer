@@ -1,4 +1,6 @@
-import m = require("mithril");
+/// <reference path="../../typings/browser.d.ts" />
+
+import * as m from "mithril";
 
 export class MenuItem {
     constructor(public href: string, public name: string) { }

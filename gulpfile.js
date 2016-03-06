@@ -8,8 +8,7 @@ var packager = require('electron-packager');
 var semanticBuild = require('./semantic/tasks/build');
 
 gulp.task('clean', function () {
-    return gulp.src(['./**/*.js', 'compiled/*'], { read: false }) // much faster
-        .pipe(ignore(['node_modules/**', 'gulpfile.js', 'semantic/**']))
+    return gulp.src(['compiled/*', 'test/client', 'test/test'], { read: false })
         .pipe(rimraf());
 });
 

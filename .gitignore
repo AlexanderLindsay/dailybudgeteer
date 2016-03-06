@@ -5,6 +5,7 @@ semantic/dist
 #compiled scripts
 compiled
 main.js
+tests/compiled
 
 #packaging
 builds

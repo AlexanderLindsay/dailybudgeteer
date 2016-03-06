@@ -1,5 +1,7 @@
-import m = require("mithril");
-import moment = require("moment");
+/// <reference path="../../typings/browser.d.ts" />
+
+import * as m from "mithril";
+import * as moment from "moment";
 import Expense from "./expense";
 import BudgetContext from "../data/budgetcontext";
 import DataSource from "../components/datasource";
@@ -23,7 +25,18 @@ export class ExpenseDataSource implements DataSource<Expense> {
         this.modalTitle = m.prop(saveTitle);
         this.modalActionName = m.prop(saveActionName);
         this.list = this.fetchList();
+        context.addUpdateCallback(this.contextCallback);
     }
+
+    private contextCallback = () => {
+        m.startComputation();
+        this.list = this.fetchList();
+        m.endComputation();
+    };
+
+    public onunload = () => {
+        this.context.removeUpdateCallback(this.contextCallback);
+    };
 
     private fetchList = () => {
         let perDiem = this.context.listRates().reduce<number>((previous, current, index) => {

@@ -1,5 +1,7 @@
-import m = require("mithril");
-import moment = require("moment");
+/// <reference path="../../typings/browser.d.ts" />
+
+import * as m from "mithril";
+import * as moment from "moment";
 import modal from "../components/modal";
 import * as it from "./intervaltype";
 import Rate from "./rate";
