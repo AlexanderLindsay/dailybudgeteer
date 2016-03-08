@@ -51,6 +51,6 @@ gulp.task('package', function () {
        version: "0.36.9",
        out: "builds",
        overwrite: true,
-       ignore: "(\.gitignore)|(gulpfile\.js)|(\.vscode.*)|(typings.*)|(tsconfig.json)|(semantic.json)|(builds.*)|(client.*)|(node_modules.*)|(semantic/src.*)|(semantic/tasks.*)"
+       ignore: "(\.gitignore)|(gulpfile\.js)|(\.vscode.*)|(typings.*)|(tsconfig.json)|(semantic.json)|(builds.*)|(client.*)|(test.*)|(node_modules.*)|(semantic/src.*)|(semantic/tasks.*)"
    }, function(err, appPath){}) 
 });
