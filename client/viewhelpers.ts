@@ -16,3 +16,13 @@ export function WriteOptions<T>(selected: T | T[], options: Option<T>[]) {
         return m("option", { value: opt.value, selected: isSelected }, opt.text);
     });
 }
+
+export function ConvertWithAttr<T>(converter: (value: string) => T, property: string, callback: (value: T) => void) {
+    return m.withAttr(property, (value: string) => {
+        callback(converter(value));
+    }, null);
+}
+
+export let withNumber = ConvertWithAttr.bind(null, (value: string) => {
+    return +value;
+});

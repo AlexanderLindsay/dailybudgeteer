@@ -61,6 +61,15 @@ export class ExpenseDataSource implements DataSource<Expense> {
         return deferred.promise;
     };
 
+    public total = () => {
+        let t = 0;
+        this.list()
+            .forEach((expense: Expense, index: number) => {
+                t += expense.amount();
+            });
+        return t;
+    };
+
     public edit = (id: number) => {
         let expense = this.context.getExpense(id);
         if (expense === null) {

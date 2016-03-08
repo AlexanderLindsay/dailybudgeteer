@@ -51,13 +51,11 @@ export default class RatesWidgetComponent implements
             ]),
             m("div.field", [
                 m("label[for='amount']", "Amount"),
-                m("input[type='number'][id='amount'].ui.input", { onchange: m.withAttr("value", rate.amount), value: rate.amount() })
+                m("input[type='number'][id='amount'].ui.input", { onchange: ViewHelpers.withNumber("value", rate.amount), value: rate.amount() })
             ]),
             m("div.field", [
                 m("label[for='intervaltype']", "Interval Type"),
-                m("select[id='intervaltype'].ui.selection.dropdown", { onchange: m.withAttr("value", (value) => {
-                    rate.intervalType(+value);
-                }, null), value: rate.intervalType() },
+                m("select[id='intervaltype'].ui.selection.dropdown", { onchange: ViewHelpers.withNumber("value", rate.intervalType), value: rate.intervalType() },
                     ViewHelpers.WriteOptions(rate.intervalType(), RatesWidgetComponent.intervalTypeOptions))
             ]),
             m(`div.field${rate.allowInterval() ? "" : ".disabled"}`, [

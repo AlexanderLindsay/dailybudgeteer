@@ -60,7 +60,7 @@ export class RateDataSource implements DataSource<Rate> {
 
     public total = () => {
         let t = 0;
-        this.context.listRates()
+        this.list()
             .forEach((rate: Rate, index: number) => {
                 t += rate.perDiem(moment());
             });

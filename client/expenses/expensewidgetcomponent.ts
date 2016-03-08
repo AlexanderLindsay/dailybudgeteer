@@ -8,6 +8,7 @@ import {ExpenseDataSource, ExpenseWidgetController} from "./expensewidgetcontrol
 import FormComponent from "../components/formcomponent";
 import ListComponent from "../components/listcomponent";
 import BudgetContext from "../data/budgetcontext";
+import * as ViewHelpers from "../viewhelpers";
 
 export default class ExpenseWidgetComponent implements
     _mithril.MithrilComponent<ExpenseWidgetController> {
@@ -41,15 +42,18 @@ export default class ExpenseWidgetComponent implements
             ]),
             m("div.field", [
                 m("label[for='amount']", "Amount"),
-                m("input[type='number'][id='amount'].ui.input", { onchange: m.withAttr("value", expense.amount), value: expense.amount() })
+                m("input[type='number'][id='amount'].ui.input", { onchange: ViewHelpers.withNumber("value", expense.amount), value: expense.amount() })
             ])
         ];
     };
 
     private static renderFooter = (vm: ExpenseDataSource) => {
-        return m("th[colspan='3']", [
-            m("button[type='button'].ui.primary.button", { onclick: vm.openAddModal }, "Add Expense")
-        ]);
+        return [
+            m("th", [
+                m("button[type='button'].ui.primary.button", { onclick: vm.openAddModal }, "Add Expense")
+            ]),
+            m("th[colspan='2']", vm.total())
+        ];
     };
 
     constructor(private context: BudgetContext) {
