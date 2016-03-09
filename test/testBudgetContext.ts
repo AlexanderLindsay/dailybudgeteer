@@ -1,10 +1,10 @@
-/// <reference path="../typings/browser.d.ts" />
+/// <reference path="../typings/main/ambient/ava/ava.d.ts" />
 
 import * as ava from "ava";
 import * as moment from "moment";
 import BudgetContext from "../client/data/budgetcontext";
 
-ava.test("Round trip data", async (t) => {
+ava.test("Round trip data", (t) => {
     let rate = {
         id: 1,
         name: "test rate",
