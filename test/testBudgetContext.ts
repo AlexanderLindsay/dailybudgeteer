@@ -1,5 +1,3 @@
-/// <reference path="../typings/main/ambient/ava/ava.d.ts" />
-
 import * as ava from "ava";
 import * as moment from "moment";
 import BudgetContext from "../client/data/budgetcontext";
