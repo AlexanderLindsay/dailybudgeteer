@@ -63,8 +63,19 @@ export default class Rate implements IKeyed {
     };
 
     public clone = () => {
+        let start = this.startDate();
+        let end = this.endDate();
+
+        if (start != null) {
+            start = start.clone();
+        }
+
+        if (end != null) {
+            end = end.clone();
+        }
+
         let clone = new Rate(this.name(), this.amount(), this.interval(),
-            this.intervalType(), this.startDate(), this.endDate());
+            this.intervalType(), start, end);
         clone.id(this.id());
         return clone;
     };

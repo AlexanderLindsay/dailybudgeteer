@@ -80,7 +80,7 @@ ava.test("perDiem - day - 100", (t) => {
 
 ava.test("perDiem - month - feb2016", (t) => {
     const amount = -25;
-    const month = moment([2016, 2, 1]);
+    const month = moment([2016, 1, 1]); // months in moment are zero indexed
     const expected = amount / month.daysInMonth();
 
     let r = new Rate("test", amount, 1, it.IntervalType.Month);
@@ -89,7 +89,7 @@ ava.test("perDiem - month - feb2016", (t) => {
 
 ava.test("perDiem - month - feb2016 - interval", (t) => {
     const amount = -25;
-    const month = moment([2016, 2, 1]);
+    const month = moment([2016, 1, 1]);
     const expected = amount / month.daysInMonth();
 
     let r = new Rate("test", amount, 10, it.IntervalType.Month);
@@ -98,7 +98,7 @@ ava.test("perDiem - month - feb2016 - interval", (t) => {
 
 ava.test("perDiem - month - jan2016", (t) => {
     const amount = -25;
-    const month = moment([2016, 1, 1]);
+    const month = moment([2016, 0, 1]);
     const expected = amount / month.daysInMonth();
 
     let r = new Rate("test", amount, 1, it.IntervalType.Month);
@@ -107,7 +107,7 @@ ava.test("perDiem - month - jan2016", (t) => {
 
 ava.test("perDiem - month - april2016", (t) => {
     const amount = -25;
-    const month = moment([2016, 4, 1]);
+    const month = moment([2016, 3, 1]);
     const expected = amount / month.daysInMonth();
 
     let r = new Rate("test", amount, 1, it.IntervalType.Month);
@@ -175,7 +175,7 @@ ava.test("toJSON - null start/end", (t) => {
 });
 
 ava.test("clone", (t) => {
-    let rOne = new Rate("One", -25, 1, it.IntervalType.Days);
+    let rOne = new Rate("One", -25, 1, it.IntervalType.Days, moment(), moment());
     rOne.id(1);
     let rTwo = rOne.clone();
 
@@ -184,12 +184,18 @@ ava.test("clone", (t) => {
     t.is(rTwo.name(), rOne.name());
     t.is(rTwo.amount(), rOne.amount());
     t.is(rTwo.intervalType(), rOne.intervalType());
-    t.is(rTwo.startDate(), rOne.startDate());
-    t.is(rTwo.endDate(), rOne.endDate());
+    t.true(rTwo.startDate().isSame(rOne.startDate()));
+    t.true(rTwo.endDate().isSame(rOne.endDate()));
 
     rTwo.name("Two");
     t.is(rOne.name(), "One");
     t.is(rTwo.name(), "Two");
+
+    rTwo.startDate().add(1, "day");
+    t.false(rOne.startDate().isSame(rTwo.startDate()));
+
+    rTwo.endDate().add(1, "day");
+    t.false(rOne.endDate().isSame(rTwo.endDate()));
 });
 
 ava.test("update", (t) => {

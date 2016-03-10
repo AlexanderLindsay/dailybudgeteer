@@ -19,12 +19,18 @@ export default class Expense implements IKeyed {
 
     public setDay = (value: string) => {
         let day = moment(value, "YYYY-MM-DD");
-        this.day(day);
+        if (day.isValid()) {
+            this.day(day);
+        }
     };
 
     public getDay = () => {
         const day = this.day();
         if (day == null) {
+            return "";
+        }
+
+        if (!day.isValid()) {
             return "";
         }
 
@@ -41,7 +47,13 @@ export default class Expense implements IKeyed {
     };
 
     public clone = () => {
-        let clone = new Expense(this.name(), this.day(), this.amount());
+
+        let currentDay = this.day();
+        if (currentDay != null) {
+            currentDay = currentDay.clone();
+        }
+
+        let clone = new Expense(this.name(), currentDay, this.amount());
         clone.id(this.id());
         return clone;
     };
