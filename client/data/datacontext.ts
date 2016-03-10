@@ -2,13 +2,13 @@ import IKeyed from "./keyed";
 
 export default class DataContext {
 
-    protected addItem = <T extends IKeyed>(item: T, list: T[], id: number) => {
+    public addItem = <T extends IKeyed>(item: T, list: T[], id: number) => {
         item.id(id);
         list.push(item);
         return id + 1;
     };
 
-    protected getItem = <T extends IKeyed>(id: number, list: T[]) => {
+    public getItem = <T extends IKeyed>(id: number, list: T[]) => {
         let results = list.filter((value: T, index: number) => {
             return value.id() === id;
         });
@@ -24,7 +24,7 @@ export default class DataContext {
         return null;
     };
 
-    protected removeItem = <T extends IKeyed>(id: number, list: T[]) => {
+    public removeItem = <T extends IKeyed>(id: number, list: T[]) => {
         let ids = list.map((item) => {
             return item.id();
         });
