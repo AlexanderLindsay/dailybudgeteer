@@ -91,10 +91,12 @@ export default class BudgetContext extends DataContext {
 
     public addExpense = (expense: Expense) => {
         this.nextIds.expenses = this.addItem(expense, this.expenses, this.nextIds.expenses);
+        this.onUpdate();
     };
 
     public addRate = (rate: Rate) => {
         this.nextIds.rates = this.addItem(rate, this.rates, this.nextIds.rates);
+        this.onUpdate();
     };
 
     public getExpense = (id: number) => {
@@ -107,9 +109,11 @@ export default class BudgetContext extends DataContext {
 
     public removeExpense = (id: number) => {
         this.expenses = this.removeItem(id, this.expenses);
+        this.onUpdate();
     };
 
     public removeRate = (id: number) => {
         this.rates = this.removeItem(id, this.rates);
+        this.onUpdate();
     };
 }

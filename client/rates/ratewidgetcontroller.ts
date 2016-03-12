@@ -31,9 +31,7 @@ export class RateDataSource implements DataSource<Rate> {
     }
 
     private contextCallback = () => {
-        m.startComputation();
         this.list = this.fetchList();
-        m.endComputation();
     };
 
     public onunload = () => {
@@ -82,7 +80,6 @@ export class RateDataSource implements DataSource<Rate> {
 
     public remove = (id: number) => {
         this.context.removeRate(id);
-        this.list = this.fetchList();
     };
 
     public save = () => {
@@ -98,7 +95,6 @@ export class RateDataSource implements DataSource<Rate> {
             let current = this.context.getRate(modified.id());
             current.update(modified);
         }
-        this.list = this.fetchList();
     };
 
     public allowEdit = (id: number) => {
