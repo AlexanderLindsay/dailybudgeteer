@@ -34,14 +34,14 @@ const dateFormat = "YYYY-MM-DD";
 
 let menu = new Menu.MenuComponent([
    new Menu.MenuItem(`/expenses/${moment().format(dateFormat)}`, "Expenses"),
-   new Menu.MenuItem("/rates", "Rates")
+   new Menu.MenuItem(`/rates/${moment().format(dateFormat)}`, "Rates")
 ]);
 let page = Page.bind(null, context, fileDialog, menu);
 
 m.route.mode = "search";
 
 m.route(root, `/expenses/${moment().format(dateFormat)}`, {
-    "/rates": new page(new RatesWidgetComponent(context)),
+    "/rates/:date": new page(new RatesWidgetComponent(context)),
     "/expenses": new page(new ExpenseWidgetComponent(context)),
     "/expenses/:date": new page(new ExpenseWidgetComponent(context))
 });

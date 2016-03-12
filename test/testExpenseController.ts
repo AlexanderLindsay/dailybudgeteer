@@ -34,8 +34,8 @@ ava.test("add", t => {
     expense.name("test");
     expense.day(date);
     expense.amount(-25);
-
     controller.vm.save();
+
     t.is(controller.vm.list().length, 1);
     t.is(controller.vm.list()[0].id(), 1);
     t.is(controller.vm.total(), -25);
@@ -54,8 +54,8 @@ ava.test("base rate", t => {
     expense.name("test");
     expense.day(date);
     expense.amount(-25);
-
     controller.vm.save();
+
     t.is(controller.vm.list().length, 2);
     t.is(controller.vm.list()[1].id(), 1);
     t.is(controller.vm.total(), -50);
@@ -63,4 +63,28 @@ ava.test("base rate", t => {
     t.is(controller.vm.list()[1].name(), "test");
     t.true(controller.vm.allowEdit(1));
     t.true(controller.vm.allowRemove(1));
+});
+
+ava.test("filter list", t => {
+    let bc = t.context.budgetContext;
+    let date = moment([2016, 0, 5]);
+    let controller = new expenses.ExpenseWidgetController(bc, date);
+
+    let expense = new Expense("test", date, -25);
+    controller.vm.item(expense);
+    controller.vm.save();
+
+    t.is(controller.vm.list().length, 1);
+    t.is(controller.vm.list()[0].id(), 1);
+    t.is(controller.vm.total(), -25);
+    t.is(controller.vm.list()[0].name(), "test");
+
+    expense = new Expense("test", moment([2016, 0, 4]), -25);
+    controller.vm.item(expense);
+    controller.vm.save();
+
+    t.is(controller.vm.list().length, 1);
+    t.is(controller.vm.list()[0].id(), 1);
+    t.is(controller.vm.total(), -25);
+    t.is(controller.vm.list()[0].name(), "test");
 });

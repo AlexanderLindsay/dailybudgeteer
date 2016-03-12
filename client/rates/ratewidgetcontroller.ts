@@ -21,7 +21,7 @@ export class RateDataSource implements DataSource<Rate> {
     modalTitle: _mithril.MithrilProperty<string>;
     modalActionName: _mithril.MithrilProperty<string>;
 
-    constructor(private context: BudgetContext) {
+    constructor(private context: BudgetContext, private day: moment.Moment) {
         this.item = m.prop(new Rate("", 0, 1, it.IntervalType.Days));
         this.isAddModalOpen = m.prop(false);
         this.modalTitle = m.prop(saveTitle);
@@ -41,14 +41,13 @@ export class RateDataSource implements DataSource<Rate> {
     private fetchList = () => {
         let deferred = m.deferred<Rate[]>();
         deferred.resolve(this.context.listRates().filter((rate) => {
-            const currentDate = moment();
             if (rate.startDate() == null) {
                 return true;
-            } else if (rate.startDate().isSameOrBefore(currentDate, "day")) {
+            } else if (rate.startDate().isSameOrBefore(this.day, "day")) {
                 if (rate.endDate() == null) {
                     return true;
                 } else {
-                    return rate.endDate().isSameOrAfter(currentDate, "day");
+                    return rate.endDate().isSameOrAfter(this.day, "day");
                 }
             }
             return false;
@@ -60,7 +59,7 @@ export class RateDataSource implements DataSource<Rate> {
         let t = 0;
         this.list()
             .forEach((rate: Rate, index: number) => {
-                t += rate.perDiem(moment());
+                t += rate.perDiem(this.day);
             });
         return t;
     };
@@ -88,7 +87,9 @@ export class RateDataSource implements DataSource<Rate> {
         }
 
         if (this.item().id() === 0) {
-            this.item().startDate(moment());
+            if (this.item().startDate() === undefined) {
+                this.item().startDate(this.day);
+            }
             this.context.addRate(this.item());
         } else {
             let modified = this.item();
@@ -117,7 +118,7 @@ export class RateWidgetController implements _mithril.MithrilController {
 
     public vm: RateDataSource;
 
-    constructor(context: BudgetContext) {
-        this.vm = new RateDataSource(context);
+    constructor(context: BudgetContext, day: moment.Moment) {
+        this.vm = new RateDataSource(context, day);
     }
 }

@@ -85,7 +85,9 @@ export default class RatesWidgetComponent implements
     }
 
     public controller = () => {
-        return new RateWidgetController(this.context);
+        let date = m.route.param("date");
+        let day = moment(date);
+        return new RateWidgetController(this.context, day);
     };
 
     public view = (ctrl: RateWidgetController) => {
