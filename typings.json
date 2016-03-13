@@ -1,0 +1,15 @@
+{
+  "name": "budget",
+  "version": false,
+  "dependencies": {
+    "d3": "registry:npm/d3#3.0.0+20160211003958",
+    "moment": "registry:npm/moment#2.10.5+20160211003958"
+  },
+  "ambientDependencies": {
+    "github-electron": "registry:dt/github-electron#0.36.3+20160311011419",
+    "github-electron/electron-prebuilt": "registry:dt/github-electron/electron-prebuilt#0.30.1+20150729070018",
+    "jquery": "registry:dt/jquery#1.10.0+20160303223636",
+    "mithril": "registry:dt/mithril#0.0.0+20151211181444",
+    "node": "registry:dt/node#4.0.0+20160311162451"
+  }
+}
