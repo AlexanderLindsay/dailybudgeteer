@@ -7,8 +7,9 @@ import * as FileHandling from "./filehandling/dragdrop";
 import FileDialog from "./filehandling/dialog";
 import * as Menu from "./components/menu";
 import Page from "./components/page";
-import RatesWidgetComponent from "./rates/rateswidgetcomponent";
-import ExpenseWidgetComponent from "./expenses/expensewidgetcomponent";
+import RatesComponent from "./rates/ratecomponent";
+import ExpenseComponent from "./expenses/expensecomponent";
+import SummaryComponent from "./summary/summarycomponent";
 
 let root = document.getElementById("root");
 let context = new BudgetContext();
@@ -34,14 +35,15 @@ const dateFormat = "YYYY-MM-DD";
 
 let menu = new Menu.MenuComponent([
    new Menu.MenuItem(`/expenses/${moment().format(dateFormat)}`, "Expenses"),
-   new Menu.MenuItem(`/rates/${moment().format(dateFormat)}`, "Rates")
+   new Menu.MenuItem(`/rates/${moment().format(dateFormat)}`, "Rates"),
+   new Menu.MenuItem(`/summary/${moment().format(dateFormat)}`, "Summary")
 ]);
 let page = Page.bind(null, context, fileDialog, menu);
 
 m.route.mode = "search";
 
 m.route(root, `/expenses/${moment().format(dateFormat)}`, {
-    "/rates/:date": new page(new RatesWidgetComponent(context)),
-    "/expenses": new page(new ExpenseWidgetComponent(context)),
-    "/expenses/:date": new page(new ExpenseWidgetComponent(context))
+    "/rates/:date": new page(new RatesComponent(context)),
+    "/expenses/:date": new page(new ExpenseComponent(context)),
+    "/summary/:date": new page(new SummaryComponent(context))
 });

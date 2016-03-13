@@ -5,14 +5,14 @@ import * as moment from "moment";
 import modal from "../components/modal";
 import * as it from "./intervaltype";
 import Rate from "./rate";
-import {RateDataSource, RateWidgetController} from "./ratewidgetcontroller";
+import {RateDataSource, RateController} from "./ratecontroller";
 import FormComponent from "../components/formcomponent";
 import ListComponent from "../components/listcomponent";
 import BudgetContext from "../data/budgetcontext";
 import * as ViewHelpers from "../viewhelpers";
 
-export default class RatesWidgetComponent implements
-    _mithril.MithrilComponent<RateWidgetController> {
+export default class RatesComponent implements
+    _mithril.MithrilComponent<RateController> {
 
     private formComponent: FormComponent<Rate>;
     private listComponent: ListComponent<Rate>;
@@ -56,7 +56,7 @@ export default class RatesWidgetComponent implements
             m("div.field", [
                 m("label[for='intervaltype']", "Interval Type"),
                 m("select[id='intervaltype'].ui.selection.dropdown", { onchange: ViewHelpers.withNumber("value", rate.intervalType), value: rate.intervalType() },
-                    ViewHelpers.WriteOptions(rate.intervalType(), RatesWidgetComponent.intervalTypeOptions))
+                    ViewHelpers.WriteOptions(rate.intervalType(), RatesComponent.intervalTypeOptions))
             ]),
             m(`div.field${rate.allowInterval() ? "" : ".disabled"}`, [
                 m("label[for='interval']", "Interval"),
@@ -76,21 +76,21 @@ export default class RatesWidgetComponent implements
     };
 
     constructor(private context: BudgetContext) {
-        this.formComponent = new FormComponent<Rate>(RatesWidgetComponent.renderForm);
+        this.formComponent = new FormComponent<Rate>(RatesComponent.renderForm);
         this.listComponent = new ListComponent<Rate>(
-            RatesWidgetComponent.renderHeader,
-                    RatesWidgetComponent.renderItem,
-                    RatesWidgetComponent.renderFooter
+            RatesComponent.renderHeader,
+                    RatesComponent.renderItem,
+                    RatesComponent.renderFooter
         );
     }
 
     public controller = () => {
         let date = m.route.param("date");
         let day = moment(date);
-        return new RateWidgetController(this.context, day);
+        return new RateController(this.context, day);
     };
 
-    public view = (ctrl: RateWidgetController) => {
+    public view = (ctrl: RateController) => {
         return m("div.column", [
                 m.component(this.listComponent, ctrl.vm),
                 m.component(new modal(ctrl.vm.modalTitle(), ctrl.vm.isAddModalOpen,

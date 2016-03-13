@@ -4,19 +4,19 @@ import BudgetContext from "../client/data/budgetcontext";
 import Expense from "../client/expenses/expense";
 import * as it from "../client/rates/intervaltype";
 import Rate from "../client/rates/rate";
-import * as rates from "../client/rates/ratewidgetcontroller";
+import {RateDataSource, RateController} from "../client/rates/ratecontroller";
 
 ava.test.beforeEach(t => {
     t.context.budgetContext = new BudgetContext();
     t.context.date = moment([2016, 0, 5]);
-    t.context.controller = new rates.RateWidgetController(t.context.budgetContext,
+    t.context.controller = new RateController(t.context.budgetContext,
         t.context.date);
 });
 
 ava.test("update", t => {
     let bc: BudgetContext = t.context.budgetContext;
     let date = t.context.date;
-    let controller: rates.RateWidgetController = t.context.controller;
+    let controller: RateController = t.context.controller;
 
     t.is(controller.vm.list().length, 0);
 
@@ -27,7 +27,7 @@ ava.test("update", t => {
 ava.test("add", t => {
     let bc: BudgetContext = t.context.budgetContext;
     let date = t.context.date;
-    let controller: rates.RateWidgetController = t.context.controller;
+    let controller: RateController = t.context.controller;
 
     let rate = controller.vm.item();
     rate.name("test");
@@ -48,7 +48,7 @@ ava.test("add", t => {
 ava.test("total", t => {
     let bc: BudgetContext = t.context.budgetContext;
     let date = t.context.date;
-    let controller: rates.RateWidgetController = t.context.controller;
+    let controller: RateController = t.context.controller;
 
     let rate = new Rate("day", -25, 1, it.IntervalType.Days, date);
     let total = rate.perDiem(date);
@@ -90,7 +90,7 @@ ava.test("total", t => {
 ava.test("filter list", t => {
     let bc: BudgetContext = t.context.budgetContext;
     let date = t.context.date;
-    let controller: rates.RateWidgetController = t.context.controller;
+    let controller: RateController = t.context.controller;
 
     let rate = new Rate("day", -25, 1, it.IntervalType.Days, date);
     let total = rate.perDiem(date);

@@ -24,8 +24,9 @@ gulp.task('client', ['clean'], function () {
     var jquery = gulp.src('node_modules/jquery/dist/jquery.min.js');
     var semantic = gulp.src('semantic/dist/semantic.min.js');
     var moment = gulp.src('node_modules/moment/moment.js');
+    var d3 = gulp.src('node_modules/d3/d3.min.js');
 
-    return merge(mithril, jquery, semantic, moment, compiled)
+    return merge(mithril, jquery, semantic, moment, d3, compiled)
         .pipe(gulp.dest('compiled/.'));
 });
 

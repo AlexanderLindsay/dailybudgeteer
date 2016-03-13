@@ -114,7 +114,7 @@ export class RateDataSource implements DataSource<Rate> {
     };
 }
 
-export class RateWidgetController implements _mithril.MithrilController {
+export class RateController implements _mithril.MithrilController {
 
     public vm: RateDataSource;
 

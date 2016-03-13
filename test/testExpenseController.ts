@@ -4,7 +4,7 @@ import BudgetContext from "../client/data/budgetcontext";
 import Expense from "../client/expenses/expense";
 import * as it from "../client/rates/intervaltype";
 import Rate from "../client/rates/rate";
-import * as expenses from "../client/expenses/expensewidgetcontroller";
+import {ExpenseDataSource, ExpenseController} from "../client/expenses/expensecontroller";
 
 ava.test.beforeEach(t => {
     t.context.budgetContext = new BudgetContext();
@@ -13,7 +13,7 @@ ava.test.beforeEach(t => {
 ava.test("update", t => {
     let bc = t.context.budgetContext;
     let date = moment([2016, 0, 5]);
-    let controller = new expenses.ExpenseWidgetController(bc, date);
+    let controller = new ExpenseController(bc, date);
 
     t.is(controller.vm.list().length, 0);
     bc.addExpense(new Expense("test", date, -25));
@@ -28,7 +28,7 @@ ava.test("update", t => {
 ava.test("add", t => {
     let bc = t.context.budgetContext;
     let date = moment([2016, 0, 5]);
-    let controller = new expenses.ExpenseWidgetController(bc, date);
+    let controller = new ExpenseController(bc, date);
 
     let expense = controller.vm.item();
     expense.name("test");
@@ -45,7 +45,7 @@ ava.test("add", t => {
 ava.test("base rate", t => {
     let bc: BudgetContext = t.context.budgetContext;
     let date = moment([2016, 0, 5]);
-    let controller = new expenses.ExpenseWidgetController(bc, date);
+    let controller = new ExpenseController(bc, date);
 
     bc.addRate(new Rate("test", -25, 1, it.IntervalType.Days,
         moment([2016, 0, 4]), moment([2016, 0, 10])));
@@ -68,7 +68,7 @@ ava.test("base rate", t => {
 ava.test("filter list", t => {
     let bc = t.context.budgetContext;
     let date = moment([2016, 0, 5]);
-    let controller = new expenses.ExpenseWidgetController(bc, date);
+    let controller = new ExpenseController(bc, date);
 
     let expense = new Expense("test", date, -25);
     controller.vm.item(expense);

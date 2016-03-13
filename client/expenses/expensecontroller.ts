@@ -111,7 +111,7 @@ export class ExpenseDataSource implements DataSource<Expense> {
     };
 }
 
-export class ExpenseWidgetController implements _mithril.MithrilController {
+export class ExpenseController implements _mithril.MithrilController {
 
     public vm: ExpenseDataSource;
 

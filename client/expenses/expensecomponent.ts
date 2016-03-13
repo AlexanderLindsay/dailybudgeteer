@@ -4,14 +4,14 @@ import * as m from "mithril";
 import * as moment from "moment";
 import modal from "../components/modal";
 import Expense from "./expense";
-import {ExpenseDataSource, ExpenseWidgetController} from "./expensewidgetcontroller";
+import {ExpenseDataSource, ExpenseController} from "./expensecontroller";
 import FormComponent from "../components/formcomponent";
 import ListComponent from "../components/listcomponent";
 import BudgetContext from "../data/budgetcontext";
 import * as ViewHelpers from "../viewhelpers";
 
-export default class ExpenseWidgetComponent implements
-    _mithril.MithrilComponent<ExpenseWidgetController> {
+export default class ExpenseComponent implements
+    _mithril.MithrilComponent<ExpenseController> {
 
     private formComponent: FormComponent<Expense>;
     private listComponent: ListComponent<Expense>;
@@ -57,20 +57,20 @@ export default class ExpenseWidgetComponent implements
     };
 
     constructor(private context: BudgetContext) {
-        this.formComponent = new FormComponent<Expense>(ExpenseWidgetComponent.renderForm);
+        this.formComponent = new FormComponent<Expense>(ExpenseComponent.renderForm);
         this.listComponent = new ListComponent<Expense>(
-            ExpenseWidgetComponent.renderHeader,
-            ExpenseWidgetComponent.renderItem,
-            ExpenseWidgetComponent.renderFooter);
+            ExpenseComponent.renderHeader,
+            ExpenseComponent.renderItem,
+            ExpenseComponent.renderFooter);
     }
 
     public controller = () => {
         let date = m.route.param("date");
         let day = moment(date);
-        return new ExpenseWidgetController(this.context, day);
+        return new ExpenseController(this.context, day);
     };
 
-    public view = (ctrl: ExpenseWidgetController) => {
+    public view = (ctrl: ExpenseController) => {
         return m("div.column", [
             m.component(this.listComponent, ctrl.vm),
             m.component(new modal(ctrl.vm.modalTitle(), ctrl.vm.isAddModalOpen,
