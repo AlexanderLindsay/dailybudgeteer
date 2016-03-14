@@ -2,6 +2,7 @@
 
 import * as m from "mithril";
 import * as moment from "moment";
+let momentrange = require("moment-range");
 import BudgetContext from "../data/budgetcontext";
 import Expense from "../expenses/expense";
 import Rate from "../rates/rate";
@@ -27,12 +28,33 @@ export class SummaryViewModel {
     };
 
     private fetchExpenses = () => {
+        let perDiem = (d: moment.Moment) => {
+            return this.context.listRates().reduce<number>((previous, current, index) => {
+                return previous + current.perDiem(this.day);
+            }, 0);
+        };
+
+        let expenses: Expense[] = this.context.listExpenses();
+
+        let start = this.day.clone().startOf("month").subtract(2, "month");
+        let end = this.day.clone();
+        let range = moment.range(start, end);
+        let results: Expense[] = [];
+        range.by("day", d => {
+            let exp = new Expense(d.format(), d, perDiem(d));
+            expenses
+            .filter(e => {
+                return e.day().isSame(d, "day");
+            })
+            .reduce<Expense>((accum, current, index) => {
+                accum.amount(accum.amount() + current.amount());
+                return accum;
+            }, exp);
+            results.push(exp);
+        });
+
         let deferred = m.deferred<Expense[]>();
-        deferred.resolve(this.context.listExpenses().filter((expense) => {
-            const expDate = expense.day();
-            const day = this.day;
-            return expDate.isBefore(day, "day");
-        }));
+        deferred.resolve(results);
         return deferred.promise;
     };
 

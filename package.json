@@ -20,6 +20,7 @@
     "jquery": "^2.2.1",
     "mithril": "^0.2.3",
     "moment": "^2.11.2",
+    "moment-range": "^2.2.0",
     "semantic-ui": "^2.1.8"
   },
   "scripts": {
