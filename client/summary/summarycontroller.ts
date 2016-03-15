@@ -36,7 +36,7 @@ export class SummaryViewModel {
 
         let expenses: Expense[] = this.context.listExpenses();
 
-        let start = this.day.clone().startOf("month").subtract(2, "month");
+        let start = this.day.clone().startOf("week").subtract(1, "week");
         let end = this.day.clone();
         let range = moment.range(start, end);
         let results: Expense[] = [];

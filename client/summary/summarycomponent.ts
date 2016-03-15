@@ -29,7 +29,7 @@ export default class SummaryComponent implements
             width = 700 - margin.left - margin.right,
             height = 450 - margin.top - margin.bottom;
 
-        let formatDate = d3.time.format("%Y-%m-%d");
+        let formatDate = d3.time.format("%m/%d");
 
         let x = d3.time.scale()
             .range([0, width]);
@@ -39,6 +39,8 @@ export default class SummaryComponent implements
 
         let xAxis = d3.svg.axis()
             .scale(x)
+            .ticks(d3.time.day, 1)
+            .tickFormat(formatDate)
             .orient("bottom");
 
         let yAxis = d3.svg.axis()
@@ -47,7 +49,8 @@ export default class SummaryComponent implements
 
         let line = d3.svg.line<Expense>()
             .x(d => { return x(d.day().toDate()); })
-            .y(d => { return y(d.amount()); });
+            .y(d => { return y(d.amount()); })
+            .interpolate("monotone");
 
         let svg = d3.select(element).append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -56,8 +59,13 @@ export default class SummaryComponent implements
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         ctrl.vm.expenses.then((data) => {
+
+            let maxY = d3.max(data, expense => { return expense.amount(); });
+            let minY = d3.min(data, expense => { return expense.amount(); });
+            let absMax = Math.max(Math.abs(minY), Math.abs(maxY));
+
             x.domain(d3.extent(data, expense => { return expense.day().valueOf(); }));
-            y.domain(d3.extent(data, expense => { return expense.amount(); }));
+            y.domain([-absMax, absMax]).nice();
 
             svg.append("g")
                 .attr("class", "x axis")
@@ -69,7 +77,7 @@ export default class SummaryComponent implements
                 .call(yAxis)
                 .append("text")
                 .attr("transform", "rotate(-90)")
-                .attr("y", 6)
+                .attr("y", -50)
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
                 .text("Income ($)");
