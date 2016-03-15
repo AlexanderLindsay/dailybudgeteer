@@ -19,7 +19,9 @@ let handler = new FileHandling.FileHandler(root, {
         let reader = new FileReader();
         reader.onload = (e: Event) => {
             let data = reader.result;
+            m.startComputation();
             context.loadData(data);
+            m.endComputation();
         };
 
         if (files.length > 0) {

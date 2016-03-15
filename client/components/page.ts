@@ -13,7 +13,9 @@ class PageController implements _mithril.MithrilController {
 
     openFile = () => {
         this.fileDialog.open((data: string) => {
+            m.startComputation();
             this.context.loadData(data);
+            m.endComputation();
         });
     };
 }
