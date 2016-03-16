@@ -6,7 +6,7 @@ import * as it from "../client/rates/intervaltype";
 import Rate from "../client/rates/rate";
 
 ava.test("Round trip data", (t) => {
-    let rate = {
+    let rate1 = {
         id: 1,
         name: "test rate",
         amount: -100,
@@ -16,19 +16,37 @@ ava.test("Round trip data", (t) => {
         endDate: moment()
     };
 
-    let expense = {
+    let rate2 = {
+        id: 2,
+        name: "test rate2",
+        amount: -100,
+        interval: 1,
+        intervalType: 0,
+        startDate: moment(),
+    };
+
+    let expense1 = {
         id: 1,
         name: "test expense",
         day: moment(),
         amount: -50
     };
 
+    let expense2 = {
+        id: 2,
+        name: "test expense2",
+        day: moment(),
+        amount: -75
+    };
+
     let data = JSON.stringify({
         expenses: [
-            expense
+            expense1,
+            expense2
         ],
         rates: [
-            rate
+            rate1,
+            rate2
         ],
         nextIds: {
             expenses: 2,

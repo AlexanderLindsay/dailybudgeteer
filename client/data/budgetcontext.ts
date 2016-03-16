@@ -28,7 +28,9 @@ export default class BudgetContext extends DataContext {
         this.updateCallbacks = [];
     }
 
-    private parseDate(value: string) {
+    private parseDate(value?: string) {
+        if (value === null || value === undefined)
+            return undefined;
         return moment(value);
     }
 
