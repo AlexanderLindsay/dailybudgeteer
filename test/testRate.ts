@@ -27,6 +27,14 @@ ava.test("allowInterval - changes", (t) => {
     t.is(r.allowInterval(), false);
 });
 
+ava.test("expire", (t) => {
+    let r = new Rate("test", -25, 1, it.IntervalType.Days, moment([2016, 0, 15]));
+    t.is(r.endDate(), undefined);
+    let expireDate = moment([2016, 3, 10]);
+    r.expireOn(expireDate);
+    t.is(r.endDate(), expireDate);
+});
+
 ava.test("perDiem - day - 0", (t) => {
     let amount = -25;
     const interval = 0;

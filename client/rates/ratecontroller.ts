@@ -81,6 +81,13 @@ export class RateDataSource implements DataSource<Rate> {
         this.context.removeRate(id);
     };
 
+    public expire = () => {
+        if (this.item().id() > 0) {
+            let current = this.context.getRate(this.item().id());
+            current.expireOn(this.day);
+        }
+    };
+
     public save = () => {
         if (this.item().intervalType() !== it.IntervalType.Days) {
             this.item().interval(1);

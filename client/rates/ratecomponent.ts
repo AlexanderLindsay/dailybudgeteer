@@ -71,7 +71,7 @@ export default class RatesComponent implements
             m("th[colspan='4']", [
                 m("button[type='button'].ui.primary.button", { onclick: vm.openAddModal }, "Add Rate")
             ]),
-            m("th[colspan='2']", vm.total())
+            m("th[colspan='3']", vm.total())
         ];
     };
 
@@ -96,6 +96,7 @@ export default class RatesComponent implements
                 m.component(new modal(ctrl.vm.modalTitle(), ctrl.vm.isAddModalOpen,
                     () => m.component(this.formComponent, { item: ctrl.vm.item }),
                     () => [
+                        m("button.ui.approve.button[type='button']", { onclick: ctrl.vm.expire, disabled: ctrl.vm.item().id() <= 0 }, "Expire"),
                         m("button.ui.approve.button[type='button']", { onclick: ctrl.vm.save }, ctrl.vm.modalActionName()),
                         m("button.ui.cancel.button[type='button]", "Cancel")
                     ]))

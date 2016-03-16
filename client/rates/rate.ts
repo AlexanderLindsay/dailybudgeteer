@@ -46,6 +46,10 @@ export default class Rate implements IKeyed {
         }
     };
 
+    public expireOn(date: moment.Moment) {
+        this.endDate(date);
+    }
+
     public allowInterval() {
         return this.intervalType() === it.IntervalType.Days;
     }
