@@ -21,7 +21,7 @@ export class RateDataSource implements DataSource<Rate> {
     modalTitle: _mithril.MithrilProperty<string>;
     modalActionName: _mithril.MithrilProperty<string>;
 
-    constructor(private context: BudgetContext, private day: moment.Moment) {
+    constructor(private context: BudgetContext, public day: moment.Moment) {
         this.item = m.prop(new Rate("", 0, 1, it.IntervalType.Days));
         this.isAddModalOpen = m.prop(false);
         this.modalTitle = m.prop(saveTitle);

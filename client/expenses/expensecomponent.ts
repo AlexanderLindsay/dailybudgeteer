@@ -5,6 +5,7 @@ import * as moment from "moment";
 import modal from "../components/modal";
 import Expense from "./expense";
 import {ExpenseDataSource, ExpenseController} from "./expensecontroller";
+import ChangeDateComponent from "../components/changedatecomponent";
 import FormComponent from "../components/formcomponent";
 import ListComponent from "../components/listcomponent";
 import BudgetContext from "../data/budgetcontext";
@@ -13,6 +14,7 @@ import * as ViewHelpers from "../viewhelpers";
 export default class ExpenseComponent implements
     _mithril.MithrilComponent<ExpenseController> {
 
+    private changeDateComponent: ChangeDateComponent;
     private formComponent: FormComponent<Expense>;
     private listComponent: ListComponent<Expense>;
 
@@ -57,6 +59,7 @@ export default class ExpenseComponent implements
     };
 
     constructor(private context: BudgetContext) {
+        this.changeDateComponent = new ChangeDateComponent("/expenses");
         this.formComponent = new FormComponent<Expense>(ExpenseComponent.renderForm);
         this.listComponent = new ListComponent<Expense>(
             ExpenseComponent.renderHeader,
@@ -72,6 +75,7 @@ export default class ExpenseComponent implements
 
     public view = (ctrl: ExpenseController) => {
         return m("div.column", [
+            m.component(this.changeDateComponent, ctrl.vm.day.clone()),
             m.component(this.listComponent, ctrl.vm),
             m.component(new modal(ctrl.vm.modalTitle(), ctrl.vm.isAddModalOpen,
                 () => m.component(this.formComponent, { item: ctrl.vm.item }),

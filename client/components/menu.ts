@@ -3,10 +3,10 @@
 import * as m from "mithril";
 
 export class MenuItem {
-    constructor(public href: string, public name: string) { }
+    constructor(private activeMatcher: RegExp, public href: string, public name: string) { }
 
     public isActive = () => {
-        return m.route() === this.href;
+        return this.activeMatcher.test(m.route());
     };
 }
 

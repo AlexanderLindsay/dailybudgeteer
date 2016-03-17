@@ -36,9 +36,9 @@ let fileDialog = new FileDialog();
 const dateFormat = "YYYY-MM-DD";
 
 let menu = new Menu.MenuComponent([
-   new Menu.MenuItem(`/expenses/${moment().format(dateFormat)}`, "Expenses"),
-   new Menu.MenuItem(`/rates/${moment().format(dateFormat)}`, "Rates"),
-   new Menu.MenuItem(`/summary/${moment().format(dateFormat)}`, "Summary")
+   new Menu.MenuItem(new RegExp("expenses"), `/expenses/${moment().format(dateFormat)}`, "Expenses"),
+   new Menu.MenuItem(new RegExp("rates"), `/rates/${moment().format(dateFormat)}`, "Rates"),
+   new Menu.MenuItem(new RegExp("summary"), `/summary/${moment().format(dateFormat)}`, "Summary")
 ]);
 let page = Page.bind(null, context, fileDialog, menu);
 

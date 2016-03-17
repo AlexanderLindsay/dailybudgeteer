@@ -6,6 +6,7 @@ import modal from "../components/modal";
 import * as it from "./intervaltype";
 import Rate from "./rate";
 import {RateDataSource, RateController} from "./ratecontroller";
+import ChangeDateComponent from "../components/changedatecomponent";
 import FormComponent from "../components/formcomponent";
 import ListComponent from "../components/listcomponent";
 import BudgetContext from "../data/budgetcontext";
@@ -14,6 +15,7 @@ import * as ViewHelpers from "../viewhelpers";
 export default class RatesComponent implements
     _mithril.MithrilComponent<RateController> {
 
+    private changeDateComponent: ChangeDateComponent;
     private formComponent: FormComponent<Rate>;
     private listComponent: ListComponent<Rate>;
 
@@ -76,6 +78,7 @@ export default class RatesComponent implements
     };
 
     constructor(private context: BudgetContext) {
+        this.changeDateComponent = new ChangeDateComponent("/rates");
         this.formComponent = new FormComponent<Rate>(RatesComponent.renderForm);
         this.listComponent = new ListComponent<Rate>(
             RatesComponent.renderHeader,
@@ -92,6 +95,7 @@ export default class RatesComponent implements
 
     public view = (ctrl: RateController) => {
         return m("div.column", [
+                m.component(this.changeDateComponent, ctrl.vm.day.clone()),
                 m.component(this.listComponent, ctrl.vm),
                 m.component(new modal(ctrl.vm.modalTitle(), ctrl.vm.isAddModalOpen,
                     () => m.component(this.formComponent, { item: ctrl.vm.item }),
