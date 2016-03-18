@@ -9,3 +9,22 @@
   stroke: steelblue;
   stroke-width: 1.5px;
 }
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus circle {
+  fill: none;
+  stroke: steelblue;
+}
+
+.focus-background {
+    fill: #111;
+    fill-opacity: 0.7;
+}
+
+.focus-text {
+    fill: #EEE;
+}

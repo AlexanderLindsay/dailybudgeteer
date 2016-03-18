@@ -29,7 +29,12 @@ export default class SummaryComponent implements
             width = 700 - margin.left - margin.right,
             height = 450 - margin.top - margin.bottom;
 
+        let bisectDate = d3.bisector((d: Expense) => {
+            return d.day().toDate();
+        }).left;
         let formatDate = d3.time.format("%m/%d");
+        let formatValue = d3.format(",.2f");
+        let formatCurrency = function(d) { return "$" + formatValue(d); };
 
         let x = d3.time.scale()
             .range([0, width]);
@@ -86,6 +91,71 @@ export default class SummaryComponent implements
                 .datum(data)
                 .attr("class", "line")
                 .attr("d", line);
+
+            let focus = svg.append("g")
+                .attr("class", "focus")
+                .style("display", "none");
+
+            focus.append("circle")
+                .attr("r", 4.5);
+
+            focus.append("rect")
+                .attr("width", 90)
+                .attr("height", 40)
+                .attr("y", 3)
+                .attr("class", "focus-background");
+
+            let focusText = focus.append("text")
+                .attr("class", "focus-text")
+                .attr("x", 7)
+                .attr("y", 0);
+
+            focusText
+                .append("tspan")
+                .attr("class", "focus-text-one")
+                .attr("x", 5)
+                .attr("dy", "1.2em");
+
+            focusText
+                .append("tspan")
+                .attr("class", "focus-text-two")
+                .attr("x", 5)
+                .attr("dy", "1.2em");
+
+            svg.append("rect")
+                .attr("class", "overlay")
+                .attr("width", width)
+                .attr("height", height)
+                .on("mouseover", function() { focus.style("display", null); })
+                .on("mouseout", function() { focus.style("display", "none"); })
+                .on("mousemove", mousemove);
+
+            function mousemove() {
+                let x0 = x.invert(d3.mouse(this)[0]);
+                let index = bisectDate(data, x0, 1);
+                let leftExpense = data[index - 1];
+                let rightExpense = data[index];
+
+                let xValue = x0.valueOf();
+
+                let exp = new Expense("", moment(xValue), 0);
+                if (leftExpense !== undefined &&
+                    rightExpense !== undefined) {
+
+                    let leftValue = leftExpense.day().valueOf();
+                    let rightValue = rightExpense.day().valueOf();
+
+                    if (xValue - leftValue > rightValue - xValue) {
+                        exp = rightExpense;
+                    } else {
+                        exp = leftExpense;
+                    }
+                }
+
+                focus.attr("transform", "translate(" + x(exp.day().toDate()) + "," + y(exp.amount()) + ")");
+                focus.select(".focus-text-one").text(exp.day().format("MM/DD/YYYY"));
+                focus.select(".focus-text-two").text(formatCurrency(exp.amount()));
+            }
         });
     };
 }
