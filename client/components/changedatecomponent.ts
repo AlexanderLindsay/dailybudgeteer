@@ -2,6 +2,7 @@
 
 import * as m from "mithril";
 import * as moment from "moment";
+import * as DF from "../utils/dateFormatter";
 
 class ChangeDateController implements _mithril.MithrilController {
     constructor(public date: moment.Moment) { }
@@ -21,7 +22,7 @@ export default class ChangeDateComponent implements _mithril.MithrilComponent<Ch
                     m("div.two.wide.column",
                         m("div.ui.basic.left.aligned.segment",
                             m("h2.ui.header",
-                                m("a", { href: `${baseUrl}/${ctrl.date.clone().subtract(1, "day").format("YYYY-MM-DD")}`, config: m.route }, m("i.arrow.left.icon"))
+                                m("a", { href: `${baseUrl}/${DF.formatDateForUrl(ctrl.date.clone().subtract(1, "day"))}`, config: m.route }, m("i.arrow.left.icon"))
                             )
                         )
                     ),
@@ -35,7 +36,7 @@ export default class ChangeDateComponent implements _mithril.MithrilComponent<Ch
                     m("div.two.wide.column",
                         m("div.ui.basic.right.aligned.segment",
                             m("h2.ui.header",
-                                m("a", { href: `${baseUrl}/${ctrl.date.clone().add(1, "day").format("YYYY-MM-DD")}`, config: m.route }, m("i.arrow.right.icon"))
+                                m("a", { href: `${baseUrl}/${DF.formatDateForUrl(ctrl.date.clone().add(1, "day"))}`, config: m.route }, m("i.arrow.right.icon"))
                             )
                         )
                     )
