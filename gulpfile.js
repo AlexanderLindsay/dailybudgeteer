@@ -23,11 +23,8 @@ gulp.task('client', ['clean'], function () {
     var mithril = gulp.src('node_modules/mithril/mithril.min.js');
     var jquery = gulp.src('node_modules/jquery/dist/jquery.min.js');
     var semantic = gulp.src('semantic/dist/semantic.min.js');
-    var moment = gulp.src('node_modules/moment/min/moment.min.js');
-    var momentRange = gulp.src('node_modules/moment-range/dist/moment-range.min.js');
-    var d3 = gulp.src('node_modules/d3/d3.min.js');
 
-    return merge(mithril, jquery, semantic, moment, momentRange, d3, compiled)
+    return merge(mithril, jquery, semantic, compiled)
         .pipe(gulp.dest('compiled/.'));
 });
 
@@ -53,6 +50,6 @@ gulp.task('package', function () {
        version: "0.36.9",
        out: "builds",
        overwrite: true,
-       ignore: "(\.gitignore)|(gulpfile\.js)|(\.vscode.*)|(typings.*)|(tsconfig.json)|(semantic.json)|(builds.*)|(client.*)|(test.*)|(node_modules.*)|(semantic/src.*)|(semantic/tasks.*)"
+       ignore: "(\.gitignore)|(gulpfile\.js)|(\.vscode.*)|(typings.*)|(tsconfig.json)|(semantic.json)|(builds.*)|(client.*)|(test.*)|(^/node_modules/(?!.*(d3|mithril|jquery|moment|semantic)))|(semantic/src.*)|(semantic/tasks.*)"
    }, function(err, appPath){}) 
 });
