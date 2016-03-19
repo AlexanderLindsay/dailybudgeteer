@@ -26,6 +26,7 @@
   "scripts": {
     "build": "gulp build",
     "clean": "gulp clean",
-    "test": "tsc --project test && ava test/test/*.js"
+    "test": "tsc --project test && ava test/test/*.js",
+    "package": "gulp package"
   }
 }

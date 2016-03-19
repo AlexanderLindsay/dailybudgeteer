@@ -24,6 +24,13 @@
             "showOutput": "always",
             "isBuildCommand": false,
             "isTestCommand": true
+        },
+        {
+            "taskName": "package",
+            "args": [],
+            "showOutput": "silent",
+            "isBuildCommand": false,
+            "isTestCommand": false
         }
     ]
 }
