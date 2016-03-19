@@ -34,7 +34,7 @@ export default class SummaryComponent implements
             return d.day().toDate();
         }).left;
         let formatDate = d3.time.format("%m/%d");
-        let formatValue = function(d) { return formatCurrency(d); };
+        let formatValue = function(d: number) { return formatCurrency(d); };
 
         let x = d3.time.scale()
             .range([0, width]);
