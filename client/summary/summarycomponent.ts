@@ -7,6 +7,7 @@ import {SummaryViewModel, SummaryController} from "./summarycontroller";
 import BudgetContext from "../data/budgetcontext";
 import Expense from "../expenses/expense";
 import Rate from "../rates/rate";
+import formatCurrency from "../utils/currencyFormatter";
 
 export default class SummaryComponent implements
     _mithril.MithrilComponent<SummaryController> {
@@ -33,8 +34,7 @@ export default class SummaryComponent implements
             return d.day().toDate();
         }).left;
         let formatDate = d3.time.format("%m/%d");
-        let formatValue = d3.format(",.2f");
-        let formatCurrency = function(d) { return "$" + formatValue(d); };
+        let formatValue = function(d) { return formatCurrency(d); };
 
         let x = d3.time.scale()
             .range([0, width]);
@@ -154,7 +154,7 @@ export default class SummaryComponent implements
 
                 focus.attr("transform", "translate(" + x(exp.day().toDate()) + "," + y(exp.amount()) + ")");
                 focus.select(".focus-text-one").text(exp.day().format("MM/DD/YYYY"));
-                focus.select(".focus-text-two").text(formatCurrency(exp.amount()));
+                focus.select(".focus-text-two").text(formatValue(exp.amount()));
             }
         });
     };

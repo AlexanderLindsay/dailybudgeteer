@@ -10,7 +10,8 @@ import ChangeDateComponent from "../components/changedatecomponent";
 import FormComponent from "../components/formcomponent";
 import ListComponent from "../components/listcomponent";
 import BudgetContext from "../data/budgetcontext";
-import * as ViewHelpers from "../viewhelpers";
+import * as ViewHelpers from "../utils/viewhelpers";
+import formatCurrency from "../utils/currencyFormatter";
 
 export default class RatesComponent implements
     _mithril.MithrilComponent<RateController> {
@@ -32,10 +33,10 @@ export default class RatesComponent implements
     private static renderItem = (rate: Rate) => {
         return [
             m("td", rate.name()),
-            m("td", rate.amount()),
+            m("td", formatCurrency(rate.amount())),
             m("td", rate.interval()),
             m("td", it.IntervalType[rate.intervalType()]),
-            m("td", rate.perDiem(moment()))
+            m("td", formatCurrency(rate.perDiem(moment())))
         ];
     };
 
@@ -73,7 +74,7 @@ export default class RatesComponent implements
             m("th[colspan='4']", [
                 m("button[type='button'].ui.primary.button", { onclick: vm.openAddModal }, "Add Rate")
             ]),
-            m("th[colspan='3']", vm.total())
+            m("th[colspan='3']", formatCurrency(vm.total()))
         ];
     };
 

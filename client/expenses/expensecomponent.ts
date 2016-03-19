@@ -9,7 +9,8 @@ import ChangeDateComponent from "../components/changedatecomponent";
 import FormComponent from "../components/formcomponent";
 import ListComponent from "../components/listcomponent";
 import BudgetContext from "../data/budgetcontext";
-import * as ViewHelpers from "../viewhelpers";
+import * as ViewHelpers from "../utils/viewhelpers";
+import formatCurrency from "../utils/currencyFormatter";
 
 export default class ExpenseComponent implements
     _mithril.MithrilComponent<ExpenseController> {
@@ -28,7 +29,7 @@ export default class ExpenseComponent implements
     private static renderItem = (expense: Expense) => {
         return [
             m("td", expense.name()),
-            m("td", expense.amount()),
+            m("td", formatCurrency(expense.amount())),
         ];
     };
 
@@ -54,7 +55,7 @@ export default class ExpenseComponent implements
             m("th", [
                 m("button[type='button'].ui.primary.button", { onclick: vm.openAddModal }, "Add Expense")
             ]),
-            m("th[colspan='2']", vm.total())
+            m("th[colspan='2']", formatCurrency(vm.total()))
         ];
     };
 
