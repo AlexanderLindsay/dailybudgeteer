@@ -49,7 +49,7 @@ gulp.task('package', function () {
        arch: "x64",
        dir: ".",
        platform: "win32",
-       name: "PerTurn",
+       name: "PerDay",
        version: "0.36.9",
        out: "builds",
        overwrite: true,
