@@ -28,6 +28,39 @@ If you added rates than the first entry on each day's list of expenses will be t
 
 The summary tab shows a line graph of the last two weeks of activity.
 
+## JSON Format
+
+Here is what the JSON that the application saves to/loads from
+
+```json
+{
+    "expenses": [
+        {
+            "id": 1,
+            "name": "SUPERHOT",
+            "day": "2016-03-20T07:00:00.000Z",
+            "amount": -25
+        }
+    ],
+    "rates": [
+        {
+            "id": 1,
+            "name": "Test Rate",
+            "amount": 200,
+            "interval": "14",
+            "intervalType": 0,
+            "startDate": "2016-03-20T07:00:00.000Z"
+        }
+    ],
+    "nextIds": {
+        "expenses": 2,
+        "rates": 2
+    }
+}
+```
+
+If the rate has ended then it will have an `endDate` as well as a start date.
+
 ## How to Develop
 
 #### Prerequisites
