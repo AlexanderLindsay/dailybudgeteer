@@ -1,10 +1,10 @@
-# Budget Per Day
+# Daily Budgeteer
 
-Budget Per Day was inspired by [this blog post by Alex Recker](http://alexrecker.com/our-new-sid-meiers-civilization-inspired-budget/) where he explains a budgeting tool which organizes your expenses around a Per Day modal. As in, breaking down all your costs and income to see how much you are making and spending per day. After the post got enough attention, he decided to create an improved version which you can find [here](https://github.com/arecker/bennedetto).
+Daily Budgeteer was inspired by [this blog post by Alex Recker](http://alexrecker.com/our-new-sid-meiers-civilization-inspired-budget/) where he explains a budgeting tool which organizes your expenses around a Per Day modal. As in, breaking down all your costs and income to see how much you are making and spending per day. After the post got enough attention, he decided to create an improved version which you can find [here](https://github.com/arecker/bennedetto).
 
-So Budget Per Day is different from those two projects in the fact that it is not a website. I built it in [Electron](http://electron.atom.io/), so it is a desktop app. This has a couple interesting pros and cons for a project like this. The major con is that you can't interact with it from your phone, though I want to get back to that. The major benefit, is that it doesn't have to deal with security concerns, or at least no more than any other file on your system.
+So Daily Budgeteer is different from those two projects in the fact that it is not a website. I built it in [Electron](http://electron.atom.io/), so it is a desktop app. This has a couple interesting pros and cons for a project like this. The major con is that you can't interact with it from your phone, though I want to get back to that. The major benefit, is that it doesn't have to deal with security concerns, or at least no more than any other file on your system.
 
-So the way Budget Per Day works is that it read/writes to/from JSON files. This leads back to the phone issue. I am thinking that a phone app could be created to read/write from a JSON file in the same format and store the file in google drive, or some other storage system accessible from your phone. Then the desktop app and the phone app could be connected.
+So the way Daily Budgeteer works is that it read/writes to/from JSON files. This leads back to the phone issue. I am thinking that a phone app could be created to read/write from a JSON file in the same format and store the file in google drive, or some other storage system accessible from your phone. Then the desktop app and the phone app could be connected.
 
 ## How To Use
 

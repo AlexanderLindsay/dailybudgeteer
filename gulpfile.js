@@ -46,7 +46,7 @@ gulp.task('package', function () {
        arch: "x64",
        dir: ".",
        platform: "win32",
-       name: "PerDay",
+       name: "DailyBudgeteer",
        version: "0.36.9",
        out: "builds",
        overwrite: true,
