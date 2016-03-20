@@ -23,6 +23,8 @@ The summary tab shows a line graph of the last two weeks of activity.
 - [typings](https://github.com/typings)
 - [ava](https://github.com/sindresorhus/ava)
 
+I am also using [semantic-ui](http://semantic-ui.com/), but I need to integrate it better. For now, to get it working you need to run `gulp build` in the `node_modules/semantic-ui folder`.
+
 I think that is everything that you need to install ahead of time. I think typings is optional at the moment as the typings folder is saved in git. 
 
 I was using Visual Studio Code to write the application, but that shouldn't be a requirment. 
