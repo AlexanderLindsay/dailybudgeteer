@@ -8,23 +8,23 @@ So the way Daily Budgeteer works is that it read/writes to/from JSON files. This
 
 ## How To Use
 
-![Empty Rates List]("/readme-images/Rates-Empty.PNG")
+![Empty Rates List](/readme-images/Rates-Empty.PNG)
 
 The application is fairly simple to use. Add any recurring costs or income as a rate. Make sure that costs are marked as negative values and set the time interval and interval type. For example, if the rate is once a month then choose a Month in the Interval Type dropdown list. 
 
-![Add Rates]("/readme-images/AddRate.PNG")
+![Add Rates](/readme-images/AddRate.PNG)
 
 When the Per Day value of the rate is calculated it will be based on the number of days in the current month.
 
-![RatesList ]("/readme-images/Rates-Examples.PNG")
+![RatesList ](/readme-images/Rates-Examples.PNG)
 
 Then add expenses as they occur. Again, make sure to use negative values as appropate. 
 
-![Expenses]("/readme-images/Expenses-Examples.PNG")
+![Expenses](/readme-images/Expenses-Examples.PNG)
 
 If you added rates than the first entry on each day's list of expenses will be the base line value what you are making or spending if you don't do anything that day.
 
-![Summary Tab]("/readme-images/Summary.PNG")
+![Summary Tab](/readme-images/Summary.PNG)
 
 The summary tab shows a line graph of the last two weeks of activity.
 
