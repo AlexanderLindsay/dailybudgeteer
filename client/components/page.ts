@@ -5,15 +5,26 @@ import BudgetContext from "../data/budgetcontext";
 import FileDialog from "../filehandling/dialog";
 
 class PageController implements _mithril.MithrilController {
-    constructor(private context: BudgetContext, private fileDialog: FileDialog) { }
+
+    private fileName: _mithril.MithrilProperty<string>;
+
+    constructor(private context: BudgetContext, private fileDialog: FileDialog) {
+        this.fileName = m.prop("");
+    }
+
+    newFile = () => {
+        this.fileName("");
+        this.context.clear();
+    };
 
     saveFile = () => {
-        this.fileDialog.save(this.context.writeData());
+        this.fileDialog.save(this.context.writeData(), this.fileName(), this.fileName);
     };
 
     openFile = () => {
-        this.fileDialog.open((data: string) => {
+        this.fileDialog.open((data: string, fileName: string) => {
             m.startComputation();
+            this.fileName(fileName);
             this.context.loadData(data);
             m.endComputation();
         });
@@ -33,8 +44,10 @@ export default class Page implements _mithril.MithrilComponent<PageController> {
                         "File",
                         m("i.dropdown.icon"),
                         m("div.menu", [
+                            m("div.item", { onclick: ctrl.newFile }, "New"),
                             m("div.item", { onclick: ctrl.openFile }, "Open"),
-                            m("div.item", { onclick: ctrl.saveFile }, "Save")
+                            m("div.item", { onclick: ctrl.saveFile }, "Save"),
+                            m("div.item", { onclick: ctrl.saveFile }, "Save As")
                         ])
                     ])
                 ]),

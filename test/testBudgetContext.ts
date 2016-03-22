@@ -235,3 +235,69 @@ ava.test("addRate - ids", (t) => {
     t.is(bc.getRate(1), rate1);
     t.is(bc.getRate(2), rate2);
 });
+
+ava.test("clear", (t) => {
+    let rate1 = {
+        id: 1,
+        name: "test rate",
+        amount: -100,
+        interval: 1,
+        intervalType: 0,
+        startDate: moment(),
+        endDate: moment()
+    };
+
+    let rate2 = {
+        id: 2,
+        name: "test rate2",
+        amount: -100,
+        interval: 1,
+        intervalType: 0,
+        startDate: moment(),
+    };
+
+    let expense1 = {
+        id: 1,
+        name: "test expense",
+        day: moment(),
+        amount: -50
+    };
+
+    let expense2 = {
+        id: 2,
+        name: "test expense2",
+        day: moment(),
+        amount: -75
+    };
+
+    let data = JSON.stringify({
+        expenses: [
+            expense1,
+            expense2
+        ],
+        rates: [
+            rate1,
+            rate2
+        ],
+        nextIds: {
+            expenses: 2,
+            rates: 2
+        }
+    });
+
+    let bc = new BudgetContext();
+    bc.loadData(data);
+    t.is(bc.writeData(), data);
+
+    let expected = JSON.stringify({
+        expenses: [],
+        rates: [],
+        nextIds: {
+            expenses: 1,
+            rates: 1
+        }
+    });
+
+    bc.clear();
+    t.is(bc.writeData(), expected);
+});

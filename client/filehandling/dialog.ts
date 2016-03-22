@@ -6,26 +6,33 @@ let fs = require("fs");
 
 export default class FileDialog {
 
-    public save = (data: string) => {
+    public save = (data: string, fileName: string, result: (fileName: string) => void) => {
         let dialogSettings: Electron.Dialog.SaveDialogOptions = {
             filters: [
                 { name: "json", extensions: ["json"] }
             ]
         };
 
-        dialog.showSaveDialog(null, dialogSettings, this.onSaveDialogClose.bind(this, data));
+        if (fileName === undefined || fileName === null || fileName.length <= 0) {
+            dialog.showSaveDialog(null, dialogSettings, this.onSaveDialogClose.bind(this, data, result));
+        } else {
+            this.onSaveDialogClose(data, result, fileName);
+        }
     };
 
-    private onSaveDialogClose = (data: string, fileName: string) => {
-        if (fileName === undefined) {
+    private onSaveDialogClose = (data: string, result: (fileName: string) => void, fileName: string) => {
+        if (fileName === undefined || fileName === null || fileName.length <= 0) {
             return;
         }
+
+        result(fileName);
+
         fs.writeFile(fileName, data, function(err: any) {
             dialog.showMessageBox(null, { title: "File Saved", message: `File ${fileName} was saved successfully.`, buttons: ["Ok"] });
         });
     };
 
-    public open = (onOpen: (data: string) => void) => {
+    public open = (onOpen: (data: string, fileName: string) => void) => {
         let dialogSettings: Electron.Dialog.OpenDialogOptions = {
             filters: [
                 { name: "json", extensions: ["json"] }
@@ -35,14 +42,14 @@ export default class FileDialog {
         dialog.showOpenDialog(null, dialogSettings, this.onOpenDialogClose.bind(this, onOpen));
     };
 
-    private onOpenDialogClose = (onOpen: (data: string) => void, fileNames: string[]) => {
+    private onOpenDialogClose = (onOpen: (data: string, fileName: string) => void, fileNames: string[]) => {
         if (fileNames === undefined) {
             return;
         }
         if (fileNames.length > 0) {
             let fileName = fileNames[0];
             fs.readFile(fileName, "utf-8", (err: any, data: any) => {
-                onOpen(data);
+                onOpen(data, fileName);
                 dialog.showMessageBox(null, { title: "File Opened", message: `File ${fileName} was opened successfully.`, buttons: ["Ok"] });
             });
         }

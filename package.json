@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "main.js",
   "devDependencies": {
-    "ava": "^0.12.0",
+    "ava": "^0.13.0",
     "electron-packager": "^5.2.1",
     "electron-prebuilt": "^0.36.7",
     "gulp": "^3.9.1",
