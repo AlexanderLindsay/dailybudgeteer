@@ -43,9 +43,9 @@ gulp.task('build', ['main', 'client']);
 
 gulp.task('package', function () {
    packager({
-       arch: "x64",
+       arch: "all",
        dir: ".",
-       platform: "win32",
+       platform: "all",
        name: "DailyBudgeteer",
        version: "0.36.9",
        out: "builds",
