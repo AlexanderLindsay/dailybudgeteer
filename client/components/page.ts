@@ -58,6 +58,10 @@ export class PageModel {
         this.fileDialog.save(this.context.writeData(), this.fileName(), this.setFileName);
     };
 
+    saveFileAs = () => {
+        this.fileDialog.save(this.context.writeData(), this.fileName(), this.setFileName, true);
+    };
+
     openFile = () => {
         this.fileDialog.open((data: string, fileName: string) => {
             m.startComputation();
@@ -90,7 +94,7 @@ export class Page implements _mithril.MithrilComponent<PageController> {
                             m("div.item", { onclick: ctrl.vm.newFile }, "New"),
                             m("div.item", { onclick: ctrl.vm.openFile }, "Open"),
                             m("div.item", { onclick: ctrl.vm.saveFile }, "Save"),
-                            m("div.item", { onclick: ctrl.vm.saveFile }, "Save As")
+                            m("div.item", { onclick: ctrl.vm.saveFileAs }, "Save As")
                         ])
                     ])
                 ]),

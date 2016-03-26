@@ -6,14 +6,14 @@ let fs = require("fs");
 
 export default class FileDialog {
 
-    public save = (data: string, fileName: string, result: (fileName: string) => void) => {
+    public save = (data: string, fileName: string, result: (fileName: string) => void, openDialog: boolean = false) => {
         let dialogSettings: Electron.Dialog.SaveDialogOptions = {
             filters: [
                 { name: "json", extensions: ["json"] }
             ]
         };
 
-        if (fileName === undefined || fileName === null || fileName.length <= 0) {
+        if (fileName === undefined || fileName === null || fileName.length <= 0 || openDialog) {
             dialog.showSaveDialog(null, dialogSettings, this.onSaveDialogClose.bind(this, data, result));
         } else {
             this.onSaveDialogClose(data, result, fileName);
