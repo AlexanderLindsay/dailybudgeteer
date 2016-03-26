@@ -7,6 +7,8 @@ import Rate from "../rates/rate";
 
 export default class BudgetContext extends DataContext {
 
+    private static DataKey = "BudgetData";
+
     private expenses: Expense[];
     private rates: Rate[];
     private nextIds: {
@@ -16,7 +18,15 @@ export default class BudgetContext extends DataContext {
 
     private updateCallbacks: (() => void)[];
 
-    private setupValues = () => {
+    private setupValues = (fromStorage: boolean = false) => {
+        if (fromStorage) {
+            let data = localStorage.getItem(BudgetContext.DataKey);
+            if (data) {
+                this.parseJson(data);
+                return;
+            }
+        }
+
         this.expenses = [];
         this.rates = [];
         this.nextIds = {
@@ -27,7 +37,7 @@ export default class BudgetContext extends DataContext {
 
     constructor() {
         super();
-        this.setupValues();
+        this.setupValues(true);
         this.updateCallbacks = [];
     }
 
@@ -51,12 +61,13 @@ export default class BudgetContext extends DataContext {
     };
 
     private onUpdate = () => {
+        localStorage.setItem(BudgetContext.DataKey, this.writeData());
         this.updateCallbacks.forEach(cb => {
             cb();
         });
     };
 
-    public loadData = (json: string) => {
+    private parseJson = (json: string) => {
         let data = JSON.parse(json);
         this.expenses = data.expenses.map((raw: any) => {
             let expense = new Expense(raw.name, this.parseDate(raw.day), raw.amount);
@@ -78,6 +89,10 @@ export default class BudgetContext extends DataContext {
             expenses: 1,
             rates: 1
         };
+    };
+
+    public loadData = (json: string) => {
+        this.parseJson(json);
         this.onUpdate();
     };
 
