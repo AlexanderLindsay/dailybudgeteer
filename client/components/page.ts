@@ -1,6 +1,7 @@
 /// <reference path="../../typings/browser.d.ts" />
 
 import * as m from "mithril";
+import * as mousetrap from "mousetrap";
 import BudgetContext from "../data/budgetcontext";
 import FileDialog from "../filehandling/dialog";
 import * as FileHandling from "../filehandling/dragdrop";
@@ -15,6 +16,8 @@ export class PageModel {
         this.titleRoot = document.title;
         this.fileName = m.prop("");
         this.setFileName(localStorage.getItem(PageModel.FileNameKey) || "");
+
+        this.setupShortcuts();
 
         let handler = new FileHandling.FileHandler(root, {
             onchange: (files: FileList) => {
@@ -50,8 +53,10 @@ export class PageModel {
     };
 
     newFile = () => {
+        m.startComputation();
         this.setFileName("");
         this.context.clear();
+        m.endComputation();
     };
 
     saveFile = () => {
@@ -69,6 +74,13 @@ export class PageModel {
             this.context.loadData(data);
             m.endComputation();
         });
+    };
+
+    setupShortcuts = () => {
+        mousetrap.bind("mod+n", this.newFile);
+        mousetrap.bind("mod+o", this.openFile);
+        mousetrap.bind("mod+s", this.saveFile);
+        mousetrap.bind("mod+shift+s", this.saveFileAs);
     };
 }
 
@@ -90,11 +102,27 @@ export class Page implements _mithril.MithrilComponent<PageController> {
                     m("div.ui.simple.dropdown.item", [
                         "File",
                         m("i.dropdown.icon"),
-                        m("div.menu", [
-                            m("div.item", { onclick: ctrl.vm.newFile }, "New"),
-                            m("div.item", { onclick: ctrl.vm.openFile }, "Open"),
-                            m("div.item", { onclick: ctrl.vm.saveFile }, "Save"),
-                            m("div.item", { onclick: ctrl.vm.saveFileAs }, "Save As")
+                        m("div.menu.file-menu", [
+                            m("div.item", { onclick: ctrl.vm.newFile },
+                                [
+                                    m("span.text", "New"),
+                                    m("span.description", "Ctrl + N")
+                                ]),
+                            m("div.item", { onclick: ctrl.vm.openFile },
+                                [
+                                    m("span.text", "Open"),
+                                    m("span.description", "Ctrl + O")
+                                ]),
+                            m("div.item", { onclick: ctrl.vm.saveFile },
+                                [
+                                    m("span.text", "Save"),
+                                    m("span.description", "Ctrl + S")
+                                ]),
+                            m("div.item", { onclick: ctrl.vm.saveFileAs },
+                                [
+                                    m("span.text", "Save As"),
+                                    m("span.description", "Ctrl + Shift + S")
+                                ])
                         ])
                     ])
                 ]),

@@ -11,6 +11,7 @@
     "jquery": "registry:dt/jquery#1.10.0+20160303223636",
     "mithril": "registry:dt/mithril#0.0.0+20151211181444",
     "moment-range": "registry:dt/moment-range#2.0.3+20150803084158",
+    "mousetrap": "registry:dt/mousetrap#1.5.0+20160316155526",
     "node": "registry:dt/node#4.0.0+20160311162451"
   }
 }
