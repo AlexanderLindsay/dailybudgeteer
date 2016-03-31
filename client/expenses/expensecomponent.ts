@@ -11,6 +11,7 @@ import ListComponent from "../components/listcomponent";
 import BudgetContext from "../data/budgetcontext";
 import * as ViewHelpers from "../utils/viewhelpers";
 import formatCurrency from "../utils/currencyFormatter";
+import * as DF from "../utils/dateFormatter";
 
 export default class ExpenseComponent implements
     _mithril.MithrilComponent<ExpenseController> {
@@ -33,7 +34,9 @@ export default class ExpenseComponent implements
         ];
     };
 
-    private static renderForm = (expense: Expense) => {
+    private static renderForm = (args: { item: Expense }) => {
+        let expense = args.item;
+
         return <_mithril.MithrilVirtualElement<{}>>[
             m("div.field", [
                 m("label[for='name']", "Name"),
@@ -41,7 +44,7 @@ export default class ExpenseComponent implements
             ]),
             m("div.field", [
                 m("label[for='day']", "Day"),
-                m("input[type='date'][id='day'].ui.input", { onchange: m.withAttr("value", expense.setDay, null), value: expense.getDay() })
+                m("input[type='date'][id='day'].ui.input", { onchange: m.withAttr("value", DF.setDate.bind(null, expense.day), null), value: DF.getDate(expense.day) })
             ]),
             m("div.field", [
                 m("label[for='amount']", "Amount"),
@@ -79,7 +82,7 @@ export default class ExpenseComponent implements
             m.component(this.changeDateComponent, ctrl.vm.day.clone()),
             m.component(this.listComponent, ctrl.vm),
             m.component(new modal(ctrl.vm.modalTitle(), ctrl.vm.isAddModalOpen,
-                () => m.component(this.formComponent, { item: ctrl.vm.item }),
+                () => m.component(this.formComponent, { item: ctrl.vm.item() }),
                 () => [
                     m("button.ui.approve.button[type='button']", { onclick: ctrl.vm.save }, ctrl.vm.modalActionName()),
                     m("button.ui.cancel.button[type='button]", "Cancel")

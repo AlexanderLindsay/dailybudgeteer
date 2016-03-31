@@ -3,7 +3,6 @@
 import * as m from "mithril";
 import * as moment from "moment";
 import IKeyed from "../data/keyed";
-import * as DF from "../utils/dateFormatter";
 
 export default class Expense implements IKeyed {
     id: _mithril.MithrilProperty<number>;
@@ -17,17 +16,6 @@ export default class Expense implements IKeyed {
         this.day = m.prop(day);
         this.amount = m.prop(amount);
     }
-
-    public setDay = (value: string) => {
-        let day = moment(value, DF.formats.pickerFormat);
-        if (day.isValid()) {
-            this.day(day);
-        }
-    };
-
-    public getDay = () => {
-        return DF.formatDateForPicker(this.day());
-    };
 
     public toJSON = () => {
         return {

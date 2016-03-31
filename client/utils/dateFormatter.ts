@@ -25,3 +25,14 @@ export function formatDateForPicker(date: moment.Moment) {
 export function formatDateForDisplay(date: moment.Moment) {
     return formatDate(date, formats.displayFormat);
 }
+
+export function setDate(prop: _mithril.MithrilProperty<moment.Moment>, value: string) {
+    let day = moment(value, formats.pickerFormat);
+    if (day.isValid()) {
+        prop(day);
+    }
+}
+
+export function getDate(prop: _mithril.MithrilProperty<moment.Moment>) {
+    return formatDateForPicker(prop());
+}

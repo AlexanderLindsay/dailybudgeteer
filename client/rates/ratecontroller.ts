@@ -17,15 +17,17 @@ const editActionName = "Save";
 export class RateDataSource implements DataSource<Rate> {
     item: _mithril.MithrilProperty<Rate>;
     list: _mithril.MithrilPromise<Rate[]>;
-    isAddModalOpen: _mithril.MithrilProperty<Boolean>;
+    isAddModalOpen: _mithril.MithrilProperty<boolean>;
     modalTitle: _mithril.MithrilProperty<string>;
     modalActionName: _mithril.MithrilProperty<string>;
+    editDates: _mithril.MithrilProperty<boolean>;
 
     constructor(private context: BudgetContext, public day: moment.Moment) {
         this.item = m.prop(new Rate("", 0, 1, it.IntervalType.Days));
         this.isAddModalOpen = m.prop(false);
         this.modalTitle = m.prop(saveTitle);
         this.modalActionName = m.prop(saveActionName);
+        this.editDates = m.prop(false);
         this.list = this.fetchList();
         context.addUpdateCallback(this.contextCallback);
     }
@@ -74,6 +76,7 @@ export class RateDataSource implements DataSource<Rate> {
 
         this.modalTitle(editTitle);
         this.modalActionName(editActionName);
+        this.editDates(false);
         this.isAddModalOpen(true);
     };
 
@@ -86,6 +89,10 @@ export class RateDataSource implements DataSource<Rate> {
             let current = this.context.getRate(this.item().id());
             current.expireOn(this.day);
         }
+    };
+
+    public editDuration = () => {
+        this.editDates(true);
     };
 
     public save = () => {
@@ -117,6 +124,7 @@ export class RateDataSource implements DataSource<Rate> {
         this.item(new Rate("", 0, 1, it.IntervalType.Days));
         this.modalTitle(saveTitle);
         this.modalActionName(saveActionName);
+        this.editDates(false);
         this.isAddModalOpen(true);
     };
 }
