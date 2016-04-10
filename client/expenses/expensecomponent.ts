@@ -4,6 +4,8 @@ import * as m from "mithril";
 import * as moment from "moment";
 import modal from "../components/modal";
 import Expense from "./expense";
+import Category from "../categories/category";
+import PickCategoryComponent from "../categories/pickcategorycomponent";
 import {ExpenseDataSource, ExpenseController} from "./expensecontroller";
 import ChangeDateComponent from "../components/changedatecomponent";
 import FormComponent from "../components/formcomponent";
@@ -34,7 +36,7 @@ export default class ExpenseComponent implements
         ];
     };
 
-    private static renderForm = (args: { item: Expense }) => {
+    private static renderForm = (categoryPicker: PickCategoryComponent, args: { item: Expense }) => {
         let expense = args.item;
 
         return <_mithril.MithrilVirtualElement<{}>>[
@@ -42,6 +44,7 @@ export default class ExpenseComponent implements
                 m("label[for='name']", "Name"),
                 m("input[type='text'][id='name'][placeholder='Name'].ui.input", { onchange: m.withAttr("value", expense.name), value: expense.name() })
             ]),
+            m.component(categoryPicker, { selectedValue: expense.category(), select: (value: number) => expense.category(value) }),
             m("div.field", [
                 m("label[for='day']", "Day"),
                 m("input[type='date'][id='day'].ui.input", { onchange: m.withAttr("value", DF.setDate.bind(null, expense.day), null), value: DF.getDate(expense.day) })
@@ -64,7 +67,10 @@ export default class ExpenseComponent implements
 
     constructor(private context: BudgetContext) {
         this.changeDateComponent = new ChangeDateComponent("/expenses");
-        this.formComponent = new FormComponent<Expense>(ExpenseComponent.renderForm);
+
+        let pickCategoryComponent = new PickCategoryComponent(context);
+        this.formComponent = new FormComponent<Expense>(ExpenseComponent.renderForm.bind(null, pickCategoryComponent));
+
         this.listComponent = new ListComponent<Expense>(
             ExpenseComponent.renderHeader,
             ExpenseComponent.renderItem,

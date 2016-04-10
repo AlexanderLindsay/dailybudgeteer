@@ -72,6 +72,8 @@ export default class BudgetContext extends DataContext {
         this.expenses = data.expenses.map((raw: any) => {
             let expense = new Expense(raw.name, this.parseDate(raw.day), raw.amount);
             expense.id(raw.id);
+            expense.category(raw.category);
+
             return expense;
         }) || [];
         this.rates = data.rates.map((raw: any) => {
