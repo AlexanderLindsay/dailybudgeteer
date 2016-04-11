@@ -4,6 +4,7 @@ import * as moment from "moment";
 import DataContext from "./datacontext";
 import Expense from "../expenses/expense";
 import Rate from "../rates/rate";
+import Category from "../categories/category";
 
 export default class BudgetContext extends DataContext {
 
@@ -11,9 +12,11 @@ export default class BudgetContext extends DataContext {
 
     private expenses: Expense[];
     private rates: Rate[];
+    private categories: Category[];
     private nextIds: {
         expenses: number;
         rates: number;
+        categories: number;
     };
 
     private updateCallbacks: (() => void)[];
@@ -29,9 +32,11 @@ export default class BudgetContext extends DataContext {
 
         this.expenses = [];
         this.rates = [];
+        this.categories = [];
         this.nextIds = {
             expenses: 1,
-            rates: 1
+            rates: 1,
+            categories: 1
         };
     };
 
@@ -69,14 +74,14 @@ export default class BudgetContext extends DataContext {
 
     private parseJson = (json: string) => {
         let data = JSON.parse(json);
-        this.expenses = data.expenses.map((raw: any) => {
+        this.expenses = (data.expenses || []).map((raw: any) => {
             let expense = new Expense(raw.name, this.parseDate(raw.day), raw.amount);
             expense.id(raw.id);
             expense.category(raw.category);
 
             return expense;
-        }) || [];
-        this.rates = data.rates.map((raw: any) => {
+        });
+        this.rates = (data.rates || []).map((raw: any) => {
             let rate = new Rate(
                 raw.name,
                 raw.amount,
@@ -86,10 +91,25 @@ export default class BudgetContext extends DataContext {
                 this.parseDate(raw.endDate));
             rate.id(raw.id);
             return rate;
-        }) || [];
-        this.nextIds = data.nextIds || {
+        });
+        this.categories = (data.categories || []).map((raw: any) => {
+            let category = new Category();
+            category.id(raw.id);
+            category.name(raw.name);
+            category.description(raw.description);
+            return category;
+        });
+
+        let storedIds = data.nextIds || {
             expenses: 1,
-            rates: 1
+            rates: 1,
+            categories: 1
+        };
+
+        this.nextIds = {
+            expenses: storedIds.expenses || 1,
+            rates: storedIds.rates || 1,
+            categories: storedIds.categories || 1
         };
     };
 
@@ -102,6 +122,7 @@ export default class BudgetContext extends DataContext {
         let data = {
             expenses: this.expenses,
             rates: this.rates,
+            categories: this.categories,
             nextIds: this.nextIds
         };
 
@@ -116,6 +137,10 @@ export default class BudgetContext extends DataContext {
         return this.rates.slice(0);
     };
 
+    public listCategories = () => {
+        return this.categories.slice(0);
+    };
+
     public addExpense = (expense: Expense) => {
         this.nextIds.expenses = this.addItem(expense, this.expenses, this.nextIds.expenses);
         this.onUpdate();
@@ -123,6 +148,11 @@ export default class BudgetContext extends DataContext {
 
     public addRate = (rate: Rate) => {
         this.nextIds.rates = this.addItem(rate, this.rates, this.nextIds.rates);
+        this.onUpdate();
+    };
+
+    public addCategory = (category: Category) => {
+        this.nextIds.categories = this.addItem(category, this.categories, this.nextIds.categories);
         this.onUpdate();
     };
 
@@ -134,6 +164,10 @@ export default class BudgetContext extends DataContext {
         return this.getItem<Rate>(id, this.rates);
     };
 
+    public getCategory = (id: number) => {
+        return this.getItem<Category>(id, this.categories);
+    };
+
     public removeExpense = (id: number) => {
         this.expenses = this.removeItem(id, this.expenses);
         this.onUpdate();
@@ -141,6 +175,11 @@ export default class BudgetContext extends DataContext {
 
     public removeRate = (id: number) => {
         this.rates = this.removeItem(id, this.rates);
+        this.onUpdate();
+    };
+
+    public removeCategory = (id: number) => {
+        this.categories = this.removeItem(id, this.categories);
         this.onUpdate();
     };
 }

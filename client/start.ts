@@ -9,6 +9,7 @@ import {PageModel, Page} from "./components/page";
 import RatesComponent from "./rates/ratecomponent";
 import ExpenseComponent from "./expenses/expensecomponent";
 import SummaryComponent from "./summary/summarycomponent";
+import CategoryComponent from "./categories/categorycomponent";
 import * as DF from "./utils/dateFormatter";
 
 let root = document.getElementById("root");
@@ -30,5 +31,6 @@ m.route.mode = "search";
 m.route(root, `/expenses/${DF.formatDateForUrl(moment())}`, {
     "/rates/:date": new page(new RatesComponent(context)),
     "/expenses/:date": new page(new ExpenseComponent(context)),
-    "/summary/:date": new page(new SummaryComponent(context))
+    "/summary/:date": new page(new SummaryComponent(context)),
+    "/categories": new page(new CategoryComponent(context))
 });

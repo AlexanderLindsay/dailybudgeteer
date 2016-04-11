@@ -101,7 +101,6 @@ export class Page implements _mithril.MithrilComponent<PageController> {
                 m("div.ui.top.attached.menu", [
                     m("div.ui.simple.dropdown.item", [
                         "File",
-                        m("i.dropdown.icon"),
                         m("div.menu.file-menu", [
                             m("div.item", { onclick: ctrl.vm.newFile },
                                 [
@@ -123,6 +122,12 @@ export class Page implements _mithril.MithrilComponent<PageController> {
                                     m("span.text", "Save As"),
                                     m("span.description", "Ctrl + Shift + S")
                                 ])
+                        ])
+                    ]),
+                    m("div.ui.simple.dropdown.item", [
+                        "Settings",
+                        m("div.menu.file-menu", [
+                            m("a[href='/categories'].item", { config: m.route }, "Categories")
                         ])
                     ])
                 ]),
