@@ -7,15 +7,14 @@ import FileDialog from "../filehandling/dialog";
 import * as FileHandling from "../filehandling/dragdrop";
 
 export class PageModel {
-    private static FileNameKey = "BudgetFileName";
 
     private fileName: _mithril.MithrilProperty<string>;
     private titleRoot = document.title;
 
-    constructor(root: HTMLElement, private context: BudgetContext, private fileDialog: FileDialog) {
+    constructor(root: HTMLElement, private context: BudgetContext, private fileDialog: FileDialog, private fileNameKey: string, filename: string) {
         this.titleRoot = document.title;
         this.fileName = m.prop("");
-        this.setFileName(localStorage.getItem(PageModel.FileNameKey) || "");
+        this.setFileName(filename);
 
         this.setupShortcuts();
 
@@ -49,7 +48,7 @@ export class PageModel {
             document.title = this.titleRoot;
         }
 
-        localStorage.setItem(PageModel.FileNameKey, value);
+        localStorage.setItem(this.fileNameKey, value);
     };
 
     newFile = () => {

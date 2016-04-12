@@ -21,15 +21,7 @@ export default class BudgetContext extends DataContext {
 
     private updateCallbacks: (() => void)[];
 
-    private setupValues = (fromStorage: boolean = false) => {
-        if (fromStorage) {
-            let data = localStorage.getItem(BudgetContext.DataKey);
-            if (data) {
-                this.parseJson(data);
-                return;
-            }
-        }
-
+    private setupValues = () => {
         this.expenses = [];
         this.rates = [];
         this.categories = [];
@@ -40,9 +32,13 @@ export default class BudgetContext extends DataContext {
         };
     };
 
-    constructor() {
+    constructor(existingData?: string) {
         super();
-        this.setupValues(true);
+        if (existingData === undefined || existingData === null) {
+            this.setupValues();
+        } else {
+            this.parseJson(existingData);
+        }
         this.updateCallbacks = [];
     }
 
