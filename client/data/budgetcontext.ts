@@ -62,7 +62,10 @@ export default class BudgetContext extends DataContext {
     };
 
     private onUpdate = () => {
-        localStorage.setItem(BudgetContext.DataKey, this.writeData());
+        if (typeof localStorage !== "undefined") {
+            localStorage.setItem(BudgetContext.DataKey, this.writeData());
+        }
+
         this.updateCallbacks.forEach(cb => {
             cb();
         });
