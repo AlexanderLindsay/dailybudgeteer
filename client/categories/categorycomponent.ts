@@ -124,11 +124,13 @@ export default class CategoryComponent implements
         return <_mithril.MithrilVirtualElement<{}>>[
             m("div.field", [
                 m("label[for='name']", "Name"),
-                m("input[type='text'][id='name'][placeholder='Name'].ui.input", { onchange: m.withAttr("value", category.name), value: category.name() })
+                m("input[type='text'][id='name'][placeholder='Name'].ui.input",
+                    { onchange: m.withAttr("value", category.name), value: category.name() })
             ]),
             m("div.field", [
                 m("label[for='description']", "Description"),
-                m("input[type='text'][id='description'][placeholder='Description'].ui.input", { onchange: m.withAttr("value", category.description), value: category.description() })
+                m("input[type='text'][id='description'][placeholder='Description'].ui.input",
+                    { onchange: m.withAttr("value", category.description), value: category.description() })
             ])
         ];
     };

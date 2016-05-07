@@ -48,8 +48,9 @@ export default class BudgetContext extends DataContext {
     };
 
     private parseDate(value?: string) {
-        if (value === null || value === undefined)
+        if (value === null || value === undefined) {
             return undefined;
+        }
         return moment(value);
     }
 
