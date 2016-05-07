@@ -42,16 +42,19 @@ export default class ExpenseComponent implements
         return <_mithril.MithrilVirtualElement<{}>>[
             m("div.field", [
                 m("label[for='name']", "Name"),
-                m("input[type='text'][id='name'][placeholder='Name'].ui.input", { onchange: m.withAttr("value", expense.name), value: expense.name() })
+                m("input[type='text'][id='name'][placeholder='Name'].ui.input",
+                    { onchange: m.withAttr("value", expense.name), value: expense.name() })
             ]),
             m.component(categoryPicker, { selectedValue: expense.category(), select: (value: number) => expense.category(value) }),
             m("div.field", [
                 m("label[for='day']", "Day"),
-                m("input[type='date'][id='day'].ui.input", { onchange: m.withAttr("value", DF.setDate.bind(null, expense.day), null), value: DF.getDate(expense.day) })
+                m("input[type='date'][id='day'].ui.input", 
+                    { onchange: m.withAttr("value", DF.setDate.bind(null, expense.day), null), value: DF.getDate(expense.day) })
             ]),
             m("div.field", [
                 m("label[for='amount']", "Amount"),
-                m("input[type='number'][id='amount'].ui.input", { onchange: ViewHelpers.withNumber("value", expense.amount), value: expense.amount() })
+                m("input[type='number'][id='amount'].ui.input", 
+                    { onchange: ViewHelpers.withNumber("value", expense.amount), value: expense.amount() })
             ])
         ];
     };

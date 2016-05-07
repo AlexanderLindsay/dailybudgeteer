@@ -36,9 +36,13 @@ if (loadDataFromFile) {
 }
 
 let menu = new Menu.MenuComponent([
-    new Menu.MenuItem(new RegExp("expenses"), `/expenses/${DF.formatDateForUrl(moment())}`, "Expenses"),
-    new Menu.MenuItem(new RegExp("rates"), `/rates/${DF.formatDateForUrl(moment())}`, "Rates"),
-    new Menu.MenuItem(new RegExp("summary"), `/summary/${DF.formatDateForUrl(moment())}`, "Summary")
+    new Menu.BasicMenuItem(new RegExp("expenses"), `/expenses/${DF.formatDateForUrl(moment())}`, "Expenses"),
+    new Menu.BasicMenuItem(new RegExp("rates"), `/rates/${DF.formatDateForUrl(moment())}`, "Rates"),
+    new Menu.DropdownMenuItem(new RegExp("summary"), "Summary",
+        [
+            new Menu.BasicMenuItem(new RegExp("weekly"), `/summary/${DF.formatDateForUrl(moment())}/weekly`, "Weekly"),
+            new Menu.BasicMenuItem(new RegExp("categories"), `/summary/${DF.formatDateForUrl(moment())}/categories`, "By Category"),
+        ])
 ]);
 
 let pageModel = new PageModel(root, context, fileDialog, fileNameKey, storedFileName);
@@ -50,6 +54,6 @@ m.route.mode = "search";
 m.route(root, `/expenses/${DF.formatDateForUrl(moment())}`, {
     "/rates/:date": new page(new RatesComponent(context)),
     "/expenses/:date": new page(new ExpenseComponent(context)),
-    "/summary/:date": new page(new SummaryComponent(context)),
+    "/summary/:date/:type": new page(new SummaryComponent(context)),
     "/categories": new page(new CategoryComponent(context))
 });
