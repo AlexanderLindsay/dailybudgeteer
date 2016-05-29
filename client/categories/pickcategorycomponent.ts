@@ -34,7 +34,7 @@ class PickCategoryController {
         }
 
         return id.toString();
-    }
+    };
 }
 
 export default class PickCategoryComponent implements
@@ -68,14 +68,14 @@ export default class PickCategoryComponent implements
                         },
                         [
                             m("input[type='hidden']", {
-                                value: ctrl.getSelectedValue(args.selected.id()), name: "category",
+                                value: ctrl.getSelectedValue(args.selected.id()),
+                                name: "category",
                                 onchange: ViewHelpers.withNumber("value", ctrl.pickCategory.bind(this, args.select))
                             }),
                             m("i.dropdown.icon"),
                             displayText,
-                            m("div.menu", ctrl.categoryOptions().map(co => {
-                                return m("div.item", { "data-value": co.value }, co.text);
-                            }))
+                            m("div.menu",
+                                ViewHelpers.writeOptionItems(ctrl.categoryOptions()))
                         ]
                     )
                 ]),

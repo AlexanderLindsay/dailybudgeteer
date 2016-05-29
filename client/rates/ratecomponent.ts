@@ -53,22 +53,44 @@ export default class RatesComponent implements
         let fields = [
             m("div.field", [
                 m("label[for='name']", "Name"),
-                m("input[type='text'][id='name'][placeholder='Name'].ui.input", { onchange: m.withAttr("value", rate.name), value: rate.name() })
+                m("input[type='text'][id='name'][placeholder='Name'].ui.input", {
+                    onchange: m.withAttr("value", rate.name),
+                    value: rate.name()
+                })
             ]),
             m("div.field", [
                 m("label[for='amount']", "Amount"),
-                m("input[type='number'][id='amount'].ui.input", { onchange: ViewHelpers.withNumber("value", rate.amount), value: rate.amount() })
+                m("input[type='number'][id='amount'].ui.input", {
+                    onchange: ViewHelpers.withNumber("value", rate.amount),
+                    value: rate.amount()
+                })
             ]),
             m("div.two.fields", [
                 m("div.field", [
                     m("label[for='intervaltype']", "Interval Type"),
-                    m("select[id='intervaltype'].ui.selection.dropdown", { config: ViewHelpers.createDropdown(), onchange: ViewHelpers.withNumber("value", rate.intervalType), value: rate.intervalType() },
-                        ViewHelpers.writeOptions(rate.intervalType(), RatesComponent.intervalTypeOptions))
+                    m("div.ui.selection.dropdown[id='intervaltype']",
+                        {
+                            config: ViewHelpers.createDropdown(),
+                        },
+                        [
+                            m("input[type='hidden']", {
+                                value: rate.intervalType(),
+                                onchange: ViewHelpers.withNumber("value", rate.intervalType),
+                                name: "intervaltype"
+                            }),
+                            m("i.dropdown.icon"),
+                            m("div.text", it.IntervalType[rate.intervalType()]),
+                            m("div.menu",
+                                ViewHelpers.writeOptionItems(RatesComponent.intervalTypeOptions))
+                        ])
                 ]),
                 m(`div.field${rate.allowInterval() ? "" : ".disabled"}`, [
                     m("label[for='interval']", "Interval"),
                     m("input[type='number'][id='interval'][min='1'].ui.input",
-                        { onchange: m.withAttr("value", rate.interval), value: rate.interval(), disabled: !rate.allowInterval() })
+                        {
+                            onchange: m.withAttr("value", rate.interval),
+                            value: rate.interval(), disabled: !rate.allowInterval()
+                        })
                 ])
             ])
         ];
@@ -78,11 +100,17 @@ export default class RatesComponent implements
                 m("div.two.fields", [
                     m("div.field", [
                         m("label[for='startdate']", "Start Date"),
-                        m("input[type='date'][id='startdate'].ui.input", { onchange: m.withAttr("value", DF.setDate.bind(null, rate.startDate), null), value: DF.getDate(rate.startDate) })
+                        m("input[type='date'][id='startdate'].ui.input", {
+                            onchange: m.withAttr("value", DF.setDate.bind(null, rate.startDate), null),
+                            value: DF.getDate(rate.startDate)
+                        })
                     ]),
                     m("div.field", [
                         m("label[for='enddate']", "End Date"),
-                        m("input[type='date'][id='enddate'].ui.input", { onchange: m.withAttr("value", DF.setDate.bind(null, rate.endDate), null), value: DF.getDate(rate.endDate) })
+                        m("input[type='date'][id='enddate'].ui.input", {
+                            onchange: m.withAttr("value", DF.setDate.bind(null, rate.endDate), null),
+                            value: DF.getDate(rate.endDate)
+                        })
                     ])
                 ]));
         }
@@ -122,7 +150,10 @@ export default class RatesComponent implements
             m.component(new modal(ctrl.vm.modalTitle(), ctrl.vm.isAddModalOpen,
                 () => m.component(this.formComponent, { item: ctrl.vm.item(), editDuration: ctrl.vm.editDates() }),
                 () => [
-                    m("button.ui.left.floated.button[type='button']", { onclick: ctrl.vm.editDuration, disabled: ctrl.vm.item().id() <= 0 || ctrl.vm.editDates() }, "Edit Duration"),
+                    m("button.ui.left.floated.button[type='button']", {
+                        onclick: ctrl.vm.editDuration,
+                        disabled: ctrl.vm.item().id() <= 0 || ctrl.vm.editDates()
+                    }, "Edit Duration"),
                     m("button.ui.approve.button[type='button']", { onclick: ctrl.vm.expire, disabled: ctrl.vm.item().id() <= 0 }, "Expire"),
                     m("button.ui.approve.button[type='button']", { onclick: ctrl.vm.save }, ctrl.vm.modalActionName()),
                     m("button.ui.cancel.button[type='button]", "Cancel")

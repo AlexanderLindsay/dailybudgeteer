@@ -18,6 +18,13 @@ export function writeOptions(selected: any | any[], options: Option<any>[]) {
     });
 }
 
+export function writeOptionItems(options: Option<any>[]) {
+    "use strict";
+    return options.map(o => {
+        return m("div.item", { "data-value": o.value }, o.text);
+    });
+}
+
 export function convertWithAttr<T>(converter: (value: string) => T, property: string, callback: (value: T) => void) {
     "use strict";
     return m.withAttr(property, (value: string) => {
