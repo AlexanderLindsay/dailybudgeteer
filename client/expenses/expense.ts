@@ -10,14 +10,14 @@ export default class Expense implements IKeyed {
     name: _mithril.MithrilProperty<string>;
     day: _mithril.MithrilProperty<moment.Moment>;
     amount: _mithril.MithrilProperty<number>;
-    category: _mithril.MithrilProperty<number>;
+    category: _mithril.MithrilProperty<Category>;
 
     constructor(name: string, day: moment.Moment, amount: number) {
         this.id = m.prop(0);
         this.name = m.prop(name);
         this.day = m.prop(day);
         this.amount = m.prop(amount);
-        this.category = m.prop<number>(null);
+        this.category = m.prop<Category>(new Category());
     }
 
     public toJSON = () => {
@@ -26,7 +26,7 @@ export default class Expense implements IKeyed {
             name: this.name(),
             day: this.day(),
             amount: this.amount(),
-            category: this.category()
+            category: this.category().id()
         };
     };
 
@@ -39,7 +39,7 @@ export default class Expense implements IKeyed {
 
         let clone = new Expense(this.name(), currentDay, this.amount());
         clone.id(this.id());
-        clone.category(this.category());
+        clone.category(this.category().clone());
         return clone;
     };
 

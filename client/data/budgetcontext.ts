@@ -74,13 +74,6 @@ export default class BudgetContext extends DataContext {
 
     private parseJson = (json: string) => {
         let data = JSON.parse(json);
-        this.expenses = (data.expenses || []).map((raw: any) => {
-            let expense = new Expense(raw.name, this.parseDate(raw.day), raw.amount);
-            expense.id(raw.id);
-            expense.category(raw.category);
-
-            return expense;
-        });
         this.rates = (data.rates || []).map((raw: any) => {
             let rate = new Rate(
                 raw.name,
@@ -92,12 +85,32 @@ export default class BudgetContext extends DataContext {
             rate.id(raw.id);
             return rate;
         });
+
         this.categories = (data.categories || []).map((raw: any) => {
             let category = new Category();
             category.id(raw.id);
             category.name(raw.name);
             category.description(raw.description);
             return category;
+        });
+
+        this.expenses = (data.expenses || []).map((raw: any) => {
+            let expense = new Expense(raw.name, this.parseDate(raw.day), raw.amount);
+            expense.id(raw.id);
+
+            let matched = this.categories.filter((cat) => {
+                return cat.id() === raw.category;
+            });
+
+            if (matched.length >= 1) {
+                expense.category(matched[0].clone());
+            } else {
+                var cat = new Category();
+                cat.id(raw.category);
+                expense.category(cat);
+            }
+
+            return expense;
         });
 
         let storedIds = data.nextIds || {

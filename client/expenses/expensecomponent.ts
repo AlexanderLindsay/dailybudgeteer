@@ -25,14 +25,16 @@ export default class ExpenseComponent implements
     private static renderHeader = () => {
         return [
             m("th", "Name"),
-            m("th", "Amount"),
+            m("th", "Category"),
+            m("th", "Amount")
         ];
     };
 
     private static renderItem = (expense: Expense) => {
         return [
             m("td", expense.name()),
-            m("td", formatCurrency(expense.amount())),
+            m("td", expense.category().name()),
+            m("td", formatCurrency(expense.amount()))
         ];
     };
 
@@ -45,15 +47,18 @@ export default class ExpenseComponent implements
                 m("input[type='text'][id='name'][placeholder='Name'].ui.input",
                     { onchange: m.withAttr("value", expense.name), value: expense.name() })
             ]),
-            m.component(categoryPicker, { selectedValue: expense.category(), select: (value: number) => expense.category(value) }),
+            m.component(categoryPicker, {
+                selected: expense.category(),
+                select: (value: Category) => expense.category(value)
+            }),
             m("div.field", [
                 m("label[for='day']", "Day"),
-                m("input[type='date'][id='day'].ui.input", 
+                m("input[type='date'][id='day'].ui.input",
                     { onchange: m.withAttr("value", DF.setDate.bind(null, expense.day), null), value: DF.getDate(expense.day) })
             ]),
             m("div.field", [
                 m("label[for='amount']", "Amount"),
-                m("input[type='number'][id='amount'].ui.input", 
+                m("input[type='number'][id='amount'].ui.input",
                     { onchange: ViewHelpers.withNumber("value", expense.amount), value: expense.amount() })
             ])
         ];
@@ -64,6 +69,7 @@ export default class ExpenseComponent implements
             m("th", [
                 m("button[type='button'].ui.primary.button", { onclick: vm.openAddModal }, "Add Expense")
             ]),
+            m("th"),
             m("th[colspan='2']", formatCurrency(vm.total()))
         ];
     };
