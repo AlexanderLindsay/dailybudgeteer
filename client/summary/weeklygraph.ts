@@ -133,10 +133,10 @@ export default class WeeklyGraphComponent implements
 
             this.loadGraphData = (data) => {
 
-                d3.select("#graphId").remove();
+                d3.select("#weeklygraph").remove();
 
                 let svg = d3.select(element).append("svg")
-                    .attr("id", "graphId")
+                    .attr("id", "weeklygraph")
                     .attr("width", width + margin.left + margin.right)
                     .attr("height", height + margin.top + margin.bottom)
                     .append("g")
