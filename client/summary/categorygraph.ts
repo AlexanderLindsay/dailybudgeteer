@@ -156,15 +156,33 @@ export default class CategoryGraphComponent implements
                     .style("text-anchor", "end")
                     .text("Amount Spent ($)");
 
-                svg.selectAll(".bar")
+                let bar = svg.selectAll(".bar")
                     .data(data)
                     .enter()
-                    .append("rect")
+                    .append("g")
+                    .attr("transform", (d: CategoryData) => {
+                        let xCoor = x(d.category().name());
+                        let yCoor = y(d.expenditure());
+                        return `translate(${xCoor},${yCoor})`;
+                    });
+
+                bar.append("rect")
                     .attr("class", "bar")
-                    .attr("x", d => x(d.category().name()))
                     .attr("width", x.rangeBand())
-                    .attr("y", d => y(d.expenditure()))
-                    .attr("height", d => height - y(d.expenditure()));
+                    .attr("height", d => height - y(d.expenditure()))
+                    .on("mouseover", function (datum: CategoryData) {
+                        d3.select(this.nextSibling)
+                            .attr("opacity", "1");
+                    })
+                    .on("mouseout", function (datum: CategoryData) {
+                        d3.select(this.nextSibling)
+                            .attr("opacity", "0");
+                    });
+
+                bar.append("text")
+                    .attr("dy", "-.35em")
+                    .attr("opacity", "0")
+                    .text((datum: CategoryData) => datum.expenditure());
             };
         }
 
