@@ -28,7 +28,11 @@ export default class FileDialog {
         result(fileName);
 
         fs.writeFile(fileName, data, function (err: any) {
-            dialog.showMessageBox(null, { title: "File Saved", message: `File ${fileName} was saved successfully.`, buttons: ["Ok"] });
+            dialog.showMessageBox(null, {
+                title: "File Saved",
+                message: `File ${fileName} was saved successfully.`,
+                buttons: ["Ok"]
+            });
         });
     };
 

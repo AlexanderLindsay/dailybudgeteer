@@ -13,7 +13,7 @@ export class PageModel {
 
     constructor(root: HTMLElement, private context: BudgetContext,
         private fileDialog: FileDialog, private fileNameKey: string, filename: string) {
-            
+
         this.titleRoot = document.title;
         this.fileName = m.prop("");
         this.setFileName(filename);

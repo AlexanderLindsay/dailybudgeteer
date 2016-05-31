@@ -73,6 +73,11 @@ export default class BudgetContext extends DataContext {
     };
 
     private parseJson = (json: string) => {
+
+        if (json == null) {
+            json = "{}";
+        }
+
         let data = JSON.parse(json);
         this.rates = (data.rates || []).map((raw: any) => {
             let rate = new Rate(
