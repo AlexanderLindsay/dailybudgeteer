@@ -1,27 +1,27 @@
 {
   "name": "dailybudgeteer",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "main.js",
   "devDependencies": {
-    "ava": "^0.13.0",
-    "electron-packager": "^5.2.1",
-    "electron-prebuilt": "^0.36.7",
+    "ava": "^0.15.1",
+    "electron-packager": "^7.0.2",
+    "electron-prebuilt": "^1.2.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
     "gulp-ignore": "^2.0.1",
     "gulp-order": "^1.1.1",
     "gulp-rimraf": "^0.2.0",
-    "gulp-typescript": "^2.11.0",
+    "gulp-typescript": "^2.13.5",
     "merge-stream": "^1.0.0",
     "rimraf": "^2.5.2"
   },
   "dependencies": {
-    "d3": "^3.5.16",
-    "jquery": "^2.2.1",
-    "mithril": "^0.2.3",
-    "moment": "^2.11.2",
+    "d3": "^3.5.17",
+    "jquery": "^2.2.4",
+    "mithril": "^0.2.5",
+    "moment": "^2.13.0",
     "moment-range": "^2.2.0",
-    "mousetrap": "^1.5.3",
+    "mousetrap": "^1.6.0",
     "semantic-ui": "^2.1.8"
   },
   "scripts": {
@@ -29,5 +29,13 @@
     "clean": "gulp clean",
     "test": "tsc --project test && ava test/test/*.js",
     "package": "gulp package"
+  },
+  "ava": {
+    "files": [
+      "test/test/*.js"
+    ],
+    "failFast": true,
+    "tap": false,
+    "babel": "inherit"
   }
 }

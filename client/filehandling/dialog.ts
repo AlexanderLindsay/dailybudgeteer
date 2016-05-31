@@ -1,7 +1,7 @@
 /// <reference path="../../typings/main.d.ts" />
 
-let remote: Electron.Remote = require("remote");
-let dialog: Electron.Dialog = remote.require("dialog");
+let remote: Electron.Remote = require("electron").remote;
+let dialog: Electron.Dialog = remote.dialog;
 let fs = require("fs");
 
 export default class FileDialog {
@@ -27,7 +27,7 @@ export default class FileDialog {
 
         result(fileName);
 
-        fs.writeFile(fileName, data, function(err: any) {
+        fs.writeFile(fileName, data, function (err: any) {
             dialog.showMessageBox(null, { title: "File Saved", message: `File ${fileName} was saved successfully.`, buttons: ["Ok"] });
         });
     };
@@ -50,7 +50,11 @@ export default class FileDialog {
             let fileName = fileNames[0];
             fs.readFile(fileName, "utf-8", (err: any, data: any) => {
                 onOpen(data, fileName);
-                dialog.showMessageBox(null, { title: "File Opened", message: `File ${fileName} was opened successfully.`, buttons: ["Ok"] });
+                dialog.showMessageBox(null, {
+                    title: "File Opened",
+                    message: `File ${fileName} was opened successfully.`,
+                    buttons: ["Ok"]
+                });
             });
         }
     };

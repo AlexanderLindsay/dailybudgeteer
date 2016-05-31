@@ -151,7 +151,7 @@ ava.test("toJSON", (t) => {
 
     let r = new Rate(name, amount, interval, intervalType, start, end);
     r.id(1);
-    t.same(r.toJSON(), {
+    t.deepEqual(r.toJSON(), {
         id: 1,
         name: name,
         amount: amount,
@@ -171,7 +171,7 @@ ava.test("toJSON - null start/end", (t) => {
 
     let r = new Rate(name, amount, interval, intervalType);
     r.id(1);
-    t.same(r.toJSON(), {
+    t.deepEqual(r.toJSON(), {
         id: 1,
         name: name,
         amount: amount,

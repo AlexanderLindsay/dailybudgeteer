@@ -11,7 +11,7 @@ ava.test("toJSON", (t) => {
     c.name(name);
     c.description(description);
 
-    t.same(c.toJSON(), {
+    t.deepEqual(c.toJSON(), {
         id: id,
         name: name,
         description: description
