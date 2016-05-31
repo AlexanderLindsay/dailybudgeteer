@@ -4,6 +4,8 @@ import * as m from "mithril";
 import * as moment from "moment";
 import modal from "../components/modal";
 import Expense from "./expense";
+import Category from "../categories/category";
+import PickCategoryComponent from "../categories/pickcategorycomponent";
 import {ExpenseDataSource, ExpenseController} from "./expensecontroller";
 import ChangeDateComponent from "../components/changedatecomponent";
 import FormComponent from "../components/formcomponent";
@@ -11,6 +13,7 @@ import ListComponent from "../components/listcomponent";
 import BudgetContext from "../data/budgetcontext";
 import * as ViewHelpers from "../utils/viewhelpers";
 import formatCurrency from "../utils/currencyFormatter";
+import * as DF from "../utils/dateFormatter";
 
 export default class ExpenseComponent implements
     _mithril.MithrilComponent<ExpenseController> {
@@ -22,30 +25,41 @@ export default class ExpenseComponent implements
     private static renderHeader = () => {
         return [
             m("th", "Name"),
-            m("th", "Amount"),
+            m("th", "Category"),
+            m("th", "Amount")
         ];
     };
 
     private static renderItem = (expense: Expense) => {
         return [
             m("td", expense.name()),
-            m("td", formatCurrency(expense.amount())),
+            m("td", expense.category().name()),
+            m("td", formatCurrency(expense.amount()))
         ];
     };
 
-    private static renderForm = (expense: Expense) => {
+    private static renderForm = (categoryPicker: PickCategoryComponent, args: { item: Expense }) => {
+        let expense = args.item;
+
         return <_mithril.MithrilVirtualElement<{}>>[
             m("div.field", [
                 m("label[for='name']", "Name"),
-                m("input[type='text'][id='name'][placeholder='Name'].ui.input", { onchange: m.withAttr("value", expense.name), value: expense.name() })
+                m("input[type='text'][id='name'][placeholder='Name'].ui.input",
+                    { onchange: m.withAttr("value", expense.name), value: expense.name() })
             ]),
+            m.component(categoryPicker, {
+                selected: expense.category(),
+                select: (value: Category) => expense.category(value)
+            }),
             m("div.field", [
                 m("label[for='day']", "Day"),
-                m("input[type='date'][id='day'].ui.input", { onchange: m.withAttr("value", expense.setDay, null), value: expense.getDay() })
+                m("input[type='date'][id='day'].ui.input",
+                    { onchange: m.withAttr("value", DF.setDate.bind(null, expense.day), null), value: DF.getDate(expense.day) })
             ]),
             m("div.field", [
                 m("label[for='amount']", "Amount"),
-                m("input[type='number'][id='amount'].ui.input", { onchange: ViewHelpers.withNumber("value", expense.amount), value: expense.amount() })
+                m("input[type='number'][id='amount'].ui.input",
+                    { onchange: ViewHelpers.withNumber("value", expense.amount), value: expense.amount() })
             ])
         ];
     };
@@ -55,13 +69,17 @@ export default class ExpenseComponent implements
             m("th", [
                 m("button[type='button'].ui.primary.button", { onclick: vm.openAddModal }, "Add Expense")
             ]),
+            m("th"),
             m("th[colspan='2']", formatCurrency(vm.total()))
         ];
     };
 
     constructor(private context: BudgetContext) {
         this.changeDateComponent = new ChangeDateComponent("/expenses");
-        this.formComponent = new FormComponent<Expense>(ExpenseComponent.renderForm);
+
+        let pickCategoryComponent = new PickCategoryComponent(context);
+        this.formComponent = new FormComponent<Expense>(ExpenseComponent.renderForm.bind(null, pickCategoryComponent));
+
         this.listComponent = new ListComponent<Expense>(
             ExpenseComponent.renderHeader,
             ExpenseComponent.renderItem,
@@ -79,7 +97,7 @@ export default class ExpenseComponent implements
             m.component(this.changeDateComponent, ctrl.vm.day.clone()),
             m.component(this.listComponent, ctrl.vm),
             m.component(new modal(ctrl.vm.modalTitle(), ctrl.vm.isAddModalOpen,
-                () => m.component(this.formComponent, { item: ctrl.vm.item }),
+                () => m.component(this.formComponent, { item: ctrl.vm.item() }),
                 () => [
                     m("button.ui.approve.button[type='button']", { onclick: ctrl.vm.save }, ctrl.vm.modalActionName()),
                     m("button.ui.cancel.button[type='button]", "Cancel")

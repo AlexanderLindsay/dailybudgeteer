@@ -2,6 +2,7 @@
 .axis line {
   fill: none;
   stroke: #000;
+  shape-rendering: crispEdges;
 }
 
 .line {
@@ -27,4 +28,12 @@
 
 .focus-text {
     fill: #EEE;
+}
+
+.bar {
+  fill: steelblue;
+}
+
+.bar:hover {
+  fill: brown;
 }

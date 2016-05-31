@@ -1,0 +1,12 @@
+.ui.menu .dropdown.item .menu.file-menu {
+    min-width: 200px;
+}
+
+.ui.tabular.menu .dropdown.item.active-menu-dropdown {
+  background: none #FFFFFF;
+  color: rgba(0, 0, 0, 0.95);
+  border-color: #D4D4D5;
+  margin: 0px -1px 0px 0px;
+  border-radius: 0.28571429rem 0px 0px 0.28571429rem !important;
+  border-top-width: 1px;
+}

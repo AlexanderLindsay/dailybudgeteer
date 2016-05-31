@@ -18,7 +18,15 @@ When the Per Day value of the rate is calculated it will be based on the number 
 
 ![RatesList ](/readme-images/Rates-Examples.PNG)
 
-Then add expenses as they occur. Again, make sure to use negative values as appropate. 
+Then add expenses as they occur. Again, make sure to use negative values as appropriate. Optionally, add a category to the expense.
+
+![Categories](/readme-images/Categories-Examples.PNG)
+
+Categories are used to group expenses and the category graph shows the last week of expenses by category. The available categories can be adjusted by selecting `Categories` in the `Settings` menu. 
+
+![Category Graph](/readme-images/Categories-Graph.PNG)
+
+Once an expense is added it will display in a list with the rest of the days expenses.
 
 ![Expenses](/readme-images/Expenses-Examples.PNG)
 

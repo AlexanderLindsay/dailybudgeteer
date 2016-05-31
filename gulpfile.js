@@ -47,9 +47,9 @@ gulp.task('package', function () {
        dir: ".",
        platform: "all",
        name: "DailyBudgeteer",
-       version: "0.36.9",
+       version: "1.2.0",
        out: "builds",
        overwrite: true,
-       ignore: "(README.md)|(readme-images.*)|(\.gitignore)|(gulpfile\.js)|(\.vscode.*)|(typings.*)|(tsconfig.json)|(semantic.json)|(builds.*)|(client.*)|(test.*)|(^/node_modules/(?!.*(d3|mithril|jquery|moment|semantic)))|(semantic/src.*)|(semantic/tasks.*)"
+       ignore: "(README.md)|(readme-images.*)|(\.gitignore)|(gulpfile\.js)|(\.vscode.*)|(typings.*)|(tsconfig.json)|(semantic.json)|(builds.*)|(client.*)|(test.*)|(^/node_modules/(?!.*(d3|mithril|jquery|moment|semantic|mousetrap)))|(semantic/src.*)|(semantic/tasks.*)"
    }, function(err, appPath){}) 
 });
