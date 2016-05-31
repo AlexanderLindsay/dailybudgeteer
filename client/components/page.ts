@@ -11,7 +11,9 @@ export class PageModel {
     private fileName: _mithril.MithrilProperty<string>;
     private titleRoot = document.title;
 
-    constructor(root: HTMLElement, private context: BudgetContext, private fileDialog: FileDialog, private fileNameKey: string, filename: string) {
+    constructor(root: HTMLElement, private context: BudgetContext,
+        private fileDialog: FileDialog, private fileNameKey: string, filename: string) {
+            
         this.titleRoot = document.title;
         this.fileName = m.prop("");
         this.setFileName(filename);
