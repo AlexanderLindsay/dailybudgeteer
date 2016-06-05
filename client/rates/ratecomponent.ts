@@ -68,21 +68,11 @@ export default class RatesComponent implements
             m("div.two.fields", [
                 m("div.field", [
                     m("label[for='intervaltype']", "Interval Type"),
-                    m("div.ui.selection.dropdown[id='intervaltype']",
-                        {
-                            config: ViewHelpers.createDropdown(),
-                        },
-                        [
-                            m("input[type='hidden']", {
-                                value: rate.intervalType(),
-                                onchange: ViewHelpers.withNumber("value", rate.intervalType),
-                                name: "intervaltype"
-                            }),
-                            m("i.dropdown.icon"),
-                            m("div.text", it.IntervalType[rate.intervalType()]),
-                            m("div.menu",
-                                ViewHelpers.writeOptionItems(RatesComponent.intervalTypeOptions))
-                        ])
+                    m("select", {
+                        onchange: ViewHelpers.withNumber("value", rate.intervalType)
+                    },
+                    ViewHelpers.writeOptions(rate.intervalType(), RatesComponent.intervalTypeOptions)
+                    )
                 ]),
                 m(`div.field${rate.allowInterval() ? "" : ".disabled"}`, [
                     m("label[for='interval']", "Interval"),

@@ -1,0 +1,7 @@
+.ui.form select.placeholder {
+    color: #808080;
+}
+
+select option {
+    color: rgba(0,0,0,.87);
+}
