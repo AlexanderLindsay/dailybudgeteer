@@ -1,6 +1,6 @@
 {
   "name": "dailybudgeteer",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "main": "main.js",
   "devDependencies": {
     "ava": "^0.15.1",
