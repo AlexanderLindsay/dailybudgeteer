@@ -1,7 +1,7 @@
 import * as m from "mithril";
 
 export class Option<T> {
-    constructor(public value: T, public text: string) { }
+    constructor(public value: T, public text: string, public isDefault: boolean = false) { }
 }
 
 export function writeOptions(selected: any | any[], options: Option<any>[]) {
@@ -14,7 +14,12 @@ export function writeOptions(selected: any | any[], options: Option<any>[]) {
             isSelected = selected === opt.value;
         }
 
-        return m("option", { value: opt.value, selected: isSelected }, opt.text);
+        return m("option", {
+            value: opt.value,
+            selected: isSelected,
+            disabled: opt.isDefault,
+            hidden: opt.isDefault
+        }, opt.text);
     });
 }
 

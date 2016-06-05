@@ -15,6 +15,7 @@ class PickCategoryController {
         let options = catList.map((cat) => {
             return new ViewHelpers.Option(cat.id().toString(), cat.name());
         });
+        options.unshift(new ViewHelpers.Option("", this.defaultText, true));
         return options;
     };
 
@@ -48,41 +49,22 @@ export default class PickCategoryComponent implements
 
     public view = (ctrl: PickCategoryController, args: { selected: Category, select: (value: Category) => void }) => {
 
-        let displayText: _mithril.MithrilVirtualElement<{}>;
-        if (args.selected.id() > 0) {
-            displayText = m("div.text", args.selected.name());
-        } else {
-            displayText = m("div.default.text", ctrl.defaultText);
-        }
+        let hasValue: boolean = args.selected.id() > 0;
 
         return m("div.field", [
             m("label[for='category']", "Category"),
             m("div.two.fields", [
-                m("div.field", [
-                    m("div.ui.selection.dropdown[id='category']",
-                        {
-                            config: ViewHelpers.createDropdown({
-                                sortSelect: true,
-                                placeholder: ctrl.defaultText
-                            })
-                        },
-                        [
-                            m("input[type='hidden']", {
-                                value: ctrl.getSelectedValue(args.selected.id()),
-                                name: "category",
-                                onchange: ViewHelpers.withNumber("value", ctrl.pickCategory.bind(this, args.select))
-                            }),
-                            m("i.dropdown.icon"),
-                            displayText,
-                            m("div.menu",
-                                ViewHelpers.writeOptionItems(ctrl.categoryOptions()))
-                        ]
-                    )
-                ]),
+                m("div.field",
+                    m("select", {
+                        className: hasValue ? "" : "placeholder",
+                        onchange: ViewHelpers.withNumber("value", ctrl.pickCategory.bind(this, args.select))
+                    },
+                        ViewHelpers.writeOptions(ctrl.getSelectedValue(args.selected.id()), ctrl.categoryOptions()))
+                ),
                 m("div.field", [
                     m("button.ui.button[type='button']", {
                         onclick: () => {
-                            $("#category").dropdown("restore defaults");
+                            ctrl.pickCategory(args.select, 0);
                         }
                     }, "Clear Category")
                 ])
