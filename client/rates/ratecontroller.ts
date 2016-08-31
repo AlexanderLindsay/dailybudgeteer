@@ -42,18 +42,7 @@ export class RateDataSource implements DataSource<Rate> {
 
     private fetchList = () => {
         let deferred = m.deferred<Rate[]>();
-        deferred.resolve(this.context.listRates().filter((rate) => {
-            if (rate.startDate() == null) {
-                return true;
-            } else if (rate.startDate().isSameOrBefore(this.day, "day")) {
-                if (rate.endDate() == null) {
-                    return true;
-                } else {
-                    return rate.endDate().isSameOrAfter(this.day, "day");
-                }
-            }
-            return false;
-        }));
+        deferred.resolve(this.context.listActiveRates(this.day));
         return deferred.promise;
     };
 

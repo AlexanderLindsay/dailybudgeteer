@@ -155,6 +155,21 @@ export default class BudgetContext extends DataContext {
         return this.rates.slice(0);
     };
 
+    public listActiveRates = (day) => {
+        return this.listRates().filter((rate) => {
+            if (rate.startDate() == null) {
+                return true;
+            } else if (rate.startDate().isSameOrBefore(day, "day")) {
+                if (rate.endDate() == null) {
+                    return true;
+                } else {
+                    return rate.endDate().isSameOrAfter(day, "day");
+                }
+            }
+            return false;
+        });
+    };
+
     public listCategories = () => {
         return this.categories.slice(0);
     };

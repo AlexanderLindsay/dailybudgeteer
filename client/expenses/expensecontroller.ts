@@ -37,7 +37,7 @@ export class ExpenseDataSource implements DataSource<Expense> {
     };
 
     private fetchList = () => {
-        let perDiem = this.context.listRates().reduce<number>((previous, current, index) => {
+        let perDiem = this.context.listActiveRates(this.day).reduce<number>((previous, current, index) => {
             return previous + current.perDiem(this.day);
         }, 0);
 
