@@ -10,17 +10,14 @@ import formatCurrency from "../utils/currencyFormatter";
 class WeeklyGraphViewModel {
 
     expenses: _mithril.MithrilPromise<Expense[]>;
-    rates: _mithril.MithrilPromise<Rate[]>;
 
     constructor(private context: BudgetContext, private day: moment.Moment) {
         this.expenses = this.fetchExpenses();
-        this.rates = this.fetchRates();
         context.addUpdateCallback(this.contextCallback);
     }
 
     private contextCallback = () => {
         this.expenses = this.fetchExpenses();
-        this.rates = this.fetchRates();
     };
 
     public onunload = () => {
@@ -29,7 +26,7 @@ class WeeklyGraphViewModel {
 
     private fetchExpenses = () => {
         let perDiem = (d: moment.Moment) => {
-            return this.context.listRates().reduce<number>((previous, current, index) => {
+            return this.context.listActiveRates(d).reduce<number>((previous, current, index) => {
                 return previous + current.perDiem(this.day);
             }, 0);
         };
@@ -55,19 +52,6 @@ class WeeklyGraphViewModel {
 
         let deferred = m.deferred<Expense[]>();
         deferred.resolve(results);
-        return deferred.promise;
-    };
-
-    private fetchRates = () => {
-        let deferred = m.deferred<Rate[]>();
-        deferred.resolve(this.context.listRates().filter(rate => {
-            if (rate.startDate() == null) {
-                return true;
-            } else if (rate.startDate().isSameOrBefore(this.day, "day")) {
-                return true;
-            }
-            return false;
-        }));
         return deferred.promise;
     };
 }

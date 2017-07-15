@@ -6,7 +6,7 @@ export default class DataContext {
         item.id(id);
         list.push(item);
         return id + 1;
-    };
+    }
 
     public getItem = <T extends IKeyed>(id: number, list: T[]) => {
         let results = list.filter((value: T, index: number) => {
@@ -22,7 +22,7 @@ export default class DataContext {
         }
 
         return null;
-    };
+    }
 
     public removeItem = <T extends IKeyed>(id: number, list: T[]) => {
         let ids = list.map((item) => {
@@ -33,5 +33,5 @@ export default class DataContext {
 
         list.splice(index, 1);
         return list;
-    };
+    }
 }

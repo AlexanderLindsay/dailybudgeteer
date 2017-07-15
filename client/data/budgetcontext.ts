@@ -30,7 +30,7 @@ export default class BudgetContext extends DataContext {
             rates: 1,
             categories: 1
         };
-    };
+    }
 
     constructor(existingData?: string) {
         super();
@@ -45,7 +45,7 @@ export default class BudgetContext extends DataContext {
     public clear = () => {
         this.setupValues();
         this.onUpdate();
-    };
+    }
 
     private parseDate(value?: string) {
         if (value === null || value === undefined) {
@@ -56,11 +56,11 @@ export default class BudgetContext extends DataContext {
 
     public addUpdateCallback = (callback: () => void) => {
         this.updateCallbacks.push(callback);
-    };
+    }
 
     public removeUpdateCallback = (callback: () => void) => {
         this.updateCallbacks = this.updateCallbacks.filter((cb) => cb === callback);
-    };
+    }
 
     private onUpdate = () => {
         if (typeof localStorage !== "undefined") {
@@ -70,7 +70,7 @@ export default class BudgetContext extends DataContext {
         this.updateCallbacks.forEach(cb => {
             cb();
         });
-    };
+    }
 
     private parseJson = (json: string) => {
 
@@ -129,12 +129,12 @@ export default class BudgetContext extends DataContext {
             rates: storedIds.rates || 1,
             categories: storedIds.categories || 1
         };
-    };
+    }
 
     public loadData = (json: string) => {
         this.parseJson(json);
         this.onUpdate();
-    };
+    }
 
     public writeData = () => {
         let data = {
@@ -145,74 +145,65 @@ export default class BudgetContext extends DataContext {
         };
 
         return JSON.stringify(data);
-    };
+    }
 
     public listExpenses = () => {
         return this.expenses.slice(0);
-    };
+    }
 
     public listRates = () => {
         return this.rates.slice(0);
-    };
+    }
 
-    public listActiveRates = (day) => {
+    public listActiveRates = (day : moment.Moment) => {
         return this.listRates().filter((rate) => {
-            if (rate.startDate() == null) {
-                return true;
-            } else if (rate.startDate().isSameOrBefore(day, "day")) {
-                if (rate.endDate() == null) {
-                    return true;
-                } else {
-                    return rate.endDate().isSameOrAfter(day, "day");
-                }
-            }
-            return false;
+            return rate.isActiveOn(day);
         });
-    };
+    }
 
     public listCategories = () => {
         return this.categories.slice(0);
-    };
+    }
 
     public addExpense = (expense: Expense) => {
         this.nextIds.expenses = this.addItem(expense, this.expenses, this.nextIds.expenses);
         this.onUpdate();
-    };
+    }
 
     public addRate = (rate: Rate) => {
         this.nextIds.rates = this.addItem(rate, this.rates, this.nextIds.rates);
         this.onUpdate();
-    };
+    }
 
     public addCategory = (category: Category) => {
         this.nextIds.categories = this.addItem(category, this.categories, this.nextIds.categories);
         this.onUpdate();
-    };
+    }
 
     public getExpense = (id: number) => {
         return this.getItem<Expense>(id, this.expenses);
-    };
+    }
 
     public getRate = (id: number) => {
         return this.getItem<Rate>(id, this.rates);
-    };
+    }
 
     public getCategory = (id: number) => {
         return this.getItem<Category>(id, this.categories);
-    };
+    }
 
     public removeExpense = (id: number) => {
         this.expenses = this.removeItem(id, this.expenses);
         this.onUpdate();
-    };
+    }
 
     public removeRate = (id: number) => {
         this.rates = this.removeItem(id, this.rates);
         this.onUpdate();
-    };
+    }
 
     public removeCategory = (id: number) => {
         this.categories = this.removeItem(id, this.categories);
         this.onUpdate();
-    };
+    }
 }

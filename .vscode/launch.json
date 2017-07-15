@@ -9,25 +9,48 @@
 			"stopOnEntry": false,
 			"args": [],
 			"cwd": "${workspaceRoot}",
-			"runtimeExecutable": "${workspaceRoot}/node_modules/electron-prebuilt/dist/electron.exe",
+			"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd",
 			"runtimeArgs": [],
-			"env": {
-				"NODE_ENV": "development"
-			},
-			"externalConsole": false,
+			// "env": {
+			// 	"NODE_ENV": "development"
+			// },
 			"sourceMaps": false,
-			"outDir": null,
-            "preLaunchTask": "build"
+			"preLaunchTask": "build"
+		},
+		// {
+		// 	"name": "Attach",
+		// 	"type": "node",
+		// 	"request": "attach",
+		// 	"port": 5858,
+		// 	"sourceMaps": false,
+		// 	"localRoot": "${workspaceRoot}",
+		// 	"remoteRoot": null
+		// }
+		{
+			"name": "Debug Main Process",
+			"type": "node",
+			"request": "launch",
+			"cwd": "${workspaceRoot}",
+			"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+			"windows": {
+				"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+			},
+			"program": "${workspaceRoot}/main.js",
+			"protocol": "legacy"
 		},
 		{
-			"name": "Attach",
-			"type": "node",
-			"request": "attach",
-			"port": 5858,
-			"sourceMaps": false,
-			"outDir": null,
-			"localRoot": "${workspaceRoot}",
-			"remoteRoot": null
+			"name": "Debug Renderer Process",
+			"type": "chrome",
+			"request": "launch",
+			"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+			"windows": {
+				"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+			},
+			"runtimeArgs": [
+				"${workspaceRoot}/main.js",
+				"--remote-debugging-port=9222"
+			],
+			"webRoot": "${workspaceRoot}"
 		}
 	]
 }

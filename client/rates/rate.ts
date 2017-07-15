@@ -44,7 +44,7 @@ export default class Rate implements IKeyed {
                 const isLeapYear = onDate.isLeapYear();
                 return Rate.calculatePerDiem(this.amount(), isLeapYear ? 366 : 365);
         }
-    };
+    }
 
     public expireOn(date: moment.Moment) {
         this.endDate(date);
@@ -52,6 +52,19 @@ export default class Rate implements IKeyed {
 
     public allowInterval() {
         return this.intervalType() === it.IntervalType.Days;
+    }
+
+    public isActiveOn(day: moment.Moment) {
+        if (this.startDate() == null) {
+            return true;
+        } else if (this.startDate().isSameOrBefore(day, "day")) {
+            if (this.endDate() == null) {
+                return true;
+            } else {
+                return this.endDate().isSameOrAfter(day, "day");
+            }
+        }
+        return false;
     }
 
     public toJSON = () => {
@@ -64,7 +77,7 @@ export default class Rate implements IKeyed {
             startDate: this.startDate(),
             endDate: this.endDate()
         };
-    };
+    }
 
     public clone = () => {
         let start = this.startDate();
@@ -82,7 +95,7 @@ export default class Rate implements IKeyed {
             this.intervalType(), start, end);
         clone.id(this.id());
         return clone;
-    };
+    }
 
     public update = (modified: Rate) => {
         this.name(modified.name());
@@ -91,5 +104,5 @@ export default class Rate implements IKeyed {
         this.intervalType(modified.intervalType());
         this.startDate(modified.startDate());
         this.endDate(modified.endDate());
-    };
+    }
 }
