@@ -44,12 +44,3 @@ export let withNumber = convertWithAttr.bind(null, (value: string) => {
     }
     return +value;
 });
-
-export function createDropdown(options?: {}) {
-    "use strict";
-    return (element: any, isInitialized: boolean) => {
-        if (!isInitialized) {
-            $(element).dropdown(options || {});
-        }
-    };
-}

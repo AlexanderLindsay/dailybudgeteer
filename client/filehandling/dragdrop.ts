@@ -16,11 +16,11 @@ export class FileHandler {
         e.preventDefault();
         e.stopPropagation();
         return false;
-    };
+    }
 
     private deactivate = (e: DragEvent) => {
-
-    };
+        return;
+     }
 
     private update = (e: DragEvent) => {
         e.preventDefault();
@@ -29,5 +29,5 @@ export class FileHandler {
             this.options.onchange(e.dataTransfer.files);
         }
         return false;
-    };
+    }
 }

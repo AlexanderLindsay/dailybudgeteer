@@ -1,40 +1,46 @@
-/// <reference path="../../typings/browser.d.ts" />
-
 import * as m from "mithril";
 import BudgetContext from "../data/budgetcontext";
-import WeeklyGraphComponent from "./weeklygraph";
-import CategoryGraphComponent from "./categorygraph";
+import {WeeklyGraphComponent, WeeklyGraphController} from "./weeklygraph";
+import {CategoryGraphComponent, CategoryGraphController} from "./categorygraph";
 
-class SummaryController implements _mithril.MithrilController {
-    public graph: _mithril.MithrilComponent<{}>;
+export class SummaryController {
+    public graph: m.ClassComponent<any>;
+    public data: WeeklyGraphController | CategoryGraphController;
 
-    constructor(context: BudgetContext, graphType: string) {
+    constructor(private context: BudgetContext) {
+       this.changeGraphType("");
+    }
+
+    changeGraphType = (graphType) => {
         switch(graphType) {
             case "weekly":
-                this.graph = new WeeklyGraphComponent(context);
+                this.graph = new WeeklyGraphComponent(this.context);
+                this.data = new WeeklyGraphController(this.context);
                 break;
             case "categories":
-                this.graph = new CategoryGraphComponent(context);
+                this.graph = new CategoryGraphComponent(this.context);
+                this.data = new CategoryGraphController(this.context);
                 break;
             default:
-                this.graph = new WeeklyGraphComponent(context);
+                this.graph = new WeeklyGraphComponent(this.context);
+                this.data = new WeeklyGraphController(this.context);
                 break;
         }
     }
 }
 
-export default class SummaryComponent implements
-    _mithril.MithrilComponent<SummaryController> {
+export class SummaryComponent implements
+    m.ClassComponent<SummaryController> {
 
     constructor(private context: BudgetContext) {
     }
 
-    public controller = () => {
+    public oninit = ({attrs}: m.CVnode<SummaryController>) => {
         let graphType = m.route.param("type");
-        return new SummaryController(this.context, graphType);
-    };
+        attrs.changeGraphType(graphType);
+    }
 
-    public view = (ctrl: SummaryController) => {
-        return m(ctrl.graph);
-    };
+    public view = ({attrs}: m.CVnode<SummaryController>) => {
+        return m(attrs.graph, attrs.data);
+    }
 }

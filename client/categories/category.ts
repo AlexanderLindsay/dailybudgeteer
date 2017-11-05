@@ -1,18 +1,19 @@
-/// <reference path="../../typings/browser.d.ts" />
+/// <reference types="Mithril" />
 
 import m = require("mithril");
+import prop = require("mithril/stream");
 import IKeyed from "../data/keyed";
 
 export default class Category implements IKeyed {
 
-    public id: _mithril.MithrilProperty<number>;
-    public name: _mithril.MithrilProperty<string>;
-    public description: _mithril.MithrilProperty<string>;
+    public id: prop.Stream<number>;
+    public name: prop.Stream<string>;
+    public description: prop.Stream<string>;
 
     constructor() {
-        this.id = m.prop(0);
-        this.name = m.prop("");
-        this.description = m.prop("");
+        this.id = prop(0);
+        this.name = prop("");
+        this.description = prop("");
     }
 
     public toJSON = () => {
@@ -21,7 +22,7 @@ export default class Category implements IKeyed {
             name: this.name(),
             description: this.description()
         };
-    };
+    }
 
     public clone = () => {
         let clone = new Category();
@@ -29,10 +30,10 @@ export default class Category implements IKeyed {
         clone.name(this.name());
         clone.description(this.description());
         return clone;
-    };
+    }
 
     public update = (modified: Category) => {
         this.name(modified.name());
         this.description(modified.description());
-    };
+    }
 }

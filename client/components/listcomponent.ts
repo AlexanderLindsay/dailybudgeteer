@@ -1,21 +1,20 @@
-/// <reference path="../../typings/browser.d.ts" />
-
 import * as m from "mithril";
-import DataSource from "./datasource";
+import * as prop from "mithril/stream";
+import IDataSource from "./datasource";
 import IKeyed from "../data/keyed";
 
 export default class ListComponent<T extends IKeyed> implements
-    _mithril.MithrilComponent<{}> {
+    m.ClassComponent<Array<T>> {
 
     constructor(
-        private renderHeader: (args: any) => _mithril.MithrilVirtualElement<{}>,
-        private renderItem: (item: T, args: any) => _mithril.MithrilVirtualElement<{}>,
-        private renderFooter: (args: any) => _mithril.MithrilVirtualElement<{}> = () => []) { }
+        private renderHeader: (args: any) => Array<m.CVnode<T>>,
+        private renderItem: (item: T, args: any) => Array<m.CVnode<T>>,
+        private renderFooter: (args: any) => Array<m.CVnode<T>> = () => [] ) { }
 
     private renderActions(item: T, args: any) {
         const id = item.id();
 
-        let actions: _mithril.MithrilVirtualElement<{}>[] = [];
+        let actions: Array<m.CVnode<T>> = [];
         if (args.allowEdit(id)) {
             actions.push(m("button.ui.button", { onclick: args.edit.bind(args, id) }, "Edit"));
         }
@@ -27,29 +26,25 @@ export default class ListComponent<T extends IKeyed> implements
         return actions;
     }
 
-    public controller = () => {
-        return {};
-    };
-
-    public view = (ctrl: any, args: any) => {
+    public view = ({attrs}: m.CVnode<any>) => {
         return m("div", [
             m("table.ui.striped.table", [
                 m("thead", [
                     m("tr", [
-                        this.renderHeader(args),
+                        this.renderHeader(attrs),
                         m("th", "")
                     ])
                 ]),
                 m("tbody", [
-                    args.list().map((item: T, index: number) => {
+                    attrs.list().map((item: T, index: number) => {
                         return m("tr", { key: item.id() }, [
-                            this.renderItem(item, args),
-                            m("td", { key: -1 }, this.renderActions(item, args))
+                            this.renderItem(item, attrs),
+                            m("td", { key: -1 }, this.renderActions(item, attrs))
                         ]);
                     })
                 ]),
-                m("tfoot.full.width", m("tr", this.renderFooter(args)))
+                m("tfoot.full.width", m("tr", this.renderFooter(attrs)))
             ])
         ]);
-    };
+    }
 }

@@ -1,4 +1,4 @@
-/// <reference path="../../typings/main.d.ts" />
+import * as Electron from "electron";
 
 let remote: Electron.Remote = require("electron").remote;
 let dialog: Electron.Dialog = remote.dialog;
@@ -7,7 +7,7 @@ let fs = require("fs");
 export default class FileDialog {
 
     public save = (data: string, fileName: string, result: (fileName: string) => void, openDialog: boolean = false) => {
-        let dialogSettings: Electron.Dialog.SaveDialogOptions = {
+        let dialogSettings: Electron.SaveDialogOptions = {
             filters: [
                 { name: "json", extensions: ["json"] }
             ]
@@ -18,7 +18,7 @@ export default class FileDialog {
         } else {
             this.onSaveDialogClose(data, result, fileName);
         }
-    };
+    }
 
     private onSaveDialogClose = (data: string, result: (fileName: string) => void, fileName: string) => {
         if (fileName === undefined || fileName === null || fileName.length <= 0) {
@@ -34,17 +34,17 @@ export default class FileDialog {
                 buttons: ["Ok"]
             });
         });
-    };
+    }
 
     public open = (onOpen: (data: string, fileName: string) => void) => {
-        let dialogSettings: Electron.Dialog.OpenDialogOptions = {
+        let dialogSettings: Electron.OpenDialogOptions = {
             filters: [
                 { name: "json", extensions: ["json"] }
             ]
         };
 
         dialog.showOpenDialog(null, dialogSettings, this.onOpenDialogClose.bind(this, onOpen));
-    };
+    }
 
     private onOpenDialogClose = (onOpen: (data: string, fileName: string) => void, fileNames: string[]) => {
         if (fileNames === undefined) {
@@ -61,5 +61,5 @@ export default class FileDialog {
                 });
             });
         }
-    };
+    }
 }

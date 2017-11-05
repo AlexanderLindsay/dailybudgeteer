@@ -1,3 +1,4 @@
+import * as prop from "mithril/stream";
 import * as moment from "moment";
 
 export let formats = {
@@ -26,13 +27,13 @@ export function formatDateForDisplay(date: moment.Moment) {
     return formatDate(date, formats.displayFormat);
 }
 
-export function setDate(prop: _mithril.MithrilProperty<moment.Moment>, value: string) {
+export function setDate(prop: prop.Stream<moment.Moment>, value: string) {
     let day = moment(value, formats.pickerFormat);
     if (day.isValid()) {
         prop(day);
     }
 }
 
-export function getDate(prop: _mithril.MithrilProperty<moment.Moment>) {
+export function getDate(prop: prop.Stream<moment.Moment>) {
     return formatDateForPicker(prop());
 }

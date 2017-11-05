@@ -1,12 +1,10 @@
-/// <reference path="../../typings/browser.d.ts" />
-
 import * as m from "mithril";
 import * as moment from "moment";
-import modal from "../components/modal";
+import {ModalComponent, ModalController} from "../components/modal";
 import * as it from "./intervaltype";
 import Rate from "./rate";
-import {RateDataSource, RateController} from "./ratecontroller";
-import ChangeDateComponent from "../components/changedatecomponent";
+import RateController from "./ratecontroller";
+import {ChangeDateComponent, ChangeDateController} from "../components/changedatecomponent";
 import FormComponent from "../components/formcomponent";
 import ListComponent from "../components/listcomponent";
 import BudgetContext from "../data/budgetcontext";
@@ -15,10 +13,9 @@ import formatCurrency from "../utils/currencyFormatter";
 import * as DF from "../utils/dateFormatter";
 
 export default class RatesComponent implements
-    _mithril.MithrilComponent<RateController> {
+    m.ClassComponent<RateController> {
 
-    private changeDateComponent: ChangeDateComponent;
-    private formComponent: FormComponent<Rate>;
+    private formComponent: FormComponent;
     private listComponent: ListComponent<Rate>;
 
     private static renderHeader = () => {
@@ -29,7 +26,7 @@ export default class RatesComponent implements
             m("th", "Interval Type"),
             m("th", "Amount / Day")
         ];
-    };
+    }
 
     private static renderItem = (rate: Rate) => {
         return [
@@ -39,7 +36,7 @@ export default class RatesComponent implements
             m("td", it.IntervalType[rate.intervalType()]),
             m("td", formatCurrency(rate.perDiem(moment())))
         ];
-    };
+    }
 
     private static intervalTypeOptions = [
         new ViewHelpers.Option(it.IntervalType.Days, it.IntervalType[it.IntervalType.Days]),
@@ -47,9 +44,7 @@ export default class RatesComponent implements
         new ViewHelpers.Option(it.IntervalType.Year, it.IntervalType[it.IntervalType.Year])
     ];
 
-    private static renderForm = (args: { item: Rate, editDuration: boolean }) => {
-        let rate = args.item;
-
+    private static renderForm = (rate: Rate, editDuration: boolean) => {
         let fields = [
             m("div.field", [
                 m("label[for='name']", "Name"),
@@ -85,7 +80,7 @@ export default class RatesComponent implements
             ])
         ];
 
-        if (args.editDuration) {
+        if (editDuration) {
             fields.push(
                 m("div.two.fields", [
                     m("div.field", [
@@ -106,20 +101,19 @@ export default class RatesComponent implements
         }
 
         return fields;
-    };
+    }
 
-    private static renderFooter = (vm: RateDataSource) => {
+    private static renderFooter = (vm: RateController) => {
         return [
             m("th[colspan='4']", [
                 m("button[type='button'].ui.primary.button", { onclick: vm.openAddModal }, "Add Rate")
             ]),
             m("th[colspan='3']", formatCurrency(vm.total()))
         ];
-    };
+    }
 
     constructor(private context: BudgetContext) {
-        this.changeDateComponent = new ChangeDateComponent("/rates");
-        this.formComponent = new FormComponent<Rate>(RatesComponent.renderForm);
+        this.formComponent = new FormComponent();
         this.listComponent = new ListComponent<Rate>(
             RatesComponent.renderHeader,
             RatesComponent.renderItem,
@@ -127,27 +121,32 @@ export default class RatesComponent implements
         );
     }
 
-    public controller = () => {
+    public oninit = ({attrs}: m.CVnode<RateController>) => {
         let date = m.route.param("date");
         let day = moment(date);
-        return new RateController(this.context, day);
-    };
+        attrs.day(day);
+    }
 
-    public view = (ctrl: RateController) => {
+    public view = ({attrs}: m.CVnode<RateController>) => {
+        let ctrl = attrs;
         return m("div.column", [
-            m.component(this.changeDateComponent, ctrl.vm.day.clone()),
-            m.component(this.listComponent, ctrl.vm),
-            m.component(new modal(ctrl.vm.modalTitle(), ctrl.vm.isAddModalOpen,
-                () => m.component(this.formComponent, { item: ctrl.vm.item(), editDuration: ctrl.vm.editDates() }),
+            m(new ChangeDateComponent(), new ChangeDateController("/rates", ctrl.day().clone())),
+            m(this.listComponent, ctrl),
+            m(new ModalComponent(), new ModalController(
+                ctrl.isAddModalOpen,
+                ctrl.modalTitle(),
+                false,
+                () => [this.formComponent.renderForm(
+                    RatesComponent.renderForm(ctrl.item(), ctrl.editDates()))],
                 () => [
                     m("button.ui.left.floated.button[type='button']", {
-                        onclick: ctrl.vm.editDuration,
-                        disabled: ctrl.vm.item().id() <= 0 || ctrl.vm.editDates()
+                        onclick: ctrl.editDuration,
+                        disabled: ctrl.item().id() <= 0 || ctrl.editDates()
                     }, "Edit Duration"),
-                    m("button.ui.approve.button[type='button']", { onclick: ctrl.vm.expire, disabled: ctrl.vm.item().id() <= 0 }, "Expire"),
-                    m("button.ui.approve.button[type='button']", { onclick: ctrl.vm.save }, ctrl.vm.modalActionName()),
+                    m("button.ui.approve.button[type='button']", { onclick: ctrl.expire, disabled: ctrl.item().id() <= 0 }, "Expire"),
+                    m("button.ui.approve.button[type='button']", { onclick: ctrl.save }, ctrl.modalActionName()),
                     m("button.ui.cancel.button[type='button]", "Cancel")
                 ]))
         ]);
-    };
+    }
 }

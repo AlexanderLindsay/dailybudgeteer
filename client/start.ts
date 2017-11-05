@@ -1,15 +1,15 @@
-/// <reference path="../typings/browser.d.ts" />
-
 import * as m from "mithril";
 import * as moment from "moment";
 import BudgetContext from "./data/budgetcontext";
 import FileDialog from "./filehandling/dialog";
-import * as Menu from "./components/menu";
-import {PageModel, Page} from "./components/page";
+import {MenuComponent, MenuController, BasicMenuItem, DropdownMenuItem} from "./components/menu";
+import {PageModel, PageComponent, PageController} from "./components/page";
 import RatesComponent from "./rates/ratecomponent";
+import RatesController from "./rates/ratecontroller";
 import ExpenseComponent from "./expenses/expensecomponent";
-import SummaryComponent from "./summary/summarycomponent";
-import CategoryComponent from "./categories/categorycomponent";
+import ExpenseController from "./expenses/expensecontroller";
+import {SummaryComponent,SummaryController} from "./summary/summarycomponent";
+import {CategoryComponent,CategoryController} from "./categories/categorycomponent";
 import * as DF from "./utils/dateFormatter";
 let fs = require("fs");
 
@@ -26,34 +26,38 @@ let context: BudgetContext;
 if (loadDataFromFile) {
     context = new BudgetContext();
     fs.readFile(storedFileName, "utf-8", (err: any, data: any) => {
-        m.startComputation();
         context.loadData(data);
-        m.endComputation();
+        m.redraw();
     });
 } else {
     let storedBudgetData = localStorage.getItem(budgetDataKey) || "";
     context = new BudgetContext(storedBudgetData);
 }
 
-let menu = new Menu.MenuComponent([
-    new Menu.BasicMenuItem(new RegExp("expenses"), `/expenses/${DF.formatDateForUrl(moment())}`, "Expenses"),
-    new Menu.BasicMenuItem(new RegExp("rates"), `/rates/${DF.formatDateForUrl(moment())}`, "Rates"),
-    new Menu.DropdownMenuItem(new RegExp("summary"), "Summary",
+let menuModel = [
+    new BasicMenuItem(new RegExp("expenses"), `/expenses/${DF.formatDateForUrl(moment())}`, "Expenses"),
+    new BasicMenuItem(new RegExp("rates"), `/rates/${DF.formatDateForUrl(moment())}`, "Rates"),
+    new DropdownMenuItem(new RegExp("summary"), "Summary",
         [
-            new Menu.BasicMenuItem(new RegExp("weekly"), `/summary/${DF.formatDateForUrl(moment())}/weekly`, "Weekly"),
-            new Menu.BasicMenuItem(new RegExp("categories"), `/summary/${DF.formatDateForUrl(moment())}/categories`, "By Category"),
+            new BasicMenuItem(new RegExp("weekly"), `/summary/${DF.formatDateForUrl(moment())}/weekly`, "Weekly"),
+            new BasicMenuItem(new RegExp("categories"), `/summary/${DF.formatDateForUrl(moment())}/categories`, "By Category"),
         ])
-]);
+];
+
+let menu = new MenuController(menuModel);
 
 let pageModel = new PageModel(root, context, fileDialog, fileNameKey, storedFileName);
 
-let page = Page.bind(null, pageModel, menu);
-
-m.route.mode = "search";
+let page = (component, controller) => {
+    let pc = new PageController(pageModel, m(new MenuComponent(), menu), m(component, controller));
+    return {
+        view: () => m(new PageComponent(), pc)
+    };
+};
 
 m.route(root, `/expenses/${DF.formatDateForUrl(moment())}`, {
-    "/rates/:date": new page(new RatesComponent(context)),
-    "/expenses/:date": new page(new ExpenseComponent(context)),
-    "/summary/:date/:type": new page(new SummaryComponent(context)),
-    "/categories": new page(new CategoryComponent(context))
+    "/rates/:date": page(new RatesComponent(context), new RatesController(context)),
+    "/expenses/:date": page(new ExpenseComponent(context), new ExpenseController(context)),
+    "/summary/:date/:type": page(new SummaryComponent(context), new SummaryController(context)),
+    "/categories": page(new CategoryComponent(context), new CategoryController(context))
 });

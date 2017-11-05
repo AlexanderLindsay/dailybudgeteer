@@ -1,5 +1,7 @@
+import * as prop from "mithril/stream";
+
 interface IKeyed {
-    id: _mithril.MithrilProperty<number>;
+    id: prop.Stream<number>;
 }
 
 export default IKeyed;

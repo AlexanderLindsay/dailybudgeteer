@@ -35,8 +35,8 @@
 			"windows": {
 				"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
 			},
-			"program": "${workspaceRoot}/main.js",
-			"protocol": "legacy"
+			"program": "${workspaceRoot}/main.js"
+			// "protocol": "legacy"
 		},
 		{
 			"name": "Debug Renderer Process",

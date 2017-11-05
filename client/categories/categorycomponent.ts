@@ -1,9 +1,8 @@
-/// <reference path="../../typings/browser.d.ts" />
-
 import m = require("mithril");
-import modal from "../components/modal";
+import prop = require("mithril/stream");
+import {ModalComponent, ModalController} from "../components/modal";
 import BudgetContext from "../data/budgetcontext";
-import DataSource from "../components/datasource";
+import IDataSource from "../components/datasource";
 import FormComponent from "../components/formcomponent";
 import ListComponent from "../components/listcomponent";
 import Category from "./category";
@@ -13,38 +12,42 @@ const saveActionName = "Add";
 const editTitle = "Edit Category";
 const editActionName = "Save";
 
-class CategoryViewModel implements DataSource<Category> {
+class CategoryViewModel implements IDataSource<Category> {
 
-    item: _mithril.MithrilProperty<Category>;
-    list: _mithril.MithrilPromise<Category[]>;
-    isAddModalOpen: _mithril.MithrilProperty<Boolean>;
-    modalTitle: _mithril.MithrilProperty<string>;
-    modalActionName: _mithril.MithrilProperty<string>;
+    item: prop.Stream<Category>;
+    list: prop.Stream<Category[]>;
+    isAddModalOpen: prop.Stream<boolean>;
+    modalTitle: prop.Stream<string>;
+    modalActionName: prop.Stream<string>;
 
     constructor(private context: BudgetContext) {
-        this.item = m.prop(new Category());
-        this.isAddModalOpen = m.prop(false);
-        this.modalTitle = m.prop(saveTitle);
-        this.modalActionName = m.prop(saveActionName);
-        this.list = this.fetchList();
+        this.item = prop(new Category());
+        this.list = prop([]);
+        this.isAddModalOpen = prop(false);
+        this.modalTitle = prop(saveTitle);
+        this.modalActionName = prop(saveActionName);
         context.addUpdateCallback(this.contextCallback);
+
+        this.fetchList();
     }
 
     private contextCallback = () => {
-        this.list = this.fetchList();
-    };
+        this.fetchList();
+    }
 
     public onunload = () => {
         this.context.removeUpdateCallback(this.contextCallback);
-    };
+    }
 
     private fetchList = () => {
-        let deferred = m.deferred<Category[]>();
-        let cats = this.context.listCategories();
-        deferred.resolve(cats);
-
-        return deferred.promise;
-    };
+        let deferred = new Promise<Category[]>((resolve) => {
+            let cats = this.context.listCategories();
+            resolve(cats);
+        })
+        .then((categories) => {
+            this.list(categories);
+        });
+    }
 
     public edit = (id: number) => {
         let category = this.context.getCategory(id);
@@ -57,19 +60,19 @@ class CategoryViewModel implements DataSource<Category> {
         this.modalTitle(editTitle);
         this.modalActionName(editActionName);
         this.isAddModalOpen(true);
-    };
+    }
 
     public allowEdit = (id: number) => {
         return true;
-    };
+    }
 
     public allowRemove = (id: number) => {
         return true;
-    };
+    }
 
     public remove = (id: number) => {
         this.context.removeCategory(id);
-    };
+    }
 
     public save = () => {
         if (this.item().id() === 0) {
@@ -79,17 +82,17 @@ class CategoryViewModel implements DataSource<Category> {
             let current = this.context.getCategory(modified.id());
             current.update(modified);
         }
-    };
+    }
 
     public openAddModal = () => {
         this.item(new Category());
         this.modalTitle(saveTitle);
         this.modalActionName(saveActionName);
         this.isAddModalOpen(true);
-    };
+    }
 }
 
-class CategoryController {
+export class CategoryController {
 
     public vm: CategoryViewModel;
 
@@ -98,10 +101,10 @@ class CategoryController {
     }
 }
 
-export default class CategoryComponent implements
-    _mithril.MithrilComponent<CategoryController> {
+export class CategoryComponent implements
+    m.ClassComponent<CategoryController> {
 
-    private formComponent: FormComponent<Category>;
+    private formComponent: FormComponent;
     private listComponent: ListComponent<Category>;
 
     private static renderHeader = () => {
@@ -109,19 +112,17 @@ export default class CategoryComponent implements
             m("th", "Name"),
             m("th", "Description"),
         ];
-    };
+    }
 
     private static renderItem = (category: Category) => {
         return [
             m("td", category.name()),
             m("td", category.description()),
         ];
-    };
+    }
 
-    private static renderForm = (args: { item: Category }) => {
-        let category = args.item;
-
-        return <_mithril.MithrilVirtualElement<{}>>[
+    private static renderForm = (category: Category) => {
+        return [
             m("div.field", [
                 m("label[for='name']", "Name"),
                 m("input[type='text'][id='name'][placeholder='Name'].ui.input",
@@ -133,7 +134,7 @@ export default class CategoryComponent implements
                     { onchange: m.withAttr("value", category.description), value: category.description() })
             ])
         ];
-    };
+    }
 
     private static renderFooter = (vm: CategoryViewModel) => {
         return [
@@ -141,10 +142,10 @@ export default class CategoryComponent implements
                 m("button[type='button'].ui.primary.button", { onclick: vm.openAddModal }, "Add Category")
             ])
         ];
-    };
+    }
 
     constructor(private context: BudgetContext) {
-        this.formComponent = new FormComponent<Category>(CategoryComponent.renderForm);
+        this.formComponent = new FormComponent;
 
         this.listComponent = new ListComponent<Category>(
             CategoryComponent.renderHeader,
@@ -152,20 +153,22 @@ export default class CategoryComponent implements
             CategoryComponent.renderFooter);
     }
 
-    public controller = () => {
-        return new CategoryController(this.context);
-    };
-
-    public view = (ctrl: CategoryController) => {
+    public view = ({attrs}: m.CVnode<CategoryController>) => {
+        let vm = attrs.vm;
         return m("div.column", [
-            m.component(this.listComponent, ctrl.vm),
-            m.component(new modal(ctrl.vm.modalTitle(), ctrl.vm.isAddModalOpen,
-                () => m.component(this.formComponent, { item: ctrl.vm.item() }),
+            m(this.listComponent, vm),
+            m(new ModalComponent(), new ModalController(
+                vm.isAddModalOpen,
+                vm.modalTitle(),
+                false,
+                () =>
+                    [this.formComponent.renderForm(CategoryComponent.renderForm(vm.item()))],
                 () => [
-                    m("button.ui.approve.button[type='button']", { onclick: ctrl.vm.save }, ctrl.vm.modalActionName()),
+                    m("button.ui.approve.button[type='button']", { onclick: vm.save }, vm.modalActionName()),
                     m("button.ui.cancel.button[type='button]", "Cancel")
-                ]))
+                ]
+            ))
         ]);
-    };
+    }
 
 }

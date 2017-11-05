@@ -4,23 +4,23 @@
   "main": "main.js",
   "devDependencies": {
     "ava": "^0.15.1",
+    "electron": "1.7.9",
     "electron-packager": "^7.0.2",
-    "electron-prebuilt": "^1.2.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
     "gulp-ignore": "^2.0.1",
     "gulp-order": "^1.1.1",
     "gulp-rimraf": "^0.2.0",
-    "gulp-typescript": "^2.13.5",
+    "gulp-typescript": "^3.2.3",
     "merge-stream": "^1.0.0",
     "rimraf": "^2.5.2"
   },
   "dependencies": {
-    "d3": "^3.5.17",
+    "d3": "^4.11.0",
     "jquery": "^2.2.4",
-    "mithril": "^0.2.5",
+    "mithril": "^1.1.5",
     "moment": "^2.13.0",
-    "moment-range": "^2.2.0",
+    "moment-range": "^3.0.3",
     "mousetrap": "^1.6.0",
     "semantic-ui": "^2.1.8"
   },

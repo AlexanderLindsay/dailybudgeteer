@@ -1,29 +1,28 @@
-/// <reference path="../../typings/browser.d.ts" />
-
 import m = require("mithril");
+import prop = require("mithril/stream");
 import moment = require("moment");
 import IKeyed from "../data/keyed";
 import * as it from "./intervaltype";
 
 export default class Rate implements IKeyed {
 
-    public id: _mithril.MithrilProperty<number>;
-    public name: _mithril.MithrilProperty<string>;
-    public amount: _mithril.MithrilProperty<number>;
-    public interval: _mithril.MithrilProperty<number>;
-    public intervalType: _mithril.MithrilProperty<it.IntervalType>;
+    public id: prop.Stream<number>;
+    public name: prop.Stream<string>;
+    public amount: prop.Stream<number>;
+    public interval: prop.Stream<number>;
+    public intervalType: prop.Stream<it.IntervalType>;
 
-    public startDate: _mithril.MithrilProperty<moment.Moment>;
-    public endDate: _mithril.MithrilProperty<moment.Moment>;
+    public startDate: prop.Stream<moment.Moment>;
+    public endDate: prop.Stream<moment.Moment>;
 
     constructor(name: string, amount: number, interval: number, intervalType: it.IntervalType, start?: moment.Moment, end?: moment.Moment) {
-        this.id = m.prop(0);
-        this.name = m.prop(name);
-        this.amount = m.prop(amount);
-        this.interval = m.prop(interval);
-        this.intervalType = m.prop(intervalType);
-        this.startDate = m.prop(start);
-        this.endDate = m.prop(end);
+        this.id = prop(0);
+        this.name = prop(name);
+        this.amount = prop(amount);
+        this.interval = prop(interval);
+        this.intervalType = prop(intervalType);
+        this.startDate = prop(start);
+        this.endDate = prop(end);
     }
 
     private static calculatePerDiem(amount: number, days: number) {

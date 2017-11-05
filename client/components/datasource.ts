@@ -1,6 +1,8 @@
-interface DataSource< T > {
-    item: _mithril.MithrilProperty<T>;
-    list: _mithril.MithrilPromise<T[]>;
+import * as prop from "mithril/stream";
+
+interface IDataSource< T > {
+    item: prop.Stream<T>;
+    list: prop.Stream<T[]>;
     edit: (id: number) => void;
     remove: (id: number) => void;
     save: () => void;
@@ -8,4 +10,4 @@ interface DataSource< T > {
     allowRemove: (id: number) => boolean;
 }
 
-export default DataSource;
+export default IDataSource;

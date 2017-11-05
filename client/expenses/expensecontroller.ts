@@ -1,63 +1,66 @@
-/// <reference path="../../typings/browser.d.ts" />
-
 import * as m from "mithril";
+import * as prop from "mithril/stream";
 import * as moment from "moment";
 import Expense from "./expense";
 import BudgetContext from "../data/budgetcontext";
 import DataSource from "../components/datasource";
 
-const baseExpenseId = -100; // arbitray number that is not zero or -1 (which would be reasonable numbers to assume were sential values for a new record)
+// arbitrary number that is not zero or -1 (which would be reasonable numbers to assume were sentinel values for a new record)
+const baseExpenseId = -100;
+
 const saveTitle = "Add Expense";
 const saveActionName = "Add";
 const editTitle = "Edit Expense";
 const editActionName = "Save";
 
-export class ExpenseDataSource implements DataSource<Expense> {
-    item: _mithril.MithrilProperty<Expense>;
-    list: _mithril.MithrilPromise<Expense[]>;
-    isAddModalOpen: _mithril.MithrilProperty<Boolean>;
-    modalTitle: _mithril.MithrilProperty<string>;
-    modalActionName: _mithril.MithrilProperty<string>;
+export default class ExpenseController implements DataSource<Expense> {
+    item: prop.Stream<Expense>;
+    list: prop.Stream<Expense[]>;
+    isAddModalOpen: prop.Stream<boolean>;
+    modalTitle: prop.Stream<string>;
+    modalActionName: prop.Stream<string>;
 
-    constructor(private context: BudgetContext, public day: moment.Moment) {
-        this.item = m.prop(new Expense("", this.day, 0));
-        this.isAddModalOpen = m.prop(false);
-        this.modalTitle = m.prop(saveTitle);
-        this.modalActionName = m.prop(saveActionName);
-        this.list = this.fetchList();
+    public day: prop.Stream<moment.Moment>;
+
+    constructor(private context: BudgetContext) {
+        this.day = prop(moment());
+        this.item = prop(new Expense("", this.day(), 0));
+        this.isAddModalOpen = prop(false);
+        this.modalTitle = prop(saveTitle);
+        this.modalActionName = prop(saveActionName);
+        this.list = prop([]);
         context.addUpdateCallback(this.contextCallback);
+
+        this.fetchList();
     }
 
     private contextCallback = () => {
-        this.list = this.fetchList();
-    };
+        this.fetchList();
+    }
 
     public onunload = () => {
         this.context.removeUpdateCallback(this.contextCallback);
-    };
+    }
 
     private fetchList = () => {
-        let perDiem = this.context.listActiveRates(this.day).reduce<number>((previous, current, index) => {
-            return previous + current.perDiem(this.day);
+        let perDiem = this.context.listActiveRates(this.day()).reduce<number>((previous, current, index) => {
+            return previous + current.perDiem(this.day());
         }, 0);
 
         let expenses: Expense[] = this.context.listExpenses().filter((exp) => {
             const expDate = exp.day();
             const day = this.day;
-            return expDate.isSame(day, "day");
+            return expDate.isSame(day(), "day");
         });
 
         if (perDiem !== 0) {
-            let baseExpense = new Expense("Base", this.day, perDiem);
+            let baseExpense = new Expense("Base", this.day(), perDiem);
             baseExpense.id(baseExpenseId);
             expenses.unshift(baseExpense);
         }
 
-        let deferred = m.deferred<Expense[]>();
-        deferred.resolve(expenses);
-
-        return deferred.promise;
-    };
+        this.list(expenses);
+    }
 
     public total = () => {
         let t = 0;
@@ -66,12 +69,12 @@ export class ExpenseDataSource implements DataSource<Expense> {
                 t += expense.amount();
             });
         return t;
-    };
+    }
 
     public edit = (id: number) => {
         let expense = this.context.getExpense(id);
         if (expense === null) {
-            this.item(new Expense("", this.day, 0));
+            this.item(new Expense("", this.day(), 0));
         } else {
             this.item(expense.clone());
         }
@@ -79,11 +82,11 @@ export class ExpenseDataSource implements DataSource<Expense> {
         this.modalTitle(editTitle);
         this.modalActionName(editActionName);
         this.isAddModalOpen(true);
-    };
+    }
 
     public remove = (id: number) => {
         this.context.removeExpense(id);
-    };
+    }
 
     public save = () => {
         if (this.item().id() === 0) {
@@ -93,29 +96,20 @@ export class ExpenseDataSource implements DataSource<Expense> {
             let current = this.context.getExpense(modified.id());
             current.update(modified);
         }
-    };
+    }
 
     public allowEdit = (id: number) => {
         return id !== baseExpenseId;
-    };
+    }
 
     public allowRemove = (id: number) => {
         return id !== baseExpenseId;
-    };
+    }
 
     public openAddModal = () => {
-        this.item(new Expense("", this.day, 0));
+        this.item(new Expense("", this.day(), 0));
         this.modalTitle(saveTitle);
         this.modalActionName(saveActionName);
         this.isAddModalOpen(true);
-    };
-}
-
-export class ExpenseController implements _mithril.MithrilController {
-
-    public vm: ExpenseDataSource;
-
-    constructor(context: BudgetContext, day: moment.Moment) {
-        this.vm = new ExpenseDataSource(context, day);
     }
 }

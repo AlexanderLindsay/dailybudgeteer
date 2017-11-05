@@ -1,5 +1,3 @@
-/// <reference path="../../typings/browser.d.ts" />
-
 import * as moment from "moment";
 import DataContext from "./datacontext";
 import Expense from "../expenses/expense";

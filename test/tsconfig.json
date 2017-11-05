@@ -4,5 +4,8 @@
         "module": "commonjs",
         "sourceMap": true,
         "outDir": "."
-    }
+    },
+    "include": [
+        "../client/**/*"
+    ]
 }
