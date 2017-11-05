@@ -88,7 +88,7 @@ export default class ExpenseComponent implements
     public view = ({attrs}: m.CVnode<ExpenseController>) => {
         var ctrl = attrs;
         return m("div.column", [
-            m(new ChangeDateComponent(), new ChangeDateController("/expanses", ctrl.day().clone())),
+            m(new ChangeDateComponent(), new ChangeDateController("/expenses", ctrl.day().clone())),
             m(this.listComponent, ctrl),
             m(new ModalComponent(), new ModalController (
                 ctrl.isAddModalOpen,

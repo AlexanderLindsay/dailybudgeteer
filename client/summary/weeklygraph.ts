@@ -43,7 +43,6 @@ export class WeeklyGraphController {
         let start = this.day().clone().startOf("week").subtract(1, "week");
         let end = this.day().clone();
         let range = (<any>moment).range(start, end);
-        console.log(range);
         let results: Expense[] = [];
         Array.from(range.by("days")).map((d: Moment.Moment) => {
             let exp = new Expense(d.format(), d, perDiem(d));
