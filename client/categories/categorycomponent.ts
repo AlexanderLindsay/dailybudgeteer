@@ -1,6 +1,6 @@
 import m = require("mithril");
 import prop = require("mithril/stream");
-import {ModalComponent, ModalController} from "../components/modal";
+import { ModalComponent, ModalController } from "../components/modal";
 import BudgetContext from "../data/budgetcontext";
 import IDataSource from "../components/datasource";
 import FormComponent from "../components/formcomponent";
@@ -12,7 +12,7 @@ const saveActionName = "Add";
 const editTitle = "Edit Category";
 const editActionName = "Save";
 
-class CategoryViewModel implements IDataSource<Category> {
+export class CategoryController implements IDataSource<Category> {
 
     item: prop.Stream<Category>;
     list: prop.Stream<Category[]>;
@@ -40,13 +40,8 @@ class CategoryViewModel implements IDataSource<Category> {
     }
 
     private fetchList = () => {
-        let deferred = new Promise<Category[]>((resolve) => {
-            let cats = this.context.listCategories();
-            resolve(cats);
-        })
-        .then((categories) => {
-            this.list(categories);
-        });
+        let categories = this.context.listCategories();
+        this.list(categories);
     }
 
     public edit = (id: number) => {
@@ -82,6 +77,7 @@ class CategoryViewModel implements IDataSource<Category> {
             let current = this.context.getCategory(modified.id());
             current.update(modified);
         }
+        this.isAddModalOpen(false);
     }
 
     public openAddModal = () => {
@@ -92,20 +88,13 @@ class CategoryViewModel implements IDataSource<Category> {
     }
 }
 
-export class CategoryController {
-
-    public vm: CategoryViewModel;
-
-    constructor(private context: BudgetContext) {
-        this.vm = new CategoryViewModel(context);
-    }
-}
-
 export class CategoryComponent implements
     m.ClassComponent<CategoryController> {
 
     private formComponent: FormComponent;
     private listComponent: ListComponent<Category>;
+    private modalComponent: ModalComponent;
+    private modalController: ModalController;
 
     private static renderHeader = () => {
         return [
@@ -136,10 +125,10 @@ export class CategoryComponent implements
         ];
     }
 
-    private static renderFooter = (vm: CategoryViewModel) => {
+    private static renderFooter = (vm: CategoryController) => {
         return [
             m("th[colspan='3']", [
-                m("button[type='button'].ui.primary.button", { onclick: vm.openAddModal }, "Add Category")
+                m("button[type='button'].ui.primary.button", { onclick: () => vm.openAddModal() }, "Add Category")
             ])
         ];
     }
@@ -151,23 +140,33 @@ export class CategoryComponent implements
             CategoryComponent.renderHeader,
             CategoryComponent.renderItem,
             CategoryComponent.renderFooter);
+
+        this.modalComponent = new ModalComponent();
+        this.modalController = new ModalController();
     }
 
-    public view = ({attrs}: m.CVnode<CategoryController>) => {
-        let vm = attrs.vm;
+    public view = ({ attrs }: m.CVnode<CategoryController>) => {
+        let vm = attrs;
+
+        let content = [
+            m("form.ui.form", CategoryComponent.renderForm(vm.item()))
+        ];
+
+        let actions = [
+            m("button.ui.approve.button[type='button']", { onclick: vm.save }, vm.modalActionName()),
+            m("button.ui.cancel.button[type='button]", "Cancel")
+        ];
+
+        this.modalController.update(
+            vm.isAddModalOpen,
+            vm.modalTitle(),
+            false,
+            content,
+            actions);
+
         return m("div.column", [
             m(this.listComponent, vm),
-            m(new ModalComponent(), new ModalController(
-                vm.isAddModalOpen,
-                vm.modalTitle(),
-                false,
-                () =>
-                    [this.formComponent.renderForm(CategoryComponent.renderForm(vm.item()))],
-                () => [
-                    m("button.ui.approve.button[type='button']", { onclick: vm.save }, vm.modalActionName()),
-                    m("button.ui.cancel.button[type='button]", "Cancel")
-                ]
-            ))
+            m(this.modalComponent, this.modalController)
         ]);
     }
 

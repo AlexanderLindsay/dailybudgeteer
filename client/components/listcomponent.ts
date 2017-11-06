@@ -16,11 +16,11 @@ export default class ListComponent<T extends IKeyed> implements
 
         let actions: Array<m.CVnode<T>> = [];
         if (args.allowEdit(id)) {
-            actions.push(m("button.ui.button", { onclick: args.edit.bind(args, id) }, "Edit"));
+            actions.push(m("button.ui.button", { onclick: () => args.edit(id) }, "Edit"));
         }
 
         if (args.allowRemove(id)) {
-            actions.push(m("button.ui.button", { onclick: args.remove.bind(args, id) }, "Remove"));
+            actions.push(m("button.ui.button", { onclick: () => args.remove(id) }, "Remove"));
         }
 
         return actions;

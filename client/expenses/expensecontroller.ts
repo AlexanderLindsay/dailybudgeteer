@@ -24,13 +24,18 @@ export default class ExpenseController implements DataSource<Expense> {
 
     constructor(private context: BudgetContext) {
         this.day = prop(moment());
-        this.item = prop(new Expense("", this.day(), 0));
+        this.item = prop(new Expense("", this.day().clone(), 0));
         this.isAddModalOpen = prop(false);
         this.modalTitle = prop(saveTitle);
         this.modalActionName = prop(saveActionName);
         this.list = prop([]);
         context.addUpdateCallback(this.contextCallback);
 
+        this.fetchList();
+    }
+
+    public updateDate = (date: moment.Moment) => {
+        this.day(date);
         this.fetchList();
     }
 
@@ -96,6 +101,7 @@ export default class ExpenseController implements DataSource<Expense> {
             let current = this.context.getExpense(modified.id());
             current.update(modified);
         }
+        this.isAddModalOpen(false);
     }
 
     public allowEdit = (id: number) => {

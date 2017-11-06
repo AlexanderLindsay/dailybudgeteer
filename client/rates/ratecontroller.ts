@@ -42,6 +42,11 @@ export default class RatesController implements DataSource<Rate> {
         this.context.removeUpdateCallback(this.contextCallback);
     }
 
+    public updateDate = (date: moment.Moment) => {
+        this.day(date);
+        this.fetchList();
+    }
+
     private fetchList = () => {
         this.list(this.context.listActiveRates(this.day()));
     }
@@ -99,6 +104,7 @@ export default class RatesController implements DataSource<Rate> {
             let current = this.context.getRate(modified.id());
             current.update(modified);
         }
+        this.isAddModalOpen(false);
     }
 
     public allowEdit = (id: number) => {

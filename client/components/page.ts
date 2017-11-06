@@ -79,7 +79,10 @@ export class PageModel {
 }
 
 export class PageController<M,B> {
-    constructor(public vm: PageModel, public menu: m.CVnode<M>, public body: m.CVnode<B> ) { }
+    public params: prop.Stream<any>;
+    constructor(public vm: PageModel, public menu: m.CVnode<M>, public body: (params: any) => m.CVnode<B> ) {
+        this.params = prop();
+     }
 }
 
 export class PageComponent<M,B> implements m.ClassComponent<PageController<M,B>> {
@@ -121,7 +124,7 @@ export class PageComponent<M,B> implements m.ClassComponent<PageController<M,B>>
                 ])
             ]),
             ctrl.menu,
-            m("div.ui.grid.container", ctrl.body)
+            m("div.ui.grid.container", ctrl.body(ctrl.params()))
         ]);
     }
 }

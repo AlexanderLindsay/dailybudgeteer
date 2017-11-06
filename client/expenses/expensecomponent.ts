@@ -18,6 +18,10 @@ export default class ExpenseComponent implements
 
     private formComponent: FormComponent;
     private listComponent: ListComponent<Expense>;
+    private changeDateComponent: ChangeDateComponent;
+    private changeDateController: ChangeDateController;
+    private modalComponent: ModalComponent;
+    private modalController: ModalController;
 
     private static renderHeader = () => {
         return [
@@ -37,6 +41,7 @@ export default class ExpenseComponent implements
 
     private static renderForm = (categoryPicker: PickCategoryComponent,
         categoryPickerController: PickCategoryController, expense) => {
+
         categoryPickerController.selected = expense.category();
         categoryPickerController.select = (value: Category) => expense.category(value);
 
@@ -74,6 +79,10 @@ export default class ExpenseComponent implements
         let pickCategoryComponent = new PickCategoryComponent(context);
         let pickCategoryController = new PickCategoryController(context);
         this.formComponent = new FormComponent();
+        this.changeDateComponent = new ChangeDateComponent();
+        this.changeDateController = new ChangeDateController("/expenses");
+        this.modalComponent = new ModalComponent();
+        this.modalController = new ModalController();
 
         this.listComponent = new ListComponent<Expense>(
             ExpenseComponent.renderHeader,
@@ -81,26 +90,32 @@ export default class ExpenseComponent implements
             ExpenseComponent.renderFooter);
     }
 
-    public oninit({attrs}: m.CVnode<ExpenseController>) {
-        attrs.day(moment(m.route.param("date")));
-    }
-
     public view = ({attrs}: m.CVnode<ExpenseController>) => {
         var ctrl = attrs;
-        return m("div.column", [
-            m(new ChangeDateComponent(), new ChangeDateController("/expenses", ctrl.day().clone())),
+        this.changeDateController.date(ctrl.day().clone());
+
+        let content = [m("form.ui.form",
+            ExpenseComponent.renderForm(
+            new PickCategoryComponent(this.context),
+            new PickCategoryController(this.context),
+            ctrl.item()))];
+
+        let actions = [
+            m("button.ui.approve.button[type='button']", { onclick: ctrl.save }, ctrl.modalActionName()),
+            m("button.ui.cancel.button[type='button]", "Cancel")
+        ];
+
+        this.modalController.update(
+            ctrl.isAddModalOpen,
+            ctrl.modalTitle(),
+            false,
+            content,
+            actions);
+
+        return m("div.column", { key: 1 }, [
+            m(this.changeDateComponent, this.changeDateController),
             m(this.listComponent, ctrl),
-            m(new ModalComponent(), new ModalController (
-                ctrl.isAddModalOpen,
-                ctrl.modalTitle(),
-                false,
-                () => [this.formComponent.renderForm(ExpenseComponent.renderForm(
-                    new PickCategoryComponent(this.context),
-                    new PickCategoryController(this.context), ctrl.item()))],
-                () => [
-                    m("button.ui.approve.button[type='button']", { onclick: ctrl.save }, ctrl.modalActionName()),
-                    m("button.ui.cancel.button[type='button]", "Cancel")
-                ]))
+            m(this.modalComponent, this.modalController)
         ]);
     }
 }

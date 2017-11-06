@@ -48,16 +48,34 @@ let menu = new MenuController(menuModel);
 
 let pageModel = new PageModel(root, context, fileDialog, fileNameKey, storedFileName);
 
-let page = (component, controller) => {
-    let pc = new PageController(pageModel, m(new MenuComponent(), menu), m(component, controller));
+let page = (component, buildController) => {
+    let pc = new PageController(pageModel, m(new MenuComponent(), menu),
+    (params) => m(component, buildController(params)));
     return {
-        view: () => m(new PageComponent(), pc)
+        view: (node) => {
+            pc.params(node.attrs);
+            return m(new PageComponent(), pc);
+        }
     };
 };
 
+var rc = new RatesController(context);
+var ec = new ExpenseController(context);
+var cc = new CategoryController(context);
+
+m.route.prefix("?");
+
 m.route(root, `/expenses/${DF.formatDateForUrl(moment())}`, {
-    "/rates/:date": page(new RatesComponent(context), new RatesController(context)),
-    "/expenses/:date": page(new ExpenseComponent(context), new ExpenseController(context)),
-    "/summary/:date/:type": page(new SummaryComponent(context), new SummaryController(context)),
-    "/categories": page(new CategoryComponent(context), new CategoryController(context))
+    "/rates/:date": page(new RatesComponent(context), (params) => {
+        let date = moment(params.date);
+        rc.updateDate(date);
+        return rc;
+    }),
+    "/expenses/:date": page(new ExpenseComponent(context), (params) => {
+        let date = moment(params.date);
+        ec.updateDate(date);
+        return ec;
+    }),
+    "/summary/:date/:type": page(new SummaryComponent(context), () => new SummaryController(context)),
+    "/categories": page(new CategoryComponent(context), () => cc)
 });

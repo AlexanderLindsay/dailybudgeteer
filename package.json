@@ -22,7 +22,7 @@
     "moment": "^2.13.0",
     "moment-range": "^3.0.3",
     "mousetrap": "^1.6.0",
-    "semantic-ui": "^2.1.8"
+    "semantic-ui": "^2.2.0"
   },
   "scripts": {
     "build": "gulp build",

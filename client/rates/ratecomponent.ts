@@ -1,10 +1,10 @@
 import * as m from "mithril";
 import * as moment from "moment";
-import {ModalComponent, ModalController} from "../components/modal";
+import { ModalComponent, ModalController } from "../components/modal";
 import * as it from "./intervaltype";
 import Rate from "./rate";
 import RateController from "./ratecontroller";
-import {ChangeDateComponent, ChangeDateController} from "../components/changedatecomponent";
+import { ChangeDateComponent, ChangeDateController } from "../components/changedatecomponent";
 import FormComponent from "../components/formcomponent";
 import ListComponent from "../components/listcomponent";
 import BudgetContext from "../data/budgetcontext";
@@ -17,6 +17,10 @@ export default class RatesComponent implements
 
     private formComponent: FormComponent;
     private listComponent: ListComponent<Rate>;
+    private changeDateComponent: ChangeDateComponent;
+    private changeDateController: ChangeDateController;
+    private modalComponent: ModalComponent;
+    private modalController: ModalController;
 
     private static renderHeader = () => {
         return [
@@ -66,7 +70,7 @@ export default class RatesComponent implements
                     m("select", {
                         onchange: ViewHelpers.withNumber("value", rate.intervalType)
                     },
-                    ViewHelpers.writeOptions(rate.intervalType(), RatesComponent.intervalTypeOptions)
+                        ViewHelpers.writeOptions(rate.intervalType(), RatesComponent.intervalTypeOptions)
                     )
                 ]),
                 m(`div.field${rate.allowInterval() ? "" : ".disabled"}`, [
@@ -119,34 +123,40 @@ export default class RatesComponent implements
             RatesComponent.renderItem,
             RatesComponent.renderFooter
         );
+        this.changeDateComponent = new ChangeDateComponent();
+        this.changeDateController = new ChangeDateController("/rates");
+        this.modalComponent = new ModalComponent();
+        this.modalController = new ModalController();
     }
 
-    public oninit = ({attrs}: m.CVnode<RateController>) => {
-        let date = m.route.param("date");
-        let day = moment(date);
-        attrs.day(day);
-    }
-
-    public view = ({attrs}: m.CVnode<RateController>) => {
+    public view = ({ attrs }: m.CVnode<RateController>) => {
         let ctrl = attrs;
+        this.changeDateController.date(ctrl.day().clone());
+
+        let content = [m("form.ui.form",
+            RatesComponent.renderForm(ctrl.item(), ctrl.editDates()))];
+
+        let actions = [
+            m("button.ui.left.floated.button[type='button']", {
+                onclick: ctrl.editDuration,
+                disabled: ctrl.item().id() <= 0 || ctrl.editDates()
+            }, "Edit Duration"),
+            m("button.ui.approve.button[type='button']", { onclick: ctrl.expire, disabled: ctrl.item().id() <= 0 }, "Expire"),
+            m("button.ui.approve.button[type='button']", { onclick: ctrl.save }, ctrl.modalActionName()),
+            m("button.ui.cancel.button[type='button]", "Cancel")
+        ];
+
+        this.modalController.update(
+            ctrl.isAddModalOpen,
+            ctrl.modalTitle(),
+            false,
+            content,
+            actions);
+
         return m("div.column", [
-            m(new ChangeDateComponent(), new ChangeDateController("/rates", ctrl.day().clone())),
+            m(this.changeDateComponent, this.changeDateController),
             m(this.listComponent, ctrl),
-            m(new ModalComponent(), new ModalController(
-                ctrl.isAddModalOpen,
-                ctrl.modalTitle(),
-                false,
-                () => [this.formComponent.renderForm(
-                    RatesComponent.renderForm(ctrl.item(), ctrl.editDates()))],
-                () => [
-                    m("button.ui.left.floated.button[type='button']", {
-                        onclick: ctrl.editDuration,
-                        disabled: ctrl.item().id() <= 0 || ctrl.editDates()
-                    }, "Edit Duration"),
-                    m("button.ui.approve.button[type='button']", { onclick: ctrl.expire, disabled: ctrl.item().id() <= 0 }, "Expire"),
-                    m("button.ui.approve.button[type='button']", { onclick: ctrl.save }, ctrl.modalActionName()),
-                    m("button.ui.cancel.button[type='button]", "Cancel")
-                ]))
+            m(this.modalComponent, this.modalController)
         ]);
     }
 }
