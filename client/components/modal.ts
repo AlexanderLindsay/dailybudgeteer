@@ -24,25 +24,24 @@ export class ModalComponent<T> implements m.ClassComponent<ModalController<T>> {
             ]);
     }
 
-    public onremove = (node: m.CVnode<ModalController<T>>) => {
-        let element = $("div.ui.dimmer.modals");
-        element.remove();
-    }
-
     public oncreate = (node: m.CVnode<ModalController<T>>) => {
-        let element = $((<any>node).dom);
+        let element = $("div.ui.dimmer.modals > div.ui.modal");
         let show = node.attrs.show;
 
-        (<any>element).modal({
-            onVisible: () => {
-                show(true);
-            },
-            onHidden: () => {
-                show(false);
-            }
-        });
+        console.log(element);
+        if (element.length === 0) {
+            let newModal = $("div.ui.modal");
+            console.log(newModal);
+            (<any>newModal).modal({
+                onVisible: () => {
+                    show(true);
+                },
+                onHidden: () => {
+                    show(false);
+                }
+            });
+        }
 
-        element = $("div.ui.dimmer.modals > div.ui.modal");
         if (node.attrs.show()) {
             (<any>element).modal("show");
         } else {
