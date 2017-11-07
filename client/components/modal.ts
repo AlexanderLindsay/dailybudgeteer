@@ -30,24 +30,23 @@ export class ModalComponent implements m.ClassComponent<ModalController> {
 
     public view(node: m.CVnode<ModalController>) {
         let ctrl = node.attrs;
-        return m("div.ui.modal", { key: 1 },
-            [
-                m("i.close.icon"),
-                m("div.header", ctrl.title),
-                m("div.content", { "class": ctrl.hasImageContent ? "image" : "" }, ctrl.content),
-                m("div.actions", ctrl.actions)
-            ]);
+
+        let element = $("#modal");
+        m.render(element.children(".header")[0], ctrl.title);
+        m.render(element.children(".content")[0], ctrl.content);
+        m.render(element.children(".actions")[0], ctrl.actions);
+        return [];
     }
 
     public oncreate = (node: m.CVnode<ModalController>) => {
-        let element = $("div.ui.modal");
+        let element = $("#modal");
         let show = node.attrs.isVisible;
 
         (<any>element)
             .modal({
-                detachable: false,
                 onHidden: () => {
                     show(false);
+                    m.redraw();
                 }
             });
 

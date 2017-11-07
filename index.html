@@ -23,11 +23,18 @@
       We are using node <script>document.write(process.versions.node)</script>,
       Chrome <script>document.write(process.versions.chrome)</script>,
       and Electron <script>document.write(process.versions.electron)</script>.
+      <div class="ui modal" id="modal">
+        <i class="close icon"></i>
+        <div class="header"></div>
+        <div class="content"></div>
+        <div class="actions"></div>
+      </div>
   </body>
   <script type="text/javascript" src="compiled/mithril.min.js"></script>
   <script type="text/javascript" src="compiled/jquery.min.js"></script>
   <script type="text/javascript" src="compiled/semantic.min.js"></script>
   <script type="text/javascript">
+    $("#modal").modal();
     require("module").globalPaths.push(__dirname + "/compiled");
     require("start");
   </script>
