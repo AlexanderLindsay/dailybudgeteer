@@ -4,9 +4,9 @@
   "main": "main.js",
   "devDependencies": {
     "ava": "^0.15.1",
-    "electron": "1.7.9",
-    "electron-packager": "^7.0.2",
-    "gulp": "^3.9.1",
+    "electron": "^2.0.3",
+    "electron-packager": "^12.1.0",
+    "gulp": "^4.0.0",
     "gulp-concat": "^2.6.0",
     "gulp-ignore": "^2.0.1",
     "gulp-order": "^1.1.1",
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "d3": "^4.11.0",
-    "jquery": "^2.2.4",
+    "jquery": "^3.3.1",
     "mithril": "^1.1.5",
     "moment": "^2.13.0",
     "moment-range": "^3.0.3",
